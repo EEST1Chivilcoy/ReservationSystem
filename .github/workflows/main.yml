@@ -1,0 +1,7 @@
+- name: ftp-action
+  uses: sebastianpopp/ftp-action@v2.0.0
+  with:
+    host: ${{ secrets.FTP_HOST }}
+    user: ${{ secrets.FTP_USER }}
+    password: ${{ secrets.FTP_PASSWORD }}
+    remoteDir: /htdocs # Directorio remoto en tu servidor FTP
