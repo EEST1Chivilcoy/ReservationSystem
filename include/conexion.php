@@ -1,12 +1,12 @@
 <?php
-// Incluye el archivo de configuración
-require ('../config/database.php'); // Ajusta la ruta según la estructura de tus directorios
+// Cargar el archivo de configuración
+$config = require 'config_database.php';
 
-// Variables de configuración obtenidas desde config.php
-$usuario = $usuario;
-$clave = $clave;
-$servidor = $servidor;
-$basededatos = $basededatos;
+// Obtener los valores de la configuración
+$usuario = $config['db']['usuario'];
+$clave = $config['db']['clave'];
+$servidor = $config['db']['servidor'];
+$basededatos = $config['db']['basededatos'];
 
 // Establecer la conexión con la base de datos
 $conexion = mysqli_connect($servidor, $usuario, $clave, $basededatos);
