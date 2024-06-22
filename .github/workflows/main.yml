@@ -1,7 +1,18 @@
-- name: ftp-action
-  uses: sebastianpopp/ftp-action@v2.0.0
-  with:
-    host: ${{ secrets.FTP_HOST }}
-    user: ${{ secrets.FTP_USER }}
-    password: ${{ secrets.FTP_PASSWORD }}
-    remoteDir: /htdocs # Directorio remoto en tu servidor FTP
+name: Deploy to FTP
+
+on:
+  push:
+    branches:
+      - main 
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: FTP Action
+        uses: sebastianpopp/ftp-action@v2.0.0
+        with:
+          host: ${{ secrets.FTP_HOST }}
+          user: ${{ secrets.FTP_USER }}
+          password: ${{ secrets.FTP_PASSWORD }}
+          remoteDir: /htdocs  #Directorio remoto del servidor FTP
