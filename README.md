@@ -14,7 +14,7 @@ Este repositorio contiene el código de una página web para la reserva del sal�
 
 ### Configuración
 
-Para que el proyecto funcione correctamente, se debe crear un archivo llamado `config.php` en la raíz del proyecto con el siguiente código:
+Para asegurar el correcto funcionamiento del proyecto, crea un archivo llamado `config_database.php` en el directorio `include` con el siguiente código:
 
 ```php
 <?php
@@ -32,7 +32,7 @@ return [
 ### Instrucciones de uso
 
 1. Clona el repositorio a tu máquina local.
-2. Crea el archivo `config.php` en la raíz del proyecto con las credenciales de tu base de datos.
+2. Crea el archivo `config_database.php` en el directorio `include` con las credenciales de tu base de datos.
 3. Sube el proyecto a tu servidor web y asegúrate de que los permisos sean correctos.
 4. Accede a la página web y utiliza las funcionalidades según el tipo de cuenta (normal o administrador).
 
@@ -52,7 +52,7 @@ This repository contains the code for a web page designed to reserve the audiovi
 
 ### Configuration
 
-To ensure the project functions correctly, create a file named `config.php` at the root of the project with the following code:
+To ensure the project functions correctly, create a file named `config_database.php` in the `include` directory with the following code:
 
 ```php
 <?php
@@ -70,6 +70,6 @@ return [
 ### Usage Instructions
 
 1. Clone the repository to your local machine.
-2. Create the `config.php` file at the root of the project with your database credentials.
+2. Create the `config_database.php` file in the `include` directory with your database credentials.
 3. Upload the project to your web server and ensure the permissions are correct.
 4. Access the web page and use the functionalities according to the account type (normal or admin).
