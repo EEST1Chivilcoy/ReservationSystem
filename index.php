@@ -18,7 +18,7 @@ $esAdmin = isset($_SESSION['EsAdmin']) && $_SESSION['EsAdmin'] == true;
     $fecha_actual = date('Y/m/d');
     include('include/conexion.php');
     $consulta_ordenada = "SELECT * FROM tabla ORDER BY ABS(DATEDIFF(fecha, '$fecha_actual')) ASC";
-    $consulta_borrar = "DELETE FROM tabla WHERE fecha < '" . $fecha_actual . "'";
+    $consulta_borrar = "DELETE FROM tabla WHERE fecha < DATE_SUB('" . $fecha_actual . "', INTERVAL 1 DAY)";
     mysqli_query($conexion, $consulta_borrar) or die('Error en consulta de fechas');
 
     $resultado = mysqli_query($conexion, $consulta_ordenada) or die('Error en consulta');
