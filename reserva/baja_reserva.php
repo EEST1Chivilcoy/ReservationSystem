@@ -112,6 +112,7 @@ require '../include/VerificacionAdmin.php'
                     </div>
 
                     <button type="submit" class="btn btn-danger btn-block" name="boton" value=1>Eliminar la reserva</button>
+                    <br>
                     <button type="submit" class="btn btn-primary btn-block" name="boton" value=0>Anular la baja</button>
                 </form>
 

@@ -148,6 +148,7 @@ require '../include/VerificacionSesion.php';
                         <input type="text" id="materiales" name="materiales" placeholder="Ingrese materiales" class="form-control">
                     </div>
                     <button type="submit" class="btn btn-primary btn-block" name="boton" value=1>Cargar la reserva</button>
+                    <br>
                     <button type="submit" class="btn btn-danger btn-block" name="boton" value=0>Anular la reserva</button>
                 </form>
             </div>
