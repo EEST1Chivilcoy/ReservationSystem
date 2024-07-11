@@ -68,25 +68,9 @@
     <br>
     <br>
 
-    <footer>
-        <div class="contenedor-footer">
-            <div class="cont-foo">
-                <h4>Telefono</h4>
-                <p>
-                    <a href="tel:02346431330" style="color: white;">
-                        <i class="bi bi-telephone-fill"></i> 2346-431330
-                    </a>
-                </p>
-            </div>
-            <div class="cont-foo">
-                <h4>Localidad</h4>
-                <p>Chivilcoy, Buenos Aires</p>
-            </div>
-        </div>
-        <div class="footer-bottom">
-            <h3>&copy; 7to "B" 2024 | EEST N° 1 | Profesor: Sergio Caffaro</h3>
-        </div>
-    </footer>
+    <?php
+    include('footer.php');
+    ?>
 
     <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.10.0/font/bootstrap-icons.min.css" rel="stylesheet">
 </body>
