@@ -42,6 +42,7 @@ $esAdmin = isset($_SESSION['EsAdmin']) && $_SESSION['EsAdmin'] == true;
     mysqli_query($conexion, $consulta_borrar) or die('Error en consulta de fechas');
 
     $resultado = mysqli_query($conexion, $consulta_ordenada) or die('Error en consulta');
+    $num_filas = mysqli_num_rows($resultado);
 
     mysqli_close($conexion);
     ?>
@@ -137,57 +138,72 @@ $esAdmin = isset($_SESSION['EsAdmin']) && $_SESSION['EsAdmin'] == true;
         <div class="row">
             <div class="col-1"></div>
             <div class="col-10">
-                <div class="table-responsive">
-                    <table class="table table-bordered table-sm table-hover table-dark table-striped">
-                        <thead style="background-color: #003333;">
-                            <tr style="color: white;" class="text-center font-italic">
-                                <td>Nombre y Apellido</td>
-                                <td>Curso</td>
-                                <td>Materia</td>
-                                <td>Horario</td>
-                                <td>Hasta</td>
-                                <td>Fecha</td>
-                                <td>Salón</td>
-                                <td>Materiales</td>
-                                <?php if ($esAdmin) : ?>
-                                    <td>Opciones</td>
-                                <?php endif; ?>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <?php
-                            while ($d = mysqli_fetch_array($resultado)) {
-                                echo "<tr>";
-                                echo "<td>" . $d['nombreapellido'] . "</td>";
-                                echo "<td>" . $d['curso'] . "</td>";
-                                echo "<td>" . $d['materia'] . "</td>";
-                                echo "<td>" . $d['horario'] . "</td>";
-                                echo "<td>" . $d['horario1'] . "</td>";
-                                echo "<td>" . $d['fecha_formateada'] . "</td>";
-                                echo "<td>" . $d['info'] . "</td>";
-                                echo "<td>" . $d['materiales'] . "</td>";
-                                if ($esAdmin) {
-                                    echo "<td>
+                <?php if ($num_filas > 0) : ?>
+                    <div class="table-responsive">
+                        <table class="table table-bordered table-sm table-hover table-dark table-striped">
+                            <thead style="background-color: #003333;">
+                                <tr style="color: white;" class="text-center font-italic">
+                                    <td>Nombre y Apellido</td>
+                                    <td>Curso</td>
+                                    <td>Materia</td>
+                                    <td>Horario</td>
+                                    <td>Hasta</td>
+                                    <td>Fecha</td>
+                                    <td>Salón</td>
+                                    <td>Materiales</td>
+                                    <?php if ($esAdmin) : ?>
+                                        <td>Opciones</td>
+                                    <?php endif; ?>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <?php
+                                while ($d = mysqli_fetch_array($resultado)) {
+                                    echo "<tr>";
+                                    echo "<td>" . $d['nombreapellido'] . "</td>";
+                                    echo "<td>" . $d['curso'] . "</td>";
+                                    echo "<td>" . $d['materia'] . "</td>";
+                                    echo "<td>" . $d['horario'] . "</td>";
+                                    echo "<td>" . $d['horario1'] . "</td>";
+                                    echo "<td>" . $d['fecha_formateada'] . "</td>";
+                                    echo "<td>" . $d['info'] . "</td>";
+                                    echo "<td>" . $d['materiales'] . "</td>";
+                                    if ($esAdmin) {
+                                        echo "<td>
             <a href='reserva/modifica_reserva.php?id=" . $d['ID'] . "&nombreapellido=" . urlencode($d['nombreapellido']) .
-                                        "&curso=" . urlencode($d['curso']) . "&materia=" . urlencode($d['materia']) .
-                                        "&horario=" . urlencode($d['horario']) . "&horario1=" . urlencode($d['horario1']) . "&fecha=" . urlencode($d['fecha']) .
-                                        "&info=" . urlencode($d['info']) . "&materiales=" . urlencode($d['materiales']) . "'
+                                            "&curso=" . urlencode($d['curso']) . "&materia=" . urlencode($d['materia']) .
+                                            "&horario=" . urlencode($d['horario']) . "&horario1=" . urlencode($d['horario1']) . "&fecha=" . urlencode($d['fecha']) .
+                                            "&info=" . urlencode($d['info']) . "&materiales=" . urlencode($d['materiales']) . "'
             >Editar</a>
             |
             <a href='reserva\baja_reserva.php?id=" . $d['ID'] . "&nombreapellido=" . urlencode($d['nombreapellido']) .
-                                        "&curso=" . urlencode($d['curso']) . "&materia=" . urlencode($d['materia']) .
-                                        "&horario=" . urlencode($d['horario']) . "&horario1=" . urlencode($d['horario1']) . "&fecha=" . urlencode($d['fecha']) .
-                                        "&info=" . urlencode($d['info']) . "&materiales=" . urlencode($d['materiales']) . "'
+                                            "&curso=" . urlencode($d['curso']) . "&materia=" . urlencode($d['materia']) .
+                                            "&horario=" . urlencode($d['horario']) . "&horario1=" . urlencode($d['horario1']) . "&fecha=" . urlencode($d['fecha']) .
+                                            "&info=" . urlencode($d['info']) . "&materiales=" . urlencode($d['materiales']) . "'
             >Eliminar</a>
         </td>";
+                                    }
+                                    echo "</tr>";
                                 }
-                                echo "</tr>";
-                            }
-                            ?>
+                                ?>
 
-                        </tbody>
-                    </table>
-                </div>
+                            </tbody>
+                        </table>
+                    </div>
+                <?php else : ?>
+                    <div class="alert alert-dark text-center" role="alert">
+                        <h4 class="alert-dark">No hay turnos disponibles</h4>
+                        <p>En este momento no hay turnos registrados. ¡Sé el primero en reservar un salón!</p>
+                        <?php if ($loggedIn) : ?>
+                            <hr>
+                            <p class="mb-0">
+                                <a href="reserva/cargar_reserva.php?tabla=" class="btn btn-primary">
+                                    <i class="bi bi-calendar-check-fill"></i> Hacer una reserva
+                                </a>
+                            </p>
+                        <?php endif; ?>
+                    </div>
+                <?php endif; ?>
             </div>
             <div class="col-1"></div>
         </div>
