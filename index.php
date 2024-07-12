@@ -247,11 +247,20 @@ $esAdmin = isset($_SESSION['EsAdmin']) && $_SESSION['EsAdmin'] == true;
             $.ajax({
                 url: 'get_oldest_date.php',
                 type: 'GET',
+                dataType: 'json',
                 success: function(response) {
                     if (response.oldest_date) {
                         var oldestDate = response.oldest_date;
+                        var today = moment().format('YYYY-MM-DD');
+
                         $('#startDate').val(oldestDate);
                         $('#startDate').attr('min', oldestDate);
+                        $('#startDate').attr('max', today);
+
+
+                        $('#endDate').val(today);
+                        $('#endDate').attr('min', oldestDate);
+                        $('#endDate').attr('max', today);
                     } else {
                         console.error('Error al obtener la fecha más antigua:', response.error);
                     }
@@ -260,9 +269,6 @@ $esAdmin = isset($_SESSION['EsAdmin']) && $_SESSION['EsAdmin'] == true;
                     console.error('Error en la solicitud AJAX:', error);
                 }
             });
-
-            var today = moment().format('YYYY-MM-DD');
-            $('#endDate').val(today);
 
             $('#printForm').on('submit', function(e) {
                 e.preventDefault();
@@ -280,26 +286,26 @@ $esAdmin = isset($_SESSION['EsAdmin']) && $_SESSION['EsAdmin'] == true;
                     type: 'POST',
                     contentType: 'application/json',
                     data: JSON.stringify(data),
+                    dataType: 'json',
                     success: function(response) {
                         if (response.pdf) {
                             var pdfUrl = response.pdf;
                             var win = window.open(pdfUrl, '_blank');
-                            win.onbeforeunload = function() {
-                                $.ajax({
-                                    url: 'delete_pdf.php',
-                                    type: 'POST',
-                                    data: JSON.stringify({
-                                        pdf: pdfUrl
-                                    }),
-                                    contentType: 'application/json',
-                                    success: function(deleteResponse) {
-                                        console.log('PDF eliminado correctamente');
-                                    },
-                                    error: function(deleteError) {
-                                        console.error('Error al eliminar el PDF:', deleteError);
+                            if (win) {
+                                // Intentar eliminar el PDF después de un tiempo
+                                setTimeout(function() {
+                                    deletePDF(pdfUrl);
+                                }, 10000); // Espera 5 segundos antes de intentar eliminar
+
+                                // También intenta eliminar cuando la ventana se cierre
+                                $(window).on('focus', function() {
+                                    if (win.closed) {
+                                        deletePDF(pdfUrl);
                                     }
                                 });
-                            };
+                            } else {
+                                console.error('Error al abrir una nueva pestaña. Verifica que tu navegador no esté bloqueando las ventanas emergentes.');
+                            }
                         } else {
                             console.error('Error al generar el PDF:', response.error);
                         }
@@ -309,6 +315,23 @@ $esAdmin = isset($_SESSION['EsAdmin']) && $_SESSION['EsAdmin'] == true;
                     }
                 });
             });
+
+            function deletePDF(pdfUrl) {
+                $.ajax({
+                    url: 'delete_pdf.php',
+                    type: 'POST',
+                    data: JSON.stringify({
+                        pdf: pdfUrl
+                    }),
+                    contentType: 'application/json',
+                    success: function(deleteResponse) {
+                        console.log('Intento de eliminación del PDF completado');
+                    },
+                    error: function(deleteError) {
+                        console.error('Error al eliminar el PDF:', deleteError);
+                    }
+                });
+            }
         });
     </script>
 

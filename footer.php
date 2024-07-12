@@ -1,11 +1,12 @@
-<!-- footer.php -->
 <?php
 $esFeriaDeCiencias = true;
-if ($esFeriaDeCiencias){
-    $credits = "&copy; 6to 'C' 2023 | EEST N° 1 | Profesor: Sergio Caffaro";
+$anioActual = intval(date("Y")); // Obtiene el año actual como un entero
+
+if ($esFeriaDeCiencias && ($anioActual < 2025)){
+    $credits = "&copy; 6to 'C' 2023 - 2024 | EEST N° 1 | Profesor: Sergio Caffaro";
 }
 else{
-    $credits = "&copy; 7to 'B' 2024 | EEST N° 1 | Profesor: Sergio Caffaro";
+    $credits = "&copy; <a href='https://github.com/Bernard2806/ReservationSystem' style='color: white; text-decoration: none;'>7to 'B' 2024</a> | EEST N° 1 | Profesor: Sergio Caffaro";
 }
 ?>
 <footer>
