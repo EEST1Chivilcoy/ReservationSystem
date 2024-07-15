@@ -97,7 +97,7 @@ $esAdmin = isset($_SESSION['EsAdmin']) && $_SESSION['EsAdmin'] == true;
     </div>
     <div class="card-group">
         <div class="card" style="background:#696969">
-            <img src="img/audio visuales.jpg" class="card-img-top" alt="...">
+            <img src="img/audio_visuales.jpg" class="card-img-top" alt="...">
             <div class="card-body">
                 <h3 class="card-title" style="color:white; text-align:center;">AUDIOVISUALES</h3>
                 <p class="card-text">Esta sala tiene una capacidad máxima de 30 personas.
