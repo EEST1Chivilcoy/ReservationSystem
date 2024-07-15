@@ -1,6 +1,6 @@
 <?php
 header('Content-Type: application/json');
-include('include\conexion.php'); // Incluir la conexión existente
+include('include/conexion.php'); // Incluir la conexión existente
 
 $sql = "SELECT MIN(fecha) as oldest_date FROM tabla";
 $result = $conexion->query($sql);
