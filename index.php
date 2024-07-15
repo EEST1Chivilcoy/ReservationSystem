@@ -62,6 +62,20 @@ $esAdmin = isset($_SESSION['EsAdmin']) && $_SESSION['EsAdmin'] == true;
         p {
             color: white;
         }
+
+        .alert-custom-dark {
+            background-color: #343a40;
+            color: #ffffff;
+            border-color: #454d55;
+        }
+
+        .alert-custom-dark hr {
+            border-top-color: #ffffff;
+        }
+
+        .alert-custom-dark .alert-link {
+            color: #e9ecef;
+        }
     </style>
 </head>
 
@@ -191,13 +205,13 @@ $esAdmin = isset($_SESSION['EsAdmin']) && $_SESSION['EsAdmin'] == true;
                         </table>
                     </div>
                 <?php else : ?>
-                    <div class="alert alert-dark text-center" role="alert">
-                        <h4 class="alert-dark">No hay turnos disponibles</h4>
+                    <div class="alert alert-custom-dark text-center" role="alert">
+                        <h4 class="alert-heading">No hay turnos disponibles</h4>
                         <p>En este momento no hay turnos registrados. ¡Sé el primero en reservar un salón!</p>
                         <?php if ($loggedIn) : ?>
                             <hr>
                             <p class="mb-0">
-                                <a href="reserva/cargar_reserva.php?tabla=" class="btn btn-primary">
+                                <a href="reserva/cargar_reserva.php?tabla=" class="btn btn-light">
                                     <i class="bi bi-calendar-check-fill"></i> Hacer una reserva
                                 </a>
                             </p>
