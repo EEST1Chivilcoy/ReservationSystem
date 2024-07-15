@@ -14,7 +14,7 @@
         </div>
     </div>
     <div class="footer-bottom">
-        <h3>&copy; <span id='openModal' style='cursor: pointer; text-decoration: underline;'>6to 'C' 2023 - 2024</span> | EEST N° 1 | Profesor: Sergio Caffaro</h3>
+        <h3>&copy; <span id='openModal' style='cursor: pointer; text-decoration: none;'>6to 'C' 2023 - 2024 | EEST N° 1 | Profesor: Sergio Caffaro</span></h3>
     </div>
 </footer>
 
