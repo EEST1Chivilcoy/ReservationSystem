@@ -1,6 +1,25 @@
 <?php
-require('fpdf/fpdf.php');
+
+// Requerimientos
+require('fpdf/fpdf.php'); // Libreria FPDF
 include('include/conexion.php');
+
+class PDF extends FPDF
+{
+    function Header()
+    {
+        // Logo
+        $this->Image('img/logo.png', 250, 10, 30); // Ajusta la ruta y las dimensiones según tu logo
+        $this->Ln(35);
+    }
+
+    function Footer()
+    {
+        $this->SetY(-15);
+        $this->SetFont('DejaVu', '', 8);
+        $this->Cell(0, 10, 'Fecha de impresión: ' . date('d/m/Y H:i:s'), 0, 0, 'R');
+    }
+}
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $data = json_decode(file_get_contents('php://input'), true);
@@ -23,9 +42,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         die(json_encode(["error" => "Error en la consulta: " . $conexion->error]));
     }
 
-    $pdf = new FPDF('L'); // 'L' para orientación horizontal
+    $pdf = new PDF('L');
     $pdf->AddPage();
-    $pdf->SetFont('Arial', 'B', 12);
+    $pdf->AddFont('DejaVu', '', 'DejaVuSans.php');
+    $pdf->SetFont('DejaVu', '', 12);
 
     // Encabezado de las columnas centrado
     $headers = ['Nombre y Apellido', 'Curso', 'Materia', 'Materiales', 'Horario inicio', 'Horario fin', 'Fecha'];
@@ -37,7 +57,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $pdf->Ln();
 
     // Contenido de las filas
-    $pdf->SetFont('Arial', '', 10);
+    $pdf->SetFont('DejaVu', '', 10);
     while ($row = $result->fetch_assoc()) {
         $pdf->Cell($widths[0], 10, $row['nombreapellido'], 1, 0, 'L');
         $pdf->Cell($widths[1], 10, $row['curso'], 1, 0, 'L');
@@ -71,4 +91,3 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 } else {
     echo json_encode(['error' => 'Método no permitido']);
 }
-?>

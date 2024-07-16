@@ -27,7 +27,7 @@
             <li>El Profesor Sergio Cáffaro, quien proporcionó la idea inicial y la guía conceptual del proyecto.</li>
             <li>Los estudiantes de 6to año de 2023, quienes desarrollaron la versión original de la página.</li>
             <li>Los estudiantes de 6to año de 2024, quienes realizaron mejoras y completaron funcionalidades adicionales.</li>
-            <li>Bernardo, estudiante de 7mo año, por su valiosa contribución en términos de experiencia y conocimientos adicionales.</li>
+            <li>Bernardo Gonzalez, estudiante de 7mo año del 2024, por su valiosa contribución en términos de experiencia y conocimientos adicionales.</li>
         </ul>
         <p style="color: black;">Agradecemos profundamente el compromiso y la dedicación de todos los participantes que hicieron posible este proyecto.</p>
     </div>
