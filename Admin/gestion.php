@@ -105,6 +105,7 @@
     </div>
 
     <br>
+    <br>
 
     <div class="d-flex justify-content-center">
         <a href="../index.php" class="btn btn-secondary btn-lg w-50 position-relative">Volver al Inicio</a>

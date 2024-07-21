@@ -1,7 +1,7 @@
 <?php
 
 // Requerimientos
-require('fpdf/fpdf.php'); // Libreria FPDF
+require('tfpdf/fpdf.php'); // Libreria FPDF
 include('include/conexion.php');
 
 class PDF extends FPDF
