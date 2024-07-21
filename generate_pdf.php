@@ -1,10 +1,10 @@
 <?php
 
 // Requerimientos
-require('tfpdf/fpdf.php'); // Libreria FPDF
-include('include/conexion.php');
+require('fpdf/tfpdf.php'); // Libreria TFPDF (Soporta UTF-8)
+include('include/conexion.php'); //Conexion SQL
 
-class PDF extends FPDF
+class PDF extends tFPDF
 {
     function Header()
     {
