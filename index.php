@@ -30,6 +30,16 @@ $esAdmin = isset($_SESSION['EsAdmin']) && $_SESSION['EsAdmin'] == true;
 
     $fecha_actual = date('Y/m/d');
 
+    function hayRegistrosDisponibles($conexion)
+    {
+        $consulta = "SELECT COUNT(*) as count FROM tabla";
+        $resultado = mysqli_query($conexion, $consulta);
+        $fila = mysqli_fetch_assoc($resultado);
+        return $fila['count'] > 0;
+    }
+
+    $hayRegistros = hayRegistrosDisponibles($conexion);
+
     // Construir la consulta con filtro de fecha y formateo de fecha
     $consulta_ordenada = "
     SELECT *, DATE_FORMAT(fecha, '%d/%m/%Y') AS fecha_formateada 
@@ -75,6 +85,72 @@ $esAdmin = isset($_SESSION['EsAdmin']) && $_SESSION['EsAdmin'] == true;
 
         .alert-custom-dark .alert-link {
             color: #e9ecef;
+        }
+
+        /* Estilos personalizados para el modal en modo oscuro */
+        #printModal .modal-content {
+            background-color: #343a40;
+            color: #f8f9fa;
+        }
+
+        #printModal .close {
+            color: #f8f9fa;
+        }
+
+        #printModal .form-control {
+            background-color: #495057;
+            color: #f8f9fa;
+            border-color: #6c757d;
+        }
+
+        #printModal .form-control:focus {
+            background-color: #495057;
+            color: #f8f9fa;
+            border-color: #80bdff;
+            box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+        }
+
+        #printModal .btn-primary {
+            background-color: #007bff;
+            border-color: #007bff;
+        }
+
+        #printModal .btn-primary:hover {
+            background-color: #0056b3;
+            border-color: #004085;
+        }
+
+        /* Estilo para los campos de fecha en webkit browsers */
+        #printModal input[type="date"]::-webkit-calendar-picker-indicator {
+            filter: invert(1);
+        }
+
+        /* Estilos para los campos de fecha en modo oscuro */
+        #printModal .form-control[type="date"] {
+            background-color: #495057;
+            color: #fff;
+            border-color: #6c757d;
+        }
+
+        #printModal .form-control[type="date"]:focus {
+            background-color: #495057;
+            color: #fff;
+            border-color: #80bdff;
+            box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+        }
+
+        /* Estilo para el texto del placeholder y los separadores */
+        #printModal .form-control[type="date"]::-webkit-datetime-edit {
+            color: #fff;
+        }
+
+        #printModal .form-control[type="date"]::-webkit-calendar-picker-indicator {
+            filter: invert(1);
+        }
+
+        /* Estilos para Firefox */
+        #printModal .form-control[type="date"] {
+            color-scheme: dark;
         }
     </style>
 </head>
@@ -245,7 +321,7 @@ $esAdmin = isset($_SESSION['EsAdmin']) && $_SESSION['EsAdmin'] == true;
 
     <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.10.0/font/bootstrap-icons.min.css" rel="stylesheet">
 
-    <!-- Modal -->
+    <!-- Modal Imprimir Registros-->
     <div class="modal fade" id="printModal" tabindex="-1" aria-labelledby="printModalLabel" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
@@ -256,17 +332,23 @@ $esAdmin = isset($_SESSION['EsAdmin']) && $_SESSION['EsAdmin'] == true;
                     </button>
                 </div>
                 <div class="modal-body">
-                    <form id="printForm">
-                        <div class="form-group">
-                            <label for="startDate">Fecha de Inicio</label>
-                            <input type="date" class="form-control" id="startDate" name="startDate" required>
+                    <?php if ($hayRegistros) : ?>
+                        <form id="printForm">
+                            <div class="form-group">
+                                <label for="startDate">Fecha de Inicio</label>
+                                <input type="date" class="form-control" id="startDate" name="startDate" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="endDate">Fecha de Fin</label>
+                                <input type="date" class="form-control" id="endDate" name="endDate" required>
+                            </div>
+                            <button type="submit" class="btn btn-primary">Imprimir</button>
+                        </form>
+                    <?php else : ?>
+                        <div class="alert alert-warning" role="alert">
+                            No hay registros disponibles para imprimir. Los registros solo se mantienen durante 7 días.
                         </div>
-                        <div class="form-group">
-                            <label for="endDate">Fecha de Fin</label>
-                            <input type="date" class="form-control" id="endDate" name="endDate" required>
-                        </div>
-                        <button type="submit" class="btn btn-primary">Imprimir</button>
-                    </form>
+                    <?php endif; ?>
                 </div>
             </div>
         </div>

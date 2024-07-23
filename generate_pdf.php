@@ -1,15 +1,29 @@
 <?php
-
 // Requerimientos
 require('fpdf/tfpdf.php'); // Libreria TFPDF (Soporta UTF-8)
 include('include/conexion.php'); //Conexion SQL
 
 class PDF extends tFPDF
 {
+    function __construct($orientation = 'P', $unit = 'mm', $size = 'A4')
+    {
+        parent::__construct($orientation, $unit, $size);
+        $this->AddFont('DejaVu', '', 'DejaVuSans.php');
+    }
+
     function Header()
     {
+        // Set background color for the title
+        $this->SetFillColor(99, 89, 146);
+        // Set text color
+        $this->SetTextColor(39, 23, 111);
+        // Set font
+        $this->SetFont('DejaVu', '', 30);
+        // Title
+        $this->Cell(0, 30, 'Registro de Turnos', 0, 1, 'C', 1);
         // Logo
-        $this->Image('img/logo.png', 250, 10, 30); // Ajusta la ruta y las dimensiones según tu logo
+        $this->Image('img/logo.png', 250, 10, 30);
+
         $this->Ln(35);
     }
 
@@ -17,7 +31,7 @@ class PDF extends tFPDF
     {
         $this->SetY(-15);
         $this->SetFont('DejaVu', '', 8);
-        $this->Cell(0, 10, 'Fecha de impresión: ' . date('d/m/Y H:i:s'), 0, 0, 'R');
+        $this->Cell(0, 10, utf8_decode('Fecha de impresión: ' . date('d/m/Y H:i:s')), 0, 0, 'R');
     }
 }
 
@@ -30,6 +44,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (!$conexion) {
         die(json_encode(["error" => "Conexión fallida: " . mysqli_connect_error()]));
     }
+
+    // Asegurarse de que la conexión use UTF-8
+    mysqli_set_charset($conexion, "utf8mb4");
 
     // Usar consultas preparadas para prevenir inyección SQL
     $sql = "SELECT * FROM tabla WHERE fecha BETWEEN ? AND ?";
@@ -52,17 +69,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $widths = [60, 40, 50, 40, 30, 30, 30];
 
     for ($i = 0; $i < count($headers); $i++) {
-        $pdf->Cell($widths[$i], 10, $headers[$i], 1, 0, 'C');
+        $pdf->Cell($widths[$i], 10, utf8_decode($headers[$i]), 1, 0, 'C');
     }
     $pdf->Ln();
 
     // Contenido de las filas
     $pdf->SetFont('DejaVu', '', 10);
     while ($row = $result->fetch_assoc()) {
-        $pdf->Cell($widths[0], 10, $row['nombreapellido'], 1, 0, 'L');
-        $pdf->Cell($widths[1], 10, $row['curso'], 1, 0, 'L');
-        $pdf->Cell($widths[2], 10, $row['materia'], 1, 0, 'L');
-        $pdf->Cell($widths[3], 10, $row['materiales'], 1, 0, 'L');
+        $pdf->Cell($widths[0], 10, utf8_decode($row['nombreapellido']), 1, 0, 'L');
+        $pdf->Cell($widths[1], 10, utf8_decode($row['curso']), 1, 0, 'L');
+        $pdf->Cell($widths[2], 10, utf8_decode($row['materia']), 1, 0, 'L');
+        $pdf->Cell($widths[3], 10, utf8_decode($row['materiales']), 1, 0, 'L');
         $pdf->Cell($widths[4], 10, $row['horario'], 1, 0, 'C');
         $pdf->Cell($widths[5], 10, $row['horario1'], 1, 0, 'C');
         $pdf->Cell($widths[6], 10, $row['fecha'], 1, 0, 'C');
