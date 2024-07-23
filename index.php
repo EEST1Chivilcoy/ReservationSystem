@@ -28,6 +28,9 @@ $esAdmin = isset($_SESSION['EsAdmin']) && $_SESSION['EsAdmin'] == true;
     <?php
     include('include/conexion.php');
 
+    // Configurar la zona horaria a Argentina
+    date_default_timezone_set('America/Argentina/Buenos_Aires');
+
     $fecha_actual = date('Y/m/d');
 
     function hayRegistrosDisponibles($conexion)
