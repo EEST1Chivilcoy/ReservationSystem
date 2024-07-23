@@ -29,13 +29,16 @@
         .google-login {
             display: inline-block;
             background-color: #4285F4;
-            color: white;
-            padding: 10px 20px;
             border: none;
-            border-radius: 5px;
-            font-size: 16px;
             text-align: center;
             text-decoration: none;
+        }
+
+        .btn-block{
+            padding: 10px 20px;
+            border-radius: 5px;
+            font-size: 16px;
+            color: white;
         }
 
         .google-icon {
@@ -71,13 +74,14 @@
                             <input type="password" class="form-control" id="password" placeholder="Clave" name="password">
                         </div>
                         <div class="d-grid gap-2 mb-3">
-                            <button type="submit" class="btn btn-info btn-block">Ingresar</button>
+                            <button type="submit" class="btn btn-info btn-block">
+                                <i class="bi bi-box-arrow-in-right"></i> Iniciar sesión
+                            </button>
                         </div>
                         <div class="d-grid gap-2 mb-3">
-                        <a href="#" class="google-login btn-block"><i class="bi bi-google google-icon"></i>Iniciar sesión con Google</a>
+                            <a href="#" class="google-login btn-block"><i class="bi bi-google google-icon"></i>Iniciar sesión con Google</a>
                         </div>
                     </form>
-                    <br>
                     <div class="text-center">
                         <a class="btn btn-link" href="registrarse.php" role="button" style="color:white;">¿Aún no tienes cuenta? Regístrate</a>
                     </div>
