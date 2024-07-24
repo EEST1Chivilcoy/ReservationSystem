@@ -82,6 +82,8 @@ require '../include/VerificacionSesion.php';
     </nav>
     <br>
     <br>
+
+
     <!-- Formulario -->
     <div class="container" style="margin: bottom 30cm;">
         <div class="row">
@@ -89,17 +91,25 @@ require '../include/VerificacionSesion.php';
             <div class="col-6">
                 <form action="cargar_sql.php" method="post">
                     <div class="form-group">
-                        <label for="info" style="color:white;" class="font-weight-bold">Ingrese curso</label>
-                        <select name="curso" id="curso" class="select-css">
-                            <option class="form-control" value="Reunion">Reunión</option>
-                            <option class="form-control" value="Primero">Primero</option>
-                            <option class="form-control" value="Segundo">Segundo</option>
-                            <option class="form-control" value="Tercero">Tercero</option>
-                            <option class="form-control" value="Cuarto">Cuarto</option>
-                            <option class="form-control" value="Quinto">Quinto</option>
-                            <option class="form-control" value="Sexto">Sexto</option>
-                            <option class="form-control" value="Septimo">Septimo</option>
-                        </select>
+                        <div class="d-flex align-items-end">
+                            <div style="flex: 0 0 auto; width: 200px; margin-right: 10px;">
+                            <label for="info" style="color:white;" class="font-weight-bold">Ingrese curso</label>
+                                <select name="curso" id="curso" class="form-control" onchange="mostrarCampoDivision(this)">
+                                    <option value="Reunión">Reunión</option>
+                                    <option value="1º">1</option>
+                                    <option value="2º">2</option>
+                                    <option value="3º">3</option>
+                                    <option value="4º">4</option>
+                                    <option value="5º">5</option>
+                                    <option value="6º">6</option>
+                                    <option value="7º">7</option>
+                                </select>
+                            </div>
+                            <div id="campoDivision" style="display: none; flex: 0 0 auto; width: 150px;">
+                                <label for="division" style="color:white;" class="font-weight-bold">Ingrese división</label>
+                                <input type="text" id="division" name="division" class="form-control">
+                            </div>
+                        </div>
                     </div>
                     <div class="form-group">
                         <label for="materia" style="color:white;" class="font-weight-bold">Ingrese Materia</label>
@@ -141,20 +151,31 @@ require '../include/VerificacionSesion.php';
                                 campoOtro.style.display = 'none';
                             }
                         }
+
+                        function mostrarCampoDivision(select) {
+                            var campoDivision = document.getElementById('campoDivision');
+                            if (select.value !== 'Reunion') {
+                                campoDivision.style.display = 'block';
+                            } else {
+                                campoDivision.style.display = 'none';
+                            }
+                        }
                     </script>
 
                     <div class="form-group">
                         <label for="materiales" style="color:white;" class="font-weight-bold">Ingrese Materiales que va a precisar de EMATP</label>
                         <input type="text" id="materiales" name="materiales" placeholder="Ingrese materiales" class="form-control">
                     </div>
-                    <button type="submit" class="btn btn-primary btn-block" name="boton" value=1>Cargar la reserva</button>
+                    <button type="submit" class="btn btn-primary btn-block" name="boton" value="1">Cargar la reserva</button>
                     <br>
-                    <button type="submit" class="btn btn-danger btn-block" name="boton" value=0>Anular la reserva</button>
+                    <button type="submit" class="btn btn-danger btn-block" name="boton" value="0">Anular la reserva</button>
                 </form>
             </div>
             <div class="col-3"></div>
         </div>
     </div>
+
+
     <br>
     <br>
 

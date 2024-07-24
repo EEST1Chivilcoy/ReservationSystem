@@ -23,6 +23,10 @@ if ($p_boton == 0) {
     header("Location: ../index.php");
     exit();
 } else {
+    if($p_curso != "Reunión"){
+        $division = $_POST["division"];
+        $p_curso =  $p_curso . $division;
+    }
     // Si se seleccionó "Otro", tomar el valor del campo especificado
     if ($p_info == "Otro") {
         $otro_salon = $_POST["otro_salon"];
