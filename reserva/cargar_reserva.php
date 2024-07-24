@@ -93,7 +93,7 @@ require '../include/VerificacionSesion.php';
                     <div class="form-group">
                         <div class="d-flex align-items-end">
                             <div style="flex: 0 0 auto; width: 200px; margin-right: 10px;">
-                            <label for="info" style="color:white;" class="font-weight-bold">Ingrese curso</label>
+                                <label for="info" style="color:white;" class="font-weight-bold">Ingrese curso</label>
                                 <select name="curso" id="curso" class="form-control" onchange="mostrarCampoDivision(this)">
                                     <option value="Reunión">Reunión</option>
                                     <option value="1º">1</option>
@@ -154,12 +154,19 @@ require '../include/VerificacionSesion.php';
 
                         function mostrarCampoDivision(select) {
                             var campoDivision = document.getElementById('campoDivision');
-                            if (select.value !== 'Reunion') {
+                            if (select.value !== 'Reunión') {
                                 campoDivision.style.display = 'block';
                             } else {
                                 campoDivision.style.display = 'none';
                             }
                         }
+
+                        document.addEventListener('DOMContentLoaded', function() {
+                            var selectCurso = document.getElementById('curso');
+                            mostrarCampoDivision(selectCurso);
+                            var selectInfo = document.getElementById('info');
+                            mostrarCampoOtro(selectInfo);
+                        });
                     </script>
 
                     <div class="form-group">
