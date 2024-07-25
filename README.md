@@ -33,8 +33,9 @@ return [
 
 1. Clona el repositorio a tu máquina local.
 2. Crea el archivo `config_database.php` en el directorio `include` con las credenciales de tu base de datos.
-3. Sube el proyecto a tu servidor web y asegúrate de que los permisos sean correctos.
-4. Accede a la página web y utiliza las funcionalidades según el tipo de cuenta (normal o administrador).
+3. Importa la base de datos utilizando el archivo `bd.sql` que se encuentra en la raíz del repositorio. Este archivo contiene todos los comandos necesarios para crear la base de datos MySQL requerida.
+4. Sube el proyecto a tu servidor web y asegúrate de que los permisos sean correctos.
+5. Accede a la página web y utiliza las funcionalidades según el tipo de cuenta (normal o administrador).
 
 ---
 
@@ -71,5 +72,6 @@ return [
 
 1. Clone the repository to your local machine.
 2. Create the `config_database.php` file in the `include` directory with your database credentials.
-3. Upload the project to your web server and ensure the permissions are correct.
-4. Access the web page and use the functionalities according to the account type (normal or admin).
+3. Import the database using the `bd.sql` file located at the root of the repository. This file contains all the necessary commands to create the required MySQL database.
+4. Upload the project to your web server and ensure the permissions are correct.
+5. Access the web page and use the functionalities according to the account type (normal or admin).
