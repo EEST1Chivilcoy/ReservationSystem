@@ -53,15 +53,18 @@
                     </div>
 
                     <div class="d-grid gap-2 mb-3">
-                        <button type="submit" class="btn btn-success btn-block"><i class="fas fa-plus-circle"></i>Registrarse</button>
+                        <button type="submit" class="btn btn-success btn-block">
+                            <i class="bi bi-person-plus me-2"></i> Registrarse
+                        </button>
                     </div>
+
 
                 </form>
 
                 <div class="text-center">
                     <a class="btn btn-link" href="iniciar_sesion.php" role="button" style="color:white;">¿Ya tienes cuenta? Inicia sesión</a>
                 </div>
-    
+
             </div>
         </div>
     </div>

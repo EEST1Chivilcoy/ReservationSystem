@@ -108,8 +108,11 @@
     <br>
 
     <div class="d-flex justify-content-center">
-        <a href="../index.php" class="btn btn-secondary btn-lg w-50 position-relative">Volver al Inicio</a>
+        <a href="../index.php" class="btn btn-secondary btn-lg w-50 position-relative">
+            <i class="bi bi-arrow-left me-2"></i> Volver al inicio
+        </a>
     </div>
+
 
     <br>
     <br>

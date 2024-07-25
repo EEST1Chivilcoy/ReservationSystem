@@ -173,9 +173,15 @@ require '../include/VerificacionSesion.php';
                         <label for="materiales" style="color:white;" class="font-weight-bold">Ingrese Materiales que va a precisar de EMATP</label>
                         <input type="text" id="materiales" name="materiales" placeholder="Ingrese materiales" class="form-control">
                     </div>
-                    <button type="submit" class="btn btn-primary btn-block" name="boton" value="1">Cargar la reserva</button>
-                    <br>
-                    <button type="submit" class="btn btn-danger btn-block" name="boton" value="0">Anular la reserva</button>
+                    <div class="d-grid gap-2 mb-3">
+                        <button type="submit" class="btn btn-primary btn-block" name="boton" value="1">
+                            <i class="bi bi-upload me-2"></i> Cargar la reserva
+                        </button>
+                        <button type="submit" class="btn btn-danger btn-block mt-2" name="boton" value="0">
+                            <i class="bi bi-x-circle me-2"></i> Anular la reserva
+                        </button>
+                    </div>
+
                 </form>
             </div>
             <div class="col-3"></div>
