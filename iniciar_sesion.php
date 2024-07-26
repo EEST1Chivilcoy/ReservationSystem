@@ -58,19 +58,6 @@
             color: #333;
         }
 
-        .google-login {
-            background-color: #4285F4;
-            text-decoration: none;
-            color: white;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .google-icon {
-            margin-right: 10px;
-        }
-
         .text-center a {
             color: #007bff;
             text-decoration: none;
@@ -79,7 +66,6 @@
         .text-center a:hover {
             text-decoration: underline;
         }
-        
     </style>
 </head>
 
@@ -110,11 +96,6 @@
                     <button type="submit" class="btn btn-info btn-block">
                         <i class="bi bi-box-arrow-in-right"></i> Iniciar sesión
                     </button>
-                </div>
-                <div class="d-grid gap-2 mb-3">
-                    <a href="#" class="google-login btn-block">
-                        <i class="bi bi-google google-icon"></i> Iniciar sesión con Google
-                    </a>
                 </div>
             </form>
             <div class="text-center">
