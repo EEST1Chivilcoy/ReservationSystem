@@ -175,24 +175,24 @@ $esAdmin = isset($_SESSION['EsAdmin']) && $_SESSION['EsAdmin'] == true;
     <br>
     </div>
     <div class="card-group">
-        <div class="card" style="background:#696969">
-            <img src="img/audio_visuales.jpg" class="card-img-top" alt="...">
+        <div class="card mb-3 mx-2 rounded" style="background:#696969">
+            <img src="img/audio_visuales.jpg" class="card-img-top rounded" alt="...">
             <div class="card-body">
                 <h3 class="card-title" style="color:white; text-align:center;">AUDIOVISUALES</h3>
                 <p class="card-text">Esta sala tiene una capacidad máxima de 30 personas.
                     Se recomienda reservar con amplia anticipación.</p>
             </div>
         </div>
-        <div class="card" style="background:#545454">
-            <img src="img/comedor.jpg" class="card-img-top" alt="...">
+        <div class="card mb-3 mx-2 rounded" style="background:#545454">
+            <img src="img/comedor.jpg" class="card-img-top rounded" alt="...">
             <div class="card-body">
                 <h3 class="card-title" style="color:white; text-align:center;">COMEDOR</h3>
                 <p class="card-text">Esta sala tiene capacidad aproximada de 50 personas o más.
                     Pueden asistir grupos de Aula individualmente o en conjunto.</p>
             </div>
         </div>
-        <div class="card" style="background:#696969">
-            <img src="img/actos.jpg" class="card-img-top" alt="...">
+        <div class="card mb-3 mx-2 rounded" style="background:#696969">
+            <img src="img/actos.jpg" class="card-img-top rounded" alt="...">
             <div class="card-body">
                 <h3 class="card-title" style="color:white; text-align:center;">SALÓN DE ACTOS</h3>
                 <p class="card-text">Esta sala tiene capacidad aproximada de 100 personas o más.
