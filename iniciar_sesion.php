@@ -8,6 +8,7 @@
     <link rel="stylesheet" href="css/bootstrap.min.css">
     <link rel="stylesheet" href="css/estilo.css">
     <link rel="icon" href="img/logo.svg" type="image/svg+xml">
+
     <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.10.0/font/bootstrap-icons.min.css" rel="stylesheet">
     <style>
         body,
@@ -15,7 +16,6 @@
             margin: 0;
             padding: 0;
             height: 100%;
-            font-family: 'Arial', sans-serif;
         }
 
         body {
@@ -79,6 +79,7 @@
         .text-center a:hover {
             text-decoration: underline;
         }
+        
     </style>
 </head>
 
@@ -86,7 +87,7 @@
     <nav class="navbar bg-body-tertiary" style="background:#635992;">
         <div class="container-fluid">
             <div class="d-flex align-items-center">
-                <a class="navbar-brand" href="#">
+                <a class="navbar-brand" href="index.php">
                     <img src="img\logo.svg" alt="Logo" width="65" height="65" class="d-inline-block align-text-top">
                 </a>
                 <h1 class="navbar-text text-center font-italic mb-0" style="color: rgb(39, 23, 111); margin-left: 15px;">ACCEDER</h1>
