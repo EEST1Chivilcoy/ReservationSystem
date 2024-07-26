@@ -25,10 +25,6 @@
             min-height: 100vh;
         }
 
-        .navbar {
-            background: #635992;
-        }
-
         .main-content {
             flex: 1;
             display: flex;
@@ -87,11 +83,11 @@
 </head>
 
 <body>
-    <nav class="navbar">
+    <nav class="navbar bg-body-tertiary" style="background:#635992;">
         <div class="container-fluid">
             <div class="d-flex align-items-center">
-                <a class="navbar-brand" href="index.php">
-                    <img src="img/logo.svg" alt="Logo" width="65" height="65" class="d-inline-block align-text-top">
+                <a class="navbar-brand" href="#">
+                    <img src="img\logo.svg" alt="Logo" width="65" height="65" class="d-inline-block align-text-top">
                 </a>
                 <h1 class="navbar-text text-center font-italic mb-0" style="color: rgb(39, 23, 111); margin-left: 15px;">ACCEDER</h1>
             </div>
