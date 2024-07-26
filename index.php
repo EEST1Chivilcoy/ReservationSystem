@@ -155,6 +155,15 @@ $esAdmin = isset($_SESSION['EsAdmin']) && $_SESSION['EsAdmin'] == true;
         #printModal .form-control[type="date"] {
             color-scheme: dark;
         }
+
+        /* Iconos en la tabla */
+        .btn-link {
+            display: inline-flex;
+            align-items: center;
+            margin: 0;
+            padding: 0;
+            color: white;
+        }
     </style>
 </head>
 
@@ -262,19 +271,21 @@ $esAdmin = isset($_SESSION['EsAdmin']) && $_SESSION['EsAdmin'] == true;
                                     echo "<td>" . $d['info'] . "</td>";
                                     echo "<td>" . $d['materiales'] . "</td>";
                                     if ($esAdmin) {
-                                        echo "<td>
-            <a href='reserva/modifica_reserva.php?id=" . $d['ID'] . "&nombreapellido=" . urlencode($d['nombreapellido']) .
-                                            "&curso=" . urlencode($d['curso']) . "&materia=" . urlencode($d['materia']) .
-                                            "&horario=" . urlencode($d['horario']) . "&horario1=" . urlencode($d['horario1']) . "&fecha=" . urlencode($d['fecha']) .
-                                            "&info=" . urlencode($d['info']) . "&materiales=" . urlencode($d['materiales']) . "'
-            >Editar</a>
-            |
-            <a href='reserva\baja_reserva.php?id=" . $d['ID'] . "&nombreapellido=" . urlencode($d['nombreapellido']) .
-                                            "&curso=" . urlencode($d['curso']) . "&materia=" . urlencode($d['materia']) .
-                                            "&horario=" . urlencode($d['horario']) . "&horario1=" . urlencode($d['horario1']) . "&fecha=" . urlencode($d['fecha']) .
-                                            "&info=" . urlencode($d['info']) . "&materiales=" . urlencode($d['materiales']) . "'
-            >Eliminar</a>
-        </td>";
+                                        echo "<td class='actions'>
+                                        <a href='reserva/modifica_reserva.php?id=" . $d['ID'] . "&nombreapellido=" . urlencode($d['nombreapellido']) .
+                                        "&curso=" . urlencode($d['curso']) . "&materia=" . urlencode($d['materia']) .
+                                        "&horario=" . urlencode($d['horario']) . "&horario1=" . urlencode($d['horario1']) . "&fecha=" . urlencode($d['fecha']) .
+                                        "&info=" . urlencode($d['info']) . "&materiales=" . urlencode($d['materiales']) . "' class='btn btn-link'>
+                                        <i class='bi bi-pencil' style='font-size: 1.2rem;'></i> <!-- Edit icon -->
+                                        </a>
+                                        |
+                                        <a href='reserva/baja_reserva.php?id=" . $d['ID'] . "&nombreapellido=" . urlencode($d['nombreapellido']) .
+                                        "&curso=" . urlencode($d['curso']) . "&materia=" . urlencode($d['materia']) .
+                                        "&horario=" . urlencode($d['horario']) . "&horario1=" . urlencode($d['horario1']) . "&fecha=" . urlencode($d['fecha']) .
+                                        "&info=" . urlencode($d['info']) . "&materiales=" . urlencode($d['materiales']) . "' class='btn btn-link'>
+                                        <i class='bi bi-trash' style='font-size: 1.2rem;'></i> <!-- Delete icon -->
+                                        </a>
+                                        </td>";
                                     }
                                     echo "</tr>";
                                 }
