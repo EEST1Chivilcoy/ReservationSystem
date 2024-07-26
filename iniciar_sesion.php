@@ -7,95 +7,126 @@
     <title>Iniciar sesión</title>
     <link rel="stylesheet" href="css/bootstrap.min.css">
     <link rel="stylesheet" href="css/estilo.css">
-    <link rel="icon" href="img\logo.svg" type="image/svg+xml">
+    <link rel="icon" href="img/logo.svg" type="image/svg+xml">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.10.0/font/bootstrap-icons.min.css" rel="stylesheet">
     <style>
         body,
         html {
             margin: 0;
             padding: 0;
             height: 100%;
+            font-family: 'Arial', sans-serif;
         }
 
         body {
-            background: rgb(161, 192, 220);
             display: flex;
             flex-direction: column;
+            background: rgb(161, 192, 220);
+            min-height: 100vh;
+        }
+
+        .navbar {
+            background: #635992;
+        }
+
+        .main-content {
+            flex: 1;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
         }
 
         .container {
-            flex: 1;
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            width: 100%;
+            max-width: 400px;
         }
 
-        .google-login {
-            display: inline-block;
-            background-color: #4285F4;
-            border: none;
-            text-align: center;
-            text-decoration: none;
-        }
-
-        .btn-block{
+        .btn-block {
             padding: 10px 20px;
             border-radius: 5px;
             font-size: 16px;
             color: white;
         }
 
+        .btn-info {
+            border: none;
+            font-size: 16px;
+        }
+
+        .form-group label {
+            color: #333;
+        }
+
+        .google-login {
+            background-color: #4285F4;
+            text-decoration: none;
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
         .google-icon {
             margin-right: 10px;
+        }
+
+        .text-center a {
+            color: #007bff;
+            text-decoration: none;
+        }
+
+        .text-center a:hover {
+            text-decoration: underline;
         }
     </style>
 </head>
 
 <body>
-    </head>
-
-    <body>
-        <nav class="navbar bg-body-tertiary" style="background:#635992;">
-            <div class="container-fluid">
-                <div class="d-flex align-items-center">
-                    <a class="navbar-brand" href="index.php">
-                        <img src="img/logo.svg" alt="Logo" width="65" height="65" class="d-inline-block align-text-top">
-                    </a>
-                    <h1 class="navbar-text text-center font-italic mb-0" style="color: rgb(39, 23, 111); margin-left: 15px;">ACCEDER</h1>
-                </div>
-            </div>
-        </nav>
-        <div class="container">
-            <div class="row justify-content-center">
-                <div class="col-md-6">
-                    <form class="mt-5" aria-labelledby="dropdownMenuOffset" action="login.php" method="POST">
-                        <div class="form-group">
-                            <label for="exampleDropdownFormEmail2" style="color:white;" class="font-weight-bold">Usuario</label>
-                            <input type="text" class="form-control" id="usuario" placeholder="Usuario" name="username">
-                        </div>
-                        <div class="form-group">
-                            <label for="exampleDropdownFormPassword2" style="color:white;" class="font-weight-bold">Clave</label>
-                            <input type="password" class="form-control" id="password" placeholder="Clave" name="password">
-                        </div>
-                        <div class="d-grid gap-2 mb-3">
-                            <button type="submit" class="btn btn-info btn-block">
-                                <i class="bi bi-box-arrow-in-right"></i> Iniciar sesión
-                            </button>
-                        </div>
-                        <div class="d-grid gap-2 mb-3">
-                            <a href="#" class="google-login btn-block"><i class="bi bi-google google-icon"></i>Iniciar sesión con Google</a>
-                        </div>
-                    </form>
-                    <div class="text-center">
-                        <a class="btn btn-link" href="registrarse.php" role="button" style="color:white;">¿Aún no tienes cuenta? Regístrate</a>
-                    </div>
-                </div>
+    <nav class="navbar">
+        <div class="container-fluid">
+            <div class="d-flex align-items-center">
+                <a class="navbar-brand" href="index.php">
+                    <img src="img/logo.svg" alt="Logo" width="65" height="65" class="d-inline-block align-text-top">
+                </a>
+                <h1 class="navbar-text text-center font-italic mb-0" style="color: rgb(39, 23, 111); margin-left: 15px;">ACCEDER</h1>
             </div>
         </div>
-        <br>
-        <br>
+    </nav>
 
-        <?php
-        include('footer.php');
-        ?>
+    <div class="main-content">
+        <div class="container">
+            <form class="mt-4" action="login.php" method="POST">
+                <div class="form-group mb-3">
+                    <label for="usuario" class="font-weight-bold">Usuario</label>
+                    <input type="text" class="form-control" id="usuario" placeholder="Usuario" name="username" required>
+                </div>
+                <div class="form-group mb-4">
+                    <label for="password" class="font-weight-bold">Clave</label>
+                    <input type="password" class="form-control" id="password" placeholder="Clave" name="password" required>
+                </div>
+                <div class="d-grid gap-2 mb-3">
+                    <button type="submit" class="btn btn-info btn-block">
+                        <i class="bi bi-box-arrow-in-right"></i> Iniciar sesión
+                    </button>
+                </div>
+                <div class="d-grid gap-2 mb-3">
+                    <a href="#" class="google-login btn-block">
+                        <i class="bi bi-google google-icon"></i> Iniciar sesión con Google
+                    </a>
+                </div>
+            </form>
+            <div class="text-center">
+                <a class="btn btn-link" href="registrarse.php" role="button">¿Aún no tienes cuenta? Regístrate</a>
+            </div>
+        </div>
+    </div>
 
-        <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.10.0/font/bootstrap-icons.min.css" rel="stylesheet">
-    </body>
+    <?php include('footer.php'); ?>
+</body>
 
 </html>
