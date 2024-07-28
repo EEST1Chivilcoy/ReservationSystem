@@ -281,12 +281,10 @@ $esAdmin = isset($_SESSION['EsAdmin']) && $_SESSION['EsAdmin'] == true;
                                         
                                         <i class='bi bi-dash'></i>
 
-                                        <a href='reserva/baja_reserva.php?id=" . $d['ID'] . "&nombreapellido=" . urlencode($d['nombreapellido']) .
-                                            "&curso=" . urlencode($d['curso']) . "&materia=" . urlencode($d['materia']) .
-                                            "&horario=" . urlencode($d['horario']) . "&horario1=" . urlencode($d['horario1']) . "&fecha=" . urlencode($d['fecha']) .
-                                            "&info=" . urlencode($d['info']) . "&materiales=" . urlencode($d['materiales']) . "' class='btn btn-link'>
-                                        <i class='bi bi-trash'> </i> <!-- Borrar icon -->
+                                        <a href='#' class='btn btn-link' onclick=\"openDeleteModal('{$d['ID']}', '" . urlencode($d['nombreapellido']) . "', '" . urlencode($d['curso']) . "', '" . urlencode($d['materia']) . "', '" . urlencode($d['horario']) . "', '" . urlencode($d['horario1']) . "', '" . urlencode($d['fecha']) . "', '" . urlencode($d['info']) . "', '" . urlencode($d['materiales']) . "')\">
+                                            <i class='bi bi-trash'></i> <!-- Borrar icon -->
                                         </a>
+
                                         </td>";
                                     }
                                     echo "</tr>";
@@ -337,6 +335,30 @@ $esAdmin = isset($_SESSION['EsAdmin']) && $_SESSION['EsAdmin'] == true;
 
     <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.10.0/font/bootstrap-icons.min.css" rel="stylesheet">
 
+    <!-- Modal Borrar Reserva -->
+    <div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content bg-dark text-white">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="deleteModalLabel">Confirmar eliminación</h5>
+                    <button type="button" class="close" style="color: #f8f9fa;" data-dismiss="modal" aria-label="Cerrar">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    ¿Estás seguro que deseas eliminar esta reserva?
+                    <div id="modalContent"></div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+                    <a id="confirmDelete" href="#" class="btn btn-danger">Eliminar</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
     <!-- Modal Imprimir Registros-->
     <div class="modal fade" id="printModal" tabindex="-1" aria-labelledby="printModalLabel" aria-hidden="true">
         <div class="modal-dialog">
@@ -371,6 +393,40 @@ $esAdmin = isset($_SESSION['EsAdmin']) && $_SESSION['EsAdmin'] == true;
     </div>
 
     <script>
+        function openDeleteModal(id, nombreapellido, curso, materia, horario, horario1, fecha, info, materiales) {
+            // Decodificar los valores y reemplazar '+' con espacios
+            nombreapellido = decodeURIComponent(nombreapellido.replace(/\+/g, ' '));
+            curso = decodeURIComponent(curso.replace(/\+/g, ' '));
+            materia = decodeURIComponent(materia.replace(/\+/g, ' '));
+            horario = decodeURIComponent(horario.replace(/\+/g, ' '));
+            horario1 = decodeURIComponent(horario1.replace(/\+/g, ' '));
+            fecha = decodeURIComponent(fecha.replace(/\+/g, ' '));
+            info = decodeURIComponent(info.replace(/\+/g, ' '));
+            materiales = decodeURIComponent(materiales.replace(/\+/g, ' '));
+
+            // Formatear la fecha de AAAA-MM-DD a DD/MM/AAAA
+            let fechaFormateada = fecha.split('-').reverse().join('/');
+
+            // Aquí puedes actualizar el contenido del modal si es necesario
+            document.getElementById('modalContent').innerHTML = `
+            <br>
+            <p><strong>Nombre:</strong> ${nombreapellido}</p>
+            <p><strong>Curso:</strong> ${curso}</p>
+            <p><strong>Materia:</strong> ${materia}</p>
+            <p><strong>Horario:</strong> ${horario} - ${horario1}</p>
+            <p><strong>Fecha:</strong> ${fechaFormateada}</p>
+            <p><strong>Información:</strong> ${info}</p>
+            <p><strong>Materiales:</strong> ${materiales}</p>
+            `;
+
+            // Actualizar el enlace de confirmación para que apunte al script de eliminación
+            document.getElementById('confirmDelete').href = `reserva/baja_sql.php?id=${id}`;
+
+            // Mostrar el modal
+            var deleteModal = new bootstrap.Modal(document.getElementById('deleteModal'));
+            deleteModal.show();
+        }
+
         $(document).ready(function() {
             $.ajax({
                 url: 'get_oldest_date.php',
