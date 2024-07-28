@@ -341,8 +341,8 @@ $esAdmin = isset($_SESSION['EsAdmin']) && $_SESSION['EsAdmin'] == true;
             <div class="modal-content bg-dark text-white">
                 <div class="modal-header">
                     <h5 class="modal-title" id="deleteModalLabel">Confirmar eliminación</h5>
-                    <button type="button" class="close" style="color: #f8f9fa;" data-dismiss="modal" aria-label="Cerrar">
-                        <span aria-hidden="true">&times;</span>
+                    <button type="button" class="btn btn-link text-white p-0 m-0" data-bs-dismiss="modal" aria-label="Close">
+                        <i class="bi bi-x-lg"></i>
                     </button>
                 </div>
                 <div class="modal-body">
@@ -350,7 +350,7 @@ $esAdmin = isset($_SESSION['EsAdmin']) && $_SESSION['EsAdmin'] == true;
                     <div id="modalContent"></div>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
                     <a id="confirmDelete" href="#" class="btn btn-danger">Eliminar</a>
                 </div>
             </div>

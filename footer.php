@@ -54,6 +54,7 @@ $GLOBALS['version'] = $version;
 ?>
 
 
+<!-- Footer -->
 <footer>
     <div class="contenedor-footer">
         <div class="cont-foo">
@@ -74,43 +75,46 @@ $GLOBALS['version'] = $version;
         </div>
     </div>
     <div class="footer-bottom">
-        <h3>&copy; <span id='openModal' style='cursor: pointer; text-decoration: none;'>6to 'C' 2023 - 2024 | EEST N° 1 | Profesor: Sergio Caffaro</span></h3>
+        <h3>&copy; <span id="openModal" style="cursor: pointer; text-decoration: none;">6to 'C' 2023 - 2024 | EEST N° 1 | Profesor: Sergio Caffaro</span></h3>
     </div>
 </footer>
 
-
-<div id="creditsModal" class="modal" style="display: none; position: fixed; z-index: 1; left: 0; top: 0; width: 100%; height: 100%; overflow: auto; background-color: rgba(0,0,0,0.8);">
-    <div class="modal-content" style="background-color: #333; color: #fefefe; margin: 15% auto; padding: 20px; border: 1px solid #888; width: 80%; max-width: 600px;">
-        <span class="close" style="color: #fefefe; position: absolute; top: 10px; right: 20px; font-size: 28px; font-weight: bold; cursor: pointer;">&times;</span>
-        <h2>Créditos:</h2>
-        <p>Este proyecto ha sido posible gracias a la colaboración y el esfuerzo continuo de varios individuos y grupos:</p>
-        <ul>
-            <li>El Profesor Sergio Cáffaro, quien proporcionó la idea inicial y la guía conceptual del proyecto.</li>
-            <li>Los estudiantes de 6to año de 2023, quienes desarrollaron la versión original de la página.</li>
-            <li>Los estudiantes de 6to año de 2024, quienes realizaron mejoras y completaron funcionalidades adicionales.</li>
-            <li>Bernardo Gonzalez, estudiante de 7mo año del 2024, por su valiosa contribución en términos de experiencia y conocimientos adicionales.</li>
-        </ul>
-        <p>Agradecemos profundamente el compromiso y la dedicación de todos los participantes que hicieron posible este proyecto.</p>
+<!-- Modal Créditos -->
+<div class="modal fade" id="creditsModal" tabindex="-1" aria-labelledby="creditsModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content bg-dark text-white">
+            <div class="modal-header">
+                <h5 class="modal-title" id="creditsModalLabel">Créditos</h5>
+                <button type="button" class="btn btn-link text-white p-0 m-0" data-bs-dismiss="modal" aria-label="Close">
+                    <i class="bi bi-x-lg"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <p>Este proyecto ha sido posible gracias a la colaboración y el esfuerzo continuo de varios individuos y grupos:</p>
+                <ul>
+                    <li>El Profesor Sergio Cáffaro, quien proporcionó la idea inicial y la guía conceptual del proyecto.</li>
+                    <li>Los estudiantes de 6to año de 2023, quienes desarrollaron la versión original de la página.</li>
+                    <li>Los estudiantes de 6to año de 2024, quienes realizaron mejoras y completaron funcionalidades adicionales.</li>
+                    <li>Bernardo Gonzalez, estudiante de 7mo año del 2024, por su valiosa contribución en términos de experiencia y conocimientos adicionales.</li>
+                </ul>
+                <p>Agradecemos profundamente el compromiso y la dedicación de todos los participantes que hicieron posible este proyecto.</p>
+                <div class="modal-footer d-flex justify-content-center">
+                    <a href="https://github.com/Bernard2806/ReservationSystem" target="_blank" class="btn btn-outline-light">
+                        <i class="bi bi-github"></i> Visita nuestro repositorio en GitHub
+                    </a>
+                </div>
+            </div>
+        </div>
     </div>
 </div>
 
+<!-- Incluir scripts de Bootstrap 5 -->
+<script src="https://unpkg.com/@popperjs/core@2"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
 
 <script>
-    var modal = document.getElementById("creditsModal");
-    var btn = document.getElementById("openModal");
-    var span = document.getElementsByClassName("close")[0];
-
-    btn.onclick = function() {
-        modal.style.display = "block";
-    }
-
-    span.onclick = function() {
-        modal.style.display = "none";
-    }
-
-    window.onclick = function(event) {
-        if (event.target == modal) {
-            modal.style.display = "none";
-        }
-    }
+    document.getElementById('openModal').addEventListener('click', function() {
+        var myModal = new bootstrap.Modal(document.getElementById('creditsModal'));
+        myModal.show();
+    });
 </script>
