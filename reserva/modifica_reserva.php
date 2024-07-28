@@ -107,9 +107,14 @@ require '../include/VerificacionAdmin.php'
                         <input type="text" id="materiales" name="materiales" value="<?php echo $materiales; ?>" class="form-control">
                     </div>
 
-                    <button type="submit" class="btn btn-danger btn-block" name="boton" value=1>Modifica la reserva</button>
+                    <!-- Botones rediseñados -->
+                    <button type="submit" class="btn btn-warning btn-block" name="boton" value="1">
+                        <i class="bi bi-pencil-square me-2"></i> Modifica la reserva
+                    </button>
                     <br>
-                    <button type="submit" class="btn btn-primary btn-block" name="boton" value=0>Anular la edicion</button>
+                    <button type="submit" class="btn btn-secondary btn-block" name="boton" value="0">
+                        <i class="bi bi-x-circle me-2"></i> Anular la edición
+                    </button>
 
                 </form>
 

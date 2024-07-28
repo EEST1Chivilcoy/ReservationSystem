@@ -91,9 +91,14 @@ require '../include/VerificacionAdmin.php'
                         </div>
                     <?php endif; ?>
 
+                    <!-- Botones rediseñados -->
+                    <button type="submit" class="btn btn-warning btn-block" name="boton" value=1>
+                        <i class="bi bi-pencil"></i> Modificar usuario
+                    </button>
+                    <button type="submit" class="btn btn-secondary btn-block" name="boton" value=0>
+                        <i class="bi bi-x-circle"></i> Anular la modificación
+                    </button>
 
-                    <button type="submit" class="btn btn-danger btn-block" name="boton" value=1>Modificar usuario</button>
-                    <button type="submit" class="btn btn-primary btn-block" name="boton" value=0>Anular la modificacion</button>
                 </form>
 
             </div>

@@ -37,6 +37,15 @@
         .container {
             flex: 1;
         }
+
+        /* Iconos en la tabla */
+        .btn-link {
+            display: inline-flex;
+            align-items: center;
+            margin: 0;
+            padding: 0;
+            color: white;
+        }
     </style>
 
 </head>
@@ -82,14 +91,18 @@
                                 echo "<td>" . "********" . "</td>";
                                 echo "<td>" . $d['NombreYApellido'] . "</td>";
 
-                                echo "<td>
+                                echo "<td class='actions'>
                                     <a href='modifica_user.php?id=" . $d['ID'] . "&usuario=" . urlencode($d['usuario']) .
-                                    "&NombreYApellido=" . urlencode($d['NombreYApellido']) . "&esAdmin=" . urlencode($d['esAdmin']) . "'
-                                    >Editar</a>
-                                    |
+                                    "&NombreYApellido=" . urlencode($d['NombreYApellido']) . "&esAdmin=" . urlencode($d['esAdmin']) . "' class='btn btn-link'>
+                                    <i class='bi bi-pencil''></i>
+                                    </a>
+                                    
+                                    <i class='bi bi-dash'></i>
+
                                     <a href='borrar_user.php?id=" .  $d['ID'] . "&usuario=" . urlencode($d['usuario']) .
-                                    "&NombreYApellido=" . urlencode($d['NombreYApellido']) . "&esAdmin=" . urlencode($d['esAdmin']) . "'
-                                    >Eliminar</a>
+                                    "&NombreYApellido=" . urlencode($d['NombreYApellido']) . "&esAdmin=" . urlencode($d['esAdmin']) . "' class='btn btn-link'>
+                                        <i class='bi bi-trash'> </i> <!-- Borrar icon -->
+                                    </a>
                                     </td>";
 
                                 echo "<tr>";

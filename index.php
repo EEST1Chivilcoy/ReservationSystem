@@ -273,17 +273,19 @@ $esAdmin = isset($_SESSION['EsAdmin']) && $_SESSION['EsAdmin'] == true;
                                     if ($esAdmin) {
                                         echo "<td class='actions'>
                                         <a href='reserva/modifica_reserva.php?id=" . $d['ID'] . "&nombreapellido=" . urlencode($d['nombreapellido']) .
-                                        "&curso=" . urlencode($d['curso']) . "&materia=" . urlencode($d['materia']) .
-                                        "&horario=" . urlencode($d['horario']) . "&horario1=" . urlencode($d['horario1']) . "&fecha=" . urlencode($d['fecha']) .
-                                        "&info=" . urlencode($d['info']) . "&materiales=" . urlencode($d['materiales']) . "' class='btn btn-link'>
-                                        <i class='bi bi-pencil' style='font-size: 1.2rem;'></i> <!-- Edit icon -->
+                                            "&curso=" . urlencode($d['curso']) . "&materia=" . urlencode($d['materia']) .
+                                            "&horario=" . urlencode($d['horario']) . "&horario1=" . urlencode($d['horario1']) . "&fecha=" . urlencode($d['fecha']) .
+                                            "&info=" . urlencode($d['info']) . "&materiales=" . urlencode($d['materiales']) . "' class='btn btn-link'>
+                                        <i class='bi bi-pencil'></i> <!-- Editar icon -->
                                         </a>
-                                        |
+                                        
+                                        <i class='bi bi-dash'></i>
+
                                         <a href='reserva/baja_reserva.php?id=" . $d['ID'] . "&nombreapellido=" . urlencode($d['nombreapellido']) .
-                                        "&curso=" . urlencode($d['curso']) . "&materia=" . urlencode($d['materia']) .
-                                        "&horario=" . urlencode($d['horario']) . "&horario1=" . urlencode($d['horario1']) . "&fecha=" . urlencode($d['fecha']) .
-                                        "&info=" . urlencode($d['info']) . "&materiales=" . urlencode($d['materiales']) . "' class='btn btn-link'>
-                                        <i class='bi bi-trash' style='font-size: 1.2rem;'></i> <!-- Delete icon -->
+                                            "&curso=" . urlencode($d['curso']) . "&materia=" . urlencode($d['materia']) .
+                                            "&horario=" . urlencode($d['horario']) . "&horario1=" . urlencode($d['horario1']) . "&fecha=" . urlencode($d['fecha']) .
+                                            "&info=" . urlencode($d['info']) . "&materiales=" . urlencode($d['materiales']) . "' class='btn btn-link'>
+                                        <i class='bi bi-trash'> </i> <!-- Borrar icon -->
                                         </a>
                                         </td>";
                                     }
