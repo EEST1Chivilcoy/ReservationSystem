@@ -143,6 +143,22 @@ require '../include/VerificacionSesion.php';
                     </div>
 
                     <script>
+                        function validarHorarios() {
+                            const horaInicio = document.getElementById('horario').value;
+                            const horaFin = document.getElementById('horario1').value;
+
+                            if (horaInicio && horaFin) {
+                                const [horaInicioH, horaInicioM] = horaInicio.split(':').map(Number);
+                                const [horaFinH, horaFinM] = horaFin.split(':').map(Number);
+
+                                if (horaFinH < horaInicioH || (horaFinH === horaInicioH && horaFinM < horaInicioM)) {
+                                    alert('La hora de fin no puede ser anterior a la hora de inicio.');
+                                    return false;
+                                }
+                            }
+                            return true;
+                        }
+
                         function mostrarCampoOtro(select) {
                             var campoOtro = document.getElementById('campoOtro');
                             if (select.value === 'Otro') {
@@ -160,6 +176,16 @@ require '../include/VerificacionSesion.php';
                                 campoDivision.style.display = 'none';
                             }
                         }
+
+                        document.querySelector('form').addEventListener('submit', function(event) {
+                            // Obtener el valor del botón que se ha presionado
+                            const submitButtonValue = event.submitter ? event.submitter.value : '';
+
+                            // Validar solo si se presionó el botón para cargar la reserva
+                            if (submitButtonValue === '1' && !validarHorarios()) {
+                                event.preventDefault();
+                            }
+                        });
 
                         document.addEventListener('DOMContentLoaded', function() {
                             var selectCurso = document.getElementById('curso');
