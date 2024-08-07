@@ -43,8 +43,27 @@ $esAdmin = isset($_SESSION['EsAdmin']) && $_SESSION['EsAdmin'] == true;
 
     $hayRegistros = hayRegistrosDisponibles($conexion);
 
+    // Configuración de paginación
+    $items_per_page = 5;
+    $page = isset($_GET['page']) ? (int)$_GET['page'] : 1;
+    $offset = ($page - 1) * $items_per_page;
+
+    // Contar el total de elementos
+    $query = "SELECT COUNT(*) as total FROM tabla";
+    $result = mysqli_query($conexion, $query);
+    $total_items = mysqli_fetch_assoc($result)['total'];
+    $total_pages = ceil($total_items / $items_per_page);
+
+    // Obtener los datos para la página actual
+    $consulta_ordenada = "SELECT *, DATE_FORMAT(fecha, '%d/%m/%Y') AS fecha_formateada 
+    FROM tabla 
+    WHERE fecha >= '$fecha_actual'
+    ORDER BY ABS(DATEDIFF(fecha, '$fecha_actual')) ASC
+    LIMIT $offset, $items_per_page
+    ";
+
     // Construir la consulta con filtro de fecha y formateo de fecha
-    $consulta_ordenada = "
+    $consulta_ordenada_antigua = "
     SELECT *, DATE_FORMAT(fecha, '%d/%m/%Y') AS fecha_formateada 
     FROM tabla 
     WHERE fecha >= '$fecha_actual'
@@ -308,6 +327,30 @@ $esAdmin = isset($_SESSION['EsAdmin']) && $_SESSION['EsAdmin'] == true;
                         <?php endif; ?>
                     </div>
                 <?php endif; ?>
+
+                <!-- Paginación -->
+                <?php if ($total_pages > 1) : ?>
+                <nav aria-label="Page navigation">
+                    <ul class="pagination justify-content-end me-3">
+                        <li class="page-item <?= $page == 1 ? 'disabled' : '' ?>">
+                            <a class="page-link bg-dark text-light border-dark" href="?page=<?= $page - 1 ?>" aria-label="Previous">
+                                <span aria-hidden="true">&laquo;</span>
+                            </a>
+                        </li>
+                        <?php for ($i = 1; $i <= $total_pages; $i++) : ?>
+                            <li class="page-item <?= $page == $i ? 'active' : '' ?>">
+                                <a class="page-link bg-dark text-light border-dark" href="?page=<?= $i ?>"><?= $i ?></a>
+                            </li>
+                        <?php endfor; ?>
+                        <li class="page-item <?= $page == $total_pages ? 'disabled' : '' ?>">
+                            <a class="page-link bg-dark text-light border-dark" href="?page=<?= $page + 1 ?>" aria-label="Next">
+                                <span aria-hidden="true">&raquo;</span>
+                            </a>
+                        </li>
+                    </ul>
+                </nav>
+                <?php endif; ?>
+
             </div>
             <div class="col-1"></div>
         </div>
