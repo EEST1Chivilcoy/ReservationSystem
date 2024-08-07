@@ -48,33 +48,70 @@ $esAdmin = isset($_SESSION['EsAdmin']) && $_SESSION['EsAdmin'] == true;
     $page = isset($_GET['page']) ? (int)$_GET['page'] : 1;
     $offset = ($page - 1) * $items_per_page;
 
-    // Contar el total de elementos
-    $query = "SELECT COUNT(*) as total
-    FROM tabla
-    WHERE fecha >= '$fecha_actual'";
+    $filtro = isset($_GET['filtro']) ? $_GET['filtro'] : 'todas';
 
-    $result = mysqli_query($conexion, $query);
-    $total_items = mysqli_fetch_assoc($result)['total'];
-    $total_pages = ceil($total_items / $items_per_page);
+    if ($filtro == 'todas') {
 
-    // Obtener los datos para la página actual
-    $consulta_ordenada = " SELECT *, DATE_FORMAT(fecha, '%d/%m/%Y') AS fecha_formateada 
-    FROM tabla 
-    WHERE fecha >= '$fecha_actual'
-    ORDER BY 
+        // Contar el total de elementos
+        $query = "SELECT COUNT(*) as total
+        FROM tabla
+        WHERE fecha >= '$fecha_actual'";
+
+        $result = mysqli_query($conexion, $query);
+        $total_items = mysqli_fetch_assoc($result)['total'];
+        $total_pages = ceil($total_items / $items_per_page);
+
+        // Obtener los datos para la página actual
+        $consulta_ordenada = " SELECT *, DATE_FORMAT(fecha, '%d/%m/%Y') AS fecha_formateada 
+        FROM tabla 
+        WHERE fecha >= '$fecha_actual'
+        ORDER BY 
         ABS(DATEDIFF(fecha, '$fecha_actual')) ASC,
         TIME(horario) ASC
-    LIMIT $offset, $items_per_page
-    ";
+        LIMIT $offset, $items_per_page
+        ";
+    } elseif ($filtro == 'hoy') {
 
+        // Contar el total de elementos
+        $query = "SELECT COUNT(*) as total
+        FROM tabla
+        WHERE fecha = '$fecha_actual'";
 
-    // Construir la consulta con filtro de fecha y formateo de fecha
-    $consulta_ordenada_antigua = "
-    SELECT *, DATE_FORMAT(fecha, '%d/%m/%Y') AS fecha_formateada 
-    FROM tabla 
-    WHERE fecha >= '$fecha_actual'
-    ORDER BY ABS(DATEDIFF(fecha, '$fecha_actual')) ASC
-    ";
+        $result = mysqli_query($conexion, $query);
+        $total_items = mysqli_fetch_assoc($result)['total'];
+        $total_pages = ceil($total_items / $items_per_page);
+
+        // Obtener los datos para la página actual
+        $consulta_ordenada = " SELECT *, DATE_FORMAT(fecha, '%d/%m/%Y') AS fecha_formateada 
+        FROM tabla 
+        WHERE fecha = '$fecha_actual'
+        ORDER BY 
+        ABS(DATEDIFF(fecha, '$fecha_actual')) ASC,
+        TIME(horario) ASC
+        LIMIT $offset, $items_per_page
+        ";
+        
+    } else {
+
+        // Contar el total de elementos
+        $query = "SELECT COUNT(*) as total
+        FROM tabla
+        WHERE fecha >= '$fecha_actual'";
+
+        $result = mysqli_query($conexion, $query);
+        $total_items = mysqli_fetch_assoc($result)['total'];
+        $total_pages = ceil($total_items / $items_per_page);
+
+        // Obtener los datos para la página actual
+        $consulta_ordenada = " SELECT *, DATE_FORMAT(fecha, '%d/%m/%Y') AS fecha_formateada 
+        FROM tabla 
+        WHERE fecha >= '$fecha_actual'
+        ORDER BY 
+        ABS(DATEDIFF(fecha, '$fecha_actual')) ASC,
+        TIME(horario) ASC
+        LIMIT $offset, $items_per_page
+        ";
+    }
 
     $consulta_borrar = "DELETE FROM tabla WHERE fecha < DATE_SUB('" . $fecha_actual . "', INTERVAL 7 DAY)"; //Ahora esta consulta borra despues de 7 Dias (Una semana)
     mysqli_query($conexion, $consulta_borrar) or die('Error en consulta de fechas');
@@ -331,6 +368,17 @@ $esAdmin = isset($_SESSION['EsAdmin']) && $_SESSION['EsAdmin'] == true;
                                 </a>
                             </p>
                         <?php endif; ?>
+                    </div>
+                <?php endif; ?>
+
+                <?php if ($esAdmin) : ?>
+                    <!-- Select de filtro -->
+                    <div>
+                        <label for="filtro" class="form-label text-light font-italic">Filtro</label>
+                        <select id="filtro" class="form-select" onchange="window.location.href=this.value;">
+                            <option value="?filtro=todas" <?= !isset($_GET['filtro']) || $_GET['filtro'] == 'todas' ? 'selected' : '' ?>>Ninguno</option>
+                            <option value="?filtro=hoy" <?= isset($_GET['filtro']) && $_GET['filtro'] == 'hoy' ? 'selected' : '' ?>>Hoy</option>
+                        </select>
                     </div>
                 <?php endif; ?>
 
