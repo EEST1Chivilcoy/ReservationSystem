@@ -44,7 +44,7 @@ $esAdmin = isset($_SESSION['EsAdmin']) && $_SESSION['EsAdmin'] == true;
     $hayRegistros = hayRegistrosDisponibles($conexion);
 
     // Configuración de paginación
-    $items_per_page = 5;
+    $items_per_page = 10;
     $page = isset($_GET['page']) ? (int)$_GET['page'] : 1;
     $offset = ($page - 1) * $items_per_page;
 
