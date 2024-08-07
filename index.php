@@ -273,7 +273,7 @@ $esAdmin = isset($_SESSION['EsAdmin']) && $_SESSION['EsAdmin'] == true;
                                     <td>Nombre y Apellido</td>
                                     <td>Curso</td>
                                     <td>Materia</td>
-                                    <td>Horario (Inicio)=</td>
+                                    <td>Horario (Inicio)</td>
                                     <td>Horario (Fin)</td>
                                     <td>Fecha</td>
                                     <td>Salón</td>
