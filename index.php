@@ -90,7 +90,6 @@ $esAdmin = isset($_SESSION['EsAdmin']) && $_SESSION['EsAdmin'] == true;
         TIME(horario) ASC
         LIMIT $offset, $items_per_page
         ";
-        
     } else {
 
         // Contar el total de elementos
@@ -372,10 +371,10 @@ $esAdmin = isset($_SESSION['EsAdmin']) && $_SESSION['EsAdmin'] == true;
                 <?php endif; ?>
 
                 <?php if ($esAdmin) : ?>
-                    <!-- Select de filtro -->
-                    <div>
-                        <label for="filtro" class="form-label text-light font-italic">Filtro</label>
-                        <select id="filtro" class="form-select" onchange="window.location.href=this.value;">
+                    <!-- Contenedor del filtro con fondo oscuro -->
+                    <div class="bg-dark text-light p-3 rounded d-inline-block">
+                        <label for="filtro" class="form-label">Filtro: </label>
+                        <select id="filtro" class="form-select bg-secondary text-light" onchange="window.location.href=this.value;">
                             <option value="?filtro=todas" <?= !isset($_GET['filtro']) || $_GET['filtro'] == 'todas' ? 'selected' : '' ?>>Ninguno</option>
                             <option value="?filtro=hoy" <?= isset($_GET['filtro']) && $_GET['filtro'] == 'hoy' ? 'selected' : '' ?>>Hoy</option>
                         </select>
