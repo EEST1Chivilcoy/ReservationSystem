@@ -52,18 +52,21 @@ $esAdmin = isset($_SESSION['EsAdmin']) && $_SESSION['EsAdmin'] == true;
     $query = "SELECT COUNT(*) as total
     FROM tabla
     WHERE fecha >= '$fecha_actual'";
-    
+
     $result = mysqli_query($conexion, $query);
     $total_items = mysqli_fetch_assoc($result)['total'];
     $total_pages = ceil($total_items / $items_per_page);
 
     // Obtener los datos para la página actual
-    $consulta_ordenada = "SELECT *, DATE_FORMAT(fecha, '%d/%m/%Y') AS fecha_formateada 
+    $consulta_ordenada = " SELECT *, DATE_FORMAT(fecha, '%d/%m/%Y') AS fecha_formateada 
     FROM tabla 
     WHERE fecha >= '$fecha_actual'
-    ORDER BY ABS(DATEDIFF(fecha, '$fecha_actual')) ASC
+    ORDER BY 
+        ABS(DATEDIFF(fecha, '$fecha_actual')) ASC,
+        TIME(horario) ASC
     LIMIT $offset, $items_per_page
     ";
+
 
     // Construir la consulta con filtro de fecha y formateo de fecha
     $consulta_ordenada_antigua = "
@@ -270,8 +273,8 @@ $esAdmin = isset($_SESSION['EsAdmin']) && $_SESSION['EsAdmin'] == true;
                                     <td>Nombre y Apellido</td>
                                     <td>Curso</td>
                                     <td>Materia</td>
-                                    <td>Horario</td>
-                                    <td>Hasta</td>
+                                    <td>Horario (Inicio)=</td>
+                                    <td>Horario (Fin)</td>
                                     <td>Fecha</td>
                                     <td>Salón</td>
                                     <td>Materiales</td>
