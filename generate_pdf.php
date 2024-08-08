@@ -20,11 +20,11 @@ class PDF extends tFPDF
         // Set font
         $this->SetFont('DejaVu', '', 30);
         // Title
-        $this->Cell(0, 30, 'Registro de Turnos', 0, 1, 'C', 1);
+        $this->Cell(0, 40, 'Registro de Turnos', 0, 1, 'C', 1);
         // Logo
-        $this->Image('img/logo.png', 250, 10, 30);
+        $this->Image('img/logo.png', 250, 15, 30);
 
-        $this->Ln(35);
+        $this->Ln(10);
     }
 
     function Footer()
