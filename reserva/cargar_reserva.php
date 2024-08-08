@@ -11,7 +11,7 @@ require '../include/VerificacionSesion.php';
     <title>Reservación</title>
     <link rel="stylesheet" href="../css/bootstrap.min.css">
     <link rel="stylesheet" href="../css/estilo.css">
-    <link rel="icon" href="../img/logo.svg" type="image/svg+xml">
+    <link rel="icon" href="../img/logo.png" type="image/svg+xml">
     <style>
         body {
             background: rgb(161, 192, 220);
@@ -74,7 +74,7 @@ require '../include/VerificacionSesion.php';
         <div class="container-fluid">
             <div class="d-flex align-items-center">
                 <a class="navbar-brand" href="../index.php">
-                    <img src="../img/logo.svg" alt="Logo" width="65" height="65" class="d-inline-block align-text-top">
+                    <img src="../img/logo.png" alt="Logo" width="65" height="65" class="d-inline-block align-text-top">
                 </a>
                 <h1 class="navbar-text text-center font-italic mb-0" style="color: rgb(39, 23, 111); margin-left: 15px;">RESERVACIÓN</h1>
             </div>
