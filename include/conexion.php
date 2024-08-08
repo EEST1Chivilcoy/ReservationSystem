@@ -16,5 +16,7 @@ if (!$conexion) {
     die('Error de conexión: ' . mysqli_connect_error());
 }
 
+$mysqli->set_charset("utf8mb4");
+
 // Ahora puedes utilizar la conexión $conexion para realizar consultas SQL
 ?>
