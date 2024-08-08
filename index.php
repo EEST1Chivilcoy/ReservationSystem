@@ -369,21 +369,21 @@ $esAdmin = isset($_SESSION['EsAdmin']) && $_SESSION['EsAdmin'] == true;
                         <?php endif; ?>
                     </div>
                 <?php endif; ?>
-
-                <?php if ($esAdmin) : ?>
-                    <!-- Contenedor del filtro con fondo oscuro -->
-                    <div class="bg-dark text-light p-3 rounded d-inline-block">
-                        <label for="filtro" class="form-label">Filtro: </label>
-                        <select id="filtro" class="form-select bg-secondary text-light" onchange="window.location.href=this.value;">
-                            <option value="?filtro=todas" <?= !isset($_GET['filtro']) || $_GET['filtro'] == 'todas' ? 'selected' : '' ?>>Ninguno</option>
-                            <option value="?filtro=hoy" <?= isset($_GET['filtro']) && $_GET['filtro'] == 'hoy' ? 'selected' : '' ?>>Hoy</option>
-                        </select>
-                    </div>
-                <?php endif; ?>
-
                 <!-- Paginación -->
                 <?php if ($total_pages > 1) : ?>
                     <nav aria-label="Page navigation">
+                        
+                        <?php if ($esAdmin) : ?>
+                            <!-- Contenedor del filtro con fondo oscuro -->
+                            <div class="bg-dark text-light p-3 rounded d-inline-block">
+                                <label for="filtro" class="form-label">Filtro: </label>
+                                <select id="filtro" class="form-select bg-secondary text-light" onchange="window.location.href=this.value;">
+                                    <option value="?filtro=todas" <?= !isset($_GET['filtro']) || $_GET['filtro'] == 'todas' ? 'selected' : '' ?>>Ninguno</option>
+                                    <option value="?filtro=hoy" <?= isset($_GET['filtro']) && $_GET['filtro'] == 'hoy' ? 'selected' : '' ?>>Hoy</option>
+                                </select>
+                            </div>
+                        <?php endif; ?>
+
                         <ul class="pagination justify-content-end me-3">
                             <li class="page-item <?= $page == 1 ? 'disabled' : '' ?>">
                                 <a class="page-link bg-dark text-light border-dark" href="?page=<?= $page - 1 ?>" aria-label="Previous">
