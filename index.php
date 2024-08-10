@@ -90,8 +90,7 @@ $esAdmin = isset($_SESSION['EsAdmin']) && $_SESSION['EsAdmin'] == true;
         TIME(horario) ASC
         LIMIT $offset, $items_per_page
         ";
-
-    } elseif($filtro == 'ninguno') {
+    } elseif ($filtro == 'ninguno') {
 
         // Contar el total de elementos
         $query = "SELECT COUNT(*) as total
@@ -109,7 +108,6 @@ $esAdmin = isset($_SESSION['EsAdmin']) && $_SESSION['EsAdmin'] == true;
         TIME(horario) ASC
         LIMIT $offset, $items_per_page
         ";
-
     } else {
 
         // Contar el total de elementos
@@ -391,40 +389,42 @@ $esAdmin = isset($_SESSION['EsAdmin']) && $_SESSION['EsAdmin'] == true;
                 <?php endif; ?>
 
                 <nav aria-label="Page navigation">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <?php if ($esAdmin) : ?>
+                            <!-- Contenedor del filtro con fondo oscuro -->
+                            <div class="bg-dark text-light p-3 rounded">
+                                <label for="filtro" class="form-label">Filtro: </label>
+                                <select id="filtro" class="form-select bg-secondary text-light" onchange="window.location.href=this.value;">
+                                    <option value="?filtro=normal&page=<?= $page ?>" <?= !isset($_GET['filtro']) || $_GET['filtro'] == 'normal' ? 'selected' : '' ?>>Normal</option>
+                                    <option value="?filtro=hoy&page=<?= $page ?>" <?= isset($_GET['filtro']) && $_GET['filtro'] == 'hoy' ? 'selected' : '' ?>>Hoy</option>
+                                    <option value="?filtro=ninguno&page=<?= $page ?>" <?= isset($_GET['filtro']) && $_GET['filtro'] == 'ninguno' ? 'selected' : '' ?>>Ninguno (ver todos los registros)</option>
+                                </select>
+                            </div>
+                        <?php endif; ?>
 
-                    <?php if ($esAdmin) : ?>
-                        <!-- Contenedor del filtro con fondo oscuro -->
-                        <div class="bg-dark text-light p-3 rounded d-inline-block">
-                            <label for="filtro" class="form-label">Filtro: </label>
-                            <select id="filtro" class="form-select bg-secondary text-light" onchange="window.location.href=this.value;">
-                                <option value="?filtro=normal" <?= !isset($_GET['filtro']) || $_GET['filtro'] == 'normal' ? 'selected' : '' ?>>Normal</option>
-                                <option value="?filtro=hoy" <?= isset($_GET['filtro']) && $_GET['filtro'] == 'hoy' ? 'selected' : '' ?>>Hoy</option>
-                                <option value="?filtro=ninguno" <?= isset($_GET['filtro']) && $_GET['filtro'] == 'ninguno' ? 'selected' : '' ?>>Ninguno (ver todos los registros)</option>
-                            </select>
-                        </div>
-                    <?php endif; ?>
-
-                    <!-- Paginación -->
-                    <?php if ($total_pages > 1) : ?>
-                        <ul class="pagination justify-content-end me-3">
-                            <li class="page-item <?= $page == 1 ? 'disabled' : '' ?>">
-                                <a class="page-link bg-dark text-light border-dark" href="?page=<?= $page - 1 ?>" aria-label="Previous">
-                                    <span aria-hidden="true">&laquo;</span>
-                                </a>
-                            </li>
-                            <?php for ($i = 1; $i <= $total_pages; $i++) : ?>
-                                <li class="page-item <?= $page == $i ? 'active' : '' ?>">
-                                    <a class="page-link bg-dark text-light border-dark" href="?page=<?= $i ?>"><?= $i ?></a>
+                        <!-- Paginación -->
+                        <?php if ($total_pages > 1) : ?>
+                            <ul class="pagination mb-0">
+                                <li class="page-item <?= $page == 1 ? 'disabled' : '' ?>">
+                                    <a class="page-link bg-dark text-light border-dark" href="?page=<?= $page - 1 ?>&filtro=<?= isset($_GET['filtro']) ? $_GET['filtro'] : 'normal' ?>" aria-label="Previous">
+                                        <span aria-hidden="true">&laquo;</span>
+                                    </a>
                                 </li>
-                            <?php endfor; ?>
-                            <li class="page-item <?= $page == $total_pages ? 'disabled' : '' ?>">
-                                <a class="page-link bg-dark text-light border-dark" href="?page=<?= $page + 1 ?>" aria-label="Next">
-                                    <span aria-hidden="true">&raquo;</span>
-                                </a>
-                            </li>
-                        </ul>
-                    <?php endif; ?>
+                                <?php for ($i = 1; $i <= $total_pages; $i++) : ?>
+                                    <li class="page-item <?= $page == $i ? 'active' : '' ?>">
+                                        <a class="page-link bg-dark text-light border-dark" href="?page=<?= $i ?>&filtro=<?= isset($_GET['filtro']) ? $_GET['filtro'] : 'normal' ?>"><?= $i ?></a>
+                                    </li>
+                                <?php endfor; ?>
+                                <li class="page-item <?= $page == $total_pages ? 'disabled' : '' ?>">
+                                    <a class="page-link bg-dark text-light border-dark" href="?page=<?= $page + 1 ?>&filtro=<?= isset($_GET['filtro']) ? $_GET['filtro'] : 'normal' ?>" aria-label="Next">
+                                        <span aria-hidden="true">&raquo;</span>
+                                    </a>
+                                </li>
+                            </ul>
+                        <?php endif; ?>
+                    </div>
                 </nav>
+                
             </div>
             <div class="col-1"></div>
         </div>
