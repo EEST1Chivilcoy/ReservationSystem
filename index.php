@@ -395,9 +395,9 @@ $esAdmin = isset($_SESSION['EsAdmin']) && $_SESSION['EsAdmin'] == true;
                             <div class="bg-dark text-light p-3 rounded">
                                 <label for="filtro" class="form-label">Filtro: </label>
                                 <select id="filtro" class="form-select bg-secondary text-light" onchange="window.location.href=this.value;">
-                                    <option value="?filtro=normal&page=<?= $page ?>" <?= !isset($_GET['filtro']) || $_GET['filtro'] == 'normal' ? 'selected' : '' ?>>Normal</option>
-                                    <option value="?filtro=hoy&page=<?= $page ?>" <?= isset($_GET['filtro']) && $_GET['filtro'] == 'hoy' ? 'selected' : '' ?>>Hoy</option>
-                                    <option value="?filtro=ninguno&page=<?= $page ?>" <?= isset($_GET['filtro']) && $_GET['filtro'] == 'ninguno' ? 'selected' : '' ?>>Ninguno (ver todos los registros)</option>
+                                    <option value="?filtro=normal&page=1" <?= !isset($_GET['filtro']) || $_GET['filtro'] == 'normal' ? 'selected' : '' ?>>Normal</option>
+                                    <option value="?filtro=hoy&page=1" <?= isset($_GET['filtro']) && $_GET['filtro'] == 'hoy' ? 'selected' : '' ?>>Hoy</option>
+                                    <option value="?filtro=ninguno&page=1" <?= isset($_GET['filtro']) && $_GET['filtro'] == 'ninguno' ? 'selected' : '' ?>>Ninguno (ver todos los registros)</option>
                                 </select>
                             </div>
                         <?php endif; ?>
@@ -424,7 +424,7 @@ $esAdmin = isset($_SESSION['EsAdmin']) && $_SESSION['EsAdmin'] == true;
                         <?php endif; ?>
                     </div>
                 </nav>
-                
+
             </div>
             <div class="col-1"></div>
         </div>
