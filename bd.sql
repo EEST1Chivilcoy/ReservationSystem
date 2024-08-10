@@ -1,13 +1,14 @@
 -- phpMyAdmin SQL Dump
--- version 5.2.1
+-- version 4.9.0.1
 -- https://www.phpmyadmin.net/
 --
--- Servidor: 127.0.0.1
--- Tiempo de generación: 23-07-2024 a las 06:41:49
--- Versión del servidor: 10.4.32-MariaDB
--- Versión de PHP: 8.2.12
+-- Servidor: sql209.infinityfree.com
+-- Tiempo de generación: 09-08-2024 a las 20:46:57
+-- Versión del servidor: 10.4.17-MariaDB
+-- Versión de PHP: 7.2.22
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
+SET AUTOCOMMIT = 0;
 START TRANSACTION;
 SET time_zone = "+00:00";
 
@@ -18,7 +19,7 @@ SET time_zone = "+00:00";
 /*!40101 SET NAMES utf8mb4 */;
 
 --
--- Base de datos: `reserva`
+-- Base de datos: `if0_34848196_reserva`
 --
 
 -- --------------------------------------------------------
@@ -37,7 +38,8 @@ CREATE TABLE `tabla` (
   `fecha` date NOT NULL,
   `info` varchar(50) NOT NULL,
   `materiales` varchar(255) DEFAULT NULL
-) ENGINE=MyISAM DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4;
+
 
 -- --------------------------------------------------------
 
@@ -51,7 +53,8 @@ CREATE TABLE `usuarios` (
   `clave` varchar(255) NOT NULL,
   `NombreYApellido` varchar(255) NOT NULL,
   `esAdmin` tinyint(1) NOT NULL DEFAULT 0
-) ENGINE=MyISAM DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4;
+
 
 --
 -- Índices para tablas volcadas

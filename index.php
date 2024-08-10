@@ -48,9 +48,9 @@ $esAdmin = isset($_SESSION['EsAdmin']) && $_SESSION['EsAdmin'] == true;
     $page = isset($_GET['page']) ? (int)$_GET['page'] : 1;
     $offset = ($page - 1) * $items_per_page;
 
-    $filtro = isset($_GET['filtro']) ? $_GET['filtro'] : 'todas';
+    $filtro = isset($_GET['filtro']) ? $_GET['filtro'] : 'normal';
 
-    if ($filtro == 'todas') {
+    if ($filtro == 'normal') {
 
         // Contar el total de elementos
         $query = "SELECT COUNT(*) as total
@@ -90,6 +90,26 @@ $esAdmin = isset($_SESSION['EsAdmin']) && $_SESSION['EsAdmin'] == true;
         TIME(horario) ASC
         LIMIT $offset, $items_per_page
         ";
+
+    } elseif($filtro == 'ninguno') {
+
+        // Contar el total de elementos
+        $query = "SELECT COUNT(*) as total
+        FROM tabla";
+
+        $result = mysqli_query($conexion, $query);
+        $total_items = mysqli_fetch_assoc($result)['total'];
+        $total_pages = ceil($total_items / $items_per_page);
+
+        // Obtener los datos para la página actual
+        $consulta_ordenada = " SELECT *, DATE_FORMAT(fecha, '%d/%m/%Y') AS fecha_formateada 
+        FROM tabla 
+        ORDER BY 
+        ABS(DATEDIFF(fecha, '$fecha_actual')) ASC,
+        TIME(horario) ASC
+        LIMIT $offset, $items_per_page
+        ";
+
     } else {
 
         // Contar el total de elementos
@@ -369,21 +389,23 @@ $esAdmin = isset($_SESSION['EsAdmin']) && $_SESSION['EsAdmin'] == true;
                         <?php endif; ?>
                     </div>
                 <?php endif; ?>
-                <!-- Paginación -->
-                <?php if ($total_pages > 1) : ?>
-                    <nav aria-label="Page navigation">
-                        
-                        <?php if ($esAdmin) : ?>
-                            <!-- Contenedor del filtro con fondo oscuro -->
-                            <div class="bg-dark text-light p-3 rounded d-inline-block">
-                                <label for="filtro" class="form-label">Filtro: </label>
-                                <select id="filtro" class="form-select bg-secondary text-light" onchange="window.location.href=this.value;">
-                                    <option value="?filtro=todas" <?= !isset($_GET['filtro']) || $_GET['filtro'] == 'todas' ? 'selected' : '' ?>>Ninguno</option>
-                                    <option value="?filtro=hoy" <?= isset($_GET['filtro']) && $_GET['filtro'] == 'hoy' ? 'selected' : '' ?>>Hoy</option>
-                                </select>
-                            </div>
-                        <?php endif; ?>
 
+                <nav aria-label="Page navigation">
+
+                    <?php if ($esAdmin) : ?>
+                        <!-- Contenedor del filtro con fondo oscuro -->
+                        <div class="bg-dark text-light p-3 rounded d-inline-block">
+                            <label for="filtro" class="form-label">Filtro: </label>
+                            <select id="filtro" class="form-select bg-secondary text-light" onchange="window.location.href=this.value;">
+                                <option value="?filtro=normal" <?= !isset($_GET['filtro']) || $_GET['filtro'] == 'normal' ? 'selected' : '' ?>>Normal</option>
+                                <option value="?filtro=hoy" <?= isset($_GET['filtro']) && $_GET['filtro'] == 'hoy' ? 'selected' : '' ?>>Hoy</option>
+                                <option value="?filtro=ninguno" <?= isset($_GET['filtro']) && $_GET['filtro'] == 'ninguno' ? 'selected' : '' ?>>Ninguno (ver todos los registros)</option>
+                            </select>
+                        </div>
+                    <?php endif; ?>
+
+                    <!-- Paginación -->
+                    <?php if ($total_pages > 1) : ?>
                         <ul class="pagination justify-content-end me-3">
                             <li class="page-item <?= $page == 1 ? 'disabled' : '' ?>">
                                 <a class="page-link bg-dark text-light border-dark" href="?page=<?= $page - 1 ?>" aria-label="Previous">
@@ -401,9 +423,8 @@ $esAdmin = isset($_SESSION['EsAdmin']) && $_SESSION['EsAdmin'] == true;
                                 </a>
                             </li>
                         </ul>
-                    </nav>
-                <?php endif; ?>
-
+                    <?php endif; ?>
+                </nav>
             </div>
             <div class="col-1"></div>
         </div>
