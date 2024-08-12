@@ -1,6 +1,5 @@
 <?php
-session_start();
-$loggedIn = isset($_SESSION['loggedIn']) && $_SESSION['loggedIn'] == true;
+include('include\VerificacionIncio.php');
 $esAdmin = isset($_SESSION['EsAdmin']) && $_SESSION['EsAdmin'] == true;
 ?>
 
@@ -288,27 +287,18 @@ $esAdmin = isset($_SESSION['EsAdmin']) && $_SESSION['EsAdmin'] == true;
             </div>
         </div>
     </div>
-    <?php if ($loggedIn) : ?>
-        <br>
-        <div class="d-flex justify-content-center">
-            <a href="reserva/cargar_reserva.php?tabla=" class="btn btn-primary btn-lg w-50 position-relative" style="color:white; text-decoration: none;">
-                <i class="bi bi-calendar-check-fill"></i> Reservar
-            </a>
-        </div>
-        <br>
-        <div class="d-flex justify-content-center">
-            <a class="btn btn-danger btn-lg w-50 position-relative" href="logout.php">
-                <i class="bi bi-box-arrow-right"></i> Cerrar sesión
-            </a>
-        </div>
-    <?php else : ?>
-        <br>
-        <div class="d-flex justify-content-center">
-            <a class="btn btn-dark btn-lg w-50 position-relative" href="iniciar_sesion.php">
-                <i class="bi bi-person-fill"></i> Iniciar sesión / Registrarse
-            </a>
-        </div>
-    <?php endif; ?>
+    <br>
+    <div class="d-flex justify-content-center">
+        <a href="reserva/cargar_reserva.php?tabla=" class="btn btn-primary btn-lg w-50 position-relative" style="color:white; text-decoration: none;">
+            <i class="bi bi-calendar-check-fill"></i> Reservar
+        </a>
+    </div>
+    <br>
+    <div class="d-flex justify-content-center">
+        <a class="btn btn-danger btn-lg w-50 position-relative" href="logout.php">
+            <i class="bi bi-box-arrow-right"></i> Cerrar sesión
+        </a>
+    </div>
     <br>
     <div class="titulo">
         <h1 class="text-center font-italic" style="color:white;">TURNOS</h1>
@@ -377,14 +367,12 @@ $esAdmin = isset($_SESSION['EsAdmin']) && $_SESSION['EsAdmin'] == true;
                     <div class="alert alert-custom-dark text-center" role="alert">
                         <h4 class="alert-heading">No hay turnos disponibles</h4>
                         <p>En este momento no hay turnos registrados. ¡Sé el primero en reservar un salón!</p>
-                        <?php if ($loggedIn) : ?>
-                            <hr>
-                            <p class="mb-0">
-                                <a href="reserva/cargar_reserva.php?tabla=" class="btn btn-light">
-                                    <i class="bi bi-calendar-check-fill"></i> Hacer una reserva
-                                </a>
-                            </p>
-                        <?php endif; ?>
+                        <hr>
+                        <p class="mb-0">
+                            <a href="reserva/cargar_reserva.php?tabla=" class="btn btn-light">
+                                <i class="bi bi-calendar-check-fill"></i> Hacer una reserva
+                            </a>
+                        </p>
                     </div>
                 <?php endif; ?>
 
