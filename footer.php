@@ -92,7 +92,7 @@ $GLOBALS['version'] = $version;
             <div class="modal-body">
                 <!-- Imagen centrada -->
                 <div class="text-center">
-                    <img src="img\ReservationSystem.jpeg" alt="Logo del Sistema" class="img-fluid mb-4" style="max-width: 200px;">
+                    <img src="https://i.imgur.com/fSjgaVI.jpeg" alt="Logo del Sistema" class="img-fluid mb-4" style="max-width: 200px;">
                 </div>
                 <p>Este proyecto ha sido posible gracias a la colaboración y el esfuerzo continuo de varios individuos y grupos:</p>
                 <ul>
