@@ -1,6 +1,12 @@
 <?php
-include('include\VerificacionIncio.php');
+session_start();
+$loggedIn = isset($_SESSION['loggedIn']) && $_SESSION['loggedIn'] == true;
 $esAdmin = isset($_SESSION['EsAdmin']) && $_SESSION['EsAdmin'] == true;
+
+if($loggedIn == false){
+    header('Location: iniciar_sesion.php');
+    exit();
+}
 ?>
 
 <!DOCTYPE html>
