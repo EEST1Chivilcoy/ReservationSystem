@@ -1,4 +1,4 @@
-<img align="right" width="100" height="100" src="https://i.imgur.com/UN5gMSP.jpeg">
+<img align="right" width="100" height="100" src="https://i.imgur.com/fSjgaVI.jpeg">
 
 ### ReservationSystem
 ###### Institución: Escuela Técnica N°1 Chivilcoy
