@@ -258,7 +258,7 @@ if($loggedIn == false){
                 <a class="navbar-brand" href="#">
                     <img src="img\logo.png" alt="Logo" width="65" height="65" class="d-inline-block align-text-top">
                 </a>
-                <h1 class="navbar-text text-center font-italic mb-0" style="color: rgb(39, 23, 111); margin-left: 15px;">RESERVA DE SALÓN AUDIOVISUAL</h1>
+                <h1 class="navbar-text text-center font-italic mb-0" style="color: rgb(39, 23, 111); margin-left: 15px;">RESERVA DE SALONES</h1>
             </div>
         </div>
     </nav>
