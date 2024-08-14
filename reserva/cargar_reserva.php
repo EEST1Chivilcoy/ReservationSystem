@@ -89,7 +89,7 @@ require '../include/VerificacionSesion.php';
         <div class="row">
             <div class="col-3"></div>
             <div class="col-6">
-                <form action="cargar_sql.php" method="post">
+                <form action="cargar_sql.php" method="post" onsubmit="return validarFormulario()">
                     <div class="form-group">
                         <div class="d-flex align-items-end">
                             <div style="flex: 0 0 auto; width: 200px; margin-right: 10px;">
@@ -117,7 +117,7 @@ require '../include/VerificacionSesion.php';
                     </div>
                     <div class="form-group">
                         <label for="horario" style="color:white;" class="font-weight-bold">Ingrese horario</label>
-                        <input type="time" id="horario" name="horario" class="form-control">
+                        <input type="time" id="horario" name="horario" class="form-control" onchange="validarHorario()">
                     </div>
                     <div class="form-group">
                         <label for="horario1" style="color:white;" class="font-weight-bold">Fin de uso</label>
@@ -129,7 +129,7 @@ require '../include/VerificacionSesion.php';
                     </div>
                     <div class="form-group">
                         <label for="info" style="color:white;" class="font-weight-bold">Ingrese sitio</label>
-                        <select name="info" id="info" class="select-css" onchange="mostrarCampoOtro(this)">
+                        <select name="info" id="info" class="select-css" onchange="mostrarCampoOtro(this); validarHorario()">
                             <option value="Salon de actos">Salón de actos</option>
                             <option value="Comedor">Comedor</option>
                             <option value="Audiovisuales">Audiovisuales</option>
@@ -143,6 +143,28 @@ require '../include/VerificacionSesion.php';
                     </div>
 
                     <script>
+                        
+                        function validarFormulario() {
+                            const horarioValido = validarHorario();
+                            return horarioValido && validarHorarios(); // Asumiendo que `validarHorarios` es otra función que ya tienes
+                        }
+
+                        function validarHorario() {
+                            const sitio = document.getElementById('info').value;
+                            const horario = document.getElementById('horario').value;
+                            const hora = horario.split(':')[0];
+                            const horaMinutos = parseInt(hora);
+
+                            if (sitio === 'Comedor') {
+                                if (horaMinutos < 14) {
+                                    alert('Si el sitio es Comedor, el horario debe ser posterior a las 2 PM.');
+                                    document.getElementById('horario').value = '';
+                                    return false;
+                                }
+                            }
+                            return true;
+                        }
+
                         function validarHorarios() {
                             const horaInicio = document.getElementById('horario').value;
                             const horaFin = document.getElementById('horario1').value;
