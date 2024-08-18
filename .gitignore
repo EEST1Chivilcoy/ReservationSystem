@@ -399,3 +399,5 @@ FodyWeavers.xsd
 
 include/config_database.php
 .vscode/settings.json
+
+.htaccess
