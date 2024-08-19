@@ -13,18 +13,20 @@ class PDF extends tFPDF
 
     function Header()
     {
-        // Set background color for the title
-        $this->SetFillColor(99, 89, 146);
-        // Set text color
-        $this->SetTextColor(39, 23, 111);
-        // Set font
-        $this->SetFont('DejaVu', '', 30);
-        // Title
-        $this->Cell(0, 40, 'Registro de Turnos', 0, 1, 'C', 1);
-        // Logo
-        $this->Image('img/logo.png', 250, 15, 30);
-
-        $this->Ln(10);
+        // Mostrar el encabezado solo en la primera página
+        if ($this->PageNo() == 1) {
+            // Set background color for the title
+            $this->SetFillColor(99, 89, 146);
+            // Set text color
+            $this->SetTextColor(39, 23, 111);
+            // Set font
+            $this->SetFont('DejaVu', '', 30);
+            // Title
+            $this->Cell(0, 40, 'Registro de Turnos', 0, 1, 'C', 1);
+            // Logo
+            $this->Image('img/logo.png', 250, 15, 30);
+            $this->Ln(10);
+        }
     }
 
     function Footer()
