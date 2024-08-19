@@ -35,6 +35,28 @@ class PDF extends tFPDF
         $this->SetFont('DejaVu', '', 8);
         $this->Cell(0, 10, utf8_decode('Fecha de impresión: ' . date('d/m/Y H:i:s')), 0, 0, 'R');
     }
+
+    function AutoAdjustColumnWidths($headers, $data)
+    {
+        $widths = [];
+        $this->SetFont('DejaVu', '', 12);
+
+        // Calcular el ancho máximo para cada columna
+        foreach ($headers as $header) {
+            $widths[] = $this->GetStringWidth(utf8_decode($header)) + 10; // Ancho de los encabezados
+        }
+
+        foreach ($data as $row) {
+            foreach ($row as $key => $value) {
+                $width = $this->GetStringWidth(utf8_decode($value)) + 10;
+                if ($width > $widths[$key]) {
+                    $widths[$key] = $width; // Ancho máximo de cada columna
+                }
+            }
+        }
+
+        return $widths;
+    }
 }
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
@@ -66,25 +88,36 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $pdf->AddFont('DejaVu', '', 'DejaVuSans.php');
     $pdf->SetFont('DejaVu', '', 12);
 
-    // Encabezado de las columnas centrado
+    // Encabezados y datos
     $headers = ['Nombre y Apellido', 'Curso', 'Materia', 'Materiales', 'Horario inicio', 'Horario fin', 'Fecha'];
-    $widths = [60, 40, 50, 40, 30, 30, 30];
+    $data = [];
+    while ($row = $result->fetch_assoc()) {
+        $data[] = [
+            utf8_decode($row['nombreapellido']),
+            utf8_decode($row['curso']),
+            utf8_decode($row['materia']),
+            utf8_decode($row['materiales']),
+            $row['horario'],
+            $row['horario1'],
+            $row['fecha']
+        ];
+    }
 
-    for ($i = 0; $i < count($headers); $i++) {
-        $pdf->Cell($widths[$i], 10, utf8_decode($headers[$i]), 1, 0, 'C');
+    // Obtener anchos ajustados automáticamente
+    $widths = $pdf->AutoAdjustColumnWidths($headers, $data);
+
+    // Dibujar los encabezados
+    foreach ($headers as $i => $header) {
+        $pdf->Cell($widths[$i], 10, utf8_decode($header), 1, 0, 'C');
     }
     $pdf->Ln();
 
-    // Contenido de las filas
+    // Dibujar las filas de datos
     $pdf->SetFont('DejaVu', '', 10);
-    while ($row = $result->fetch_assoc()) {
-        $pdf->Cell($widths[0], 10, utf8_decode($row['nombreapellido']), 1, 0, 'L');
-        $pdf->Cell($widths[1], 10, utf8_decode($row['curso']), 1, 0, 'L');
-        $pdf->Cell($widths[2], 10, utf8_decode($row['materia']), 1, 0, 'L');
-        $pdf->Cell($widths[3], 10, utf8_decode($row['materiales']), 1, 0, 'L');
-        $pdf->Cell($widths[4], 10, $row['horario'], 1, 0, 'C');
-        $pdf->Cell($widths[5], 10, $row['horario1'], 1, 0, 'C');
-        $pdf->Cell($widths[6], 10, $row['fecha'], 1, 0, 'C');
+    foreach ($data as $row) {
+        foreach ($row as $i => $cell) {
+            $pdf->Cell($widths[$i], 10, $cell, 1, 0, 'L');
+        }
         $pdf->Ln();
     }
 
