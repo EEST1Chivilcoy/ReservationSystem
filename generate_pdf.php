@@ -89,13 +89,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $pdf->SetFont('DejaVu', '', 12);
 
     // Encabezados y datos
-    $headers = ['Nombre y Apellido', 'Curso', 'Materia', 'Materiales', 'Horario inicio', 'Horario fin', 'Fecha'];
+    $headers = ['Nombre y Apellido', 'Curso', 'Materia', 'Salón', 'Materiales', 'Horario inicio', 'Horario fin', 'Fecha'];
     $data = [];
     while ($row = $result->fetch_assoc()) {
         $data[] = [
             utf8_decode($row['nombreapellido']),
             utf8_decode($row['curso']),
             utf8_decode($row['materia']),
+            utf8_decode($row['info']),
             utf8_decode($row['materiales']),
             $row['horario'],
             $row['horario1'],
