@@ -103,7 +103,7 @@ $GLOBALS['version'] = $version;
         </div>
         <div class="cont-foo">
             <h4>Localidad</h4>
-            <p>Chivilcoy, Buenos Aires</p>
+            <p><i class="bi bi-geo-alt-fill"></i> Chivilcoy, Buenos Aires</p>
         </div>
         <div class="cont-foo">
             <h4>Versión</h4>
