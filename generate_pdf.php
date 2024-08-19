@@ -40,23 +40,23 @@ class PDF extends tFPDF
     {
         $widths = [];
         $this->SetFont('DejaVu', '', 12);
-
+    
         // Calcular el ancho máximo para cada columna
         foreach ($headers as $header) {
-            $widths[] = $this->GetStringWidth(utf8_decode($header)) + 10; // Ancho de los encabezados
+            $widths[] = $this->GetStringWidth(utf8_decode($header)) + 1; // Ancho de los encabezados con margen de 1 unidad
         }
-
+    
         foreach ($data as $row) {
             foreach ($row as $key => $value) {
-                $width = $this->GetStringWidth(utf8_decode($value)) + 10;
+                $width = $this->GetStringWidth(utf8_decode($value)) + 1; // Ancho del contenido con margen de 1 unidad
                 if ($width > $widths[$key]) {
                     $widths[$key] = $width; // Ancho máximo de cada columna
                 }
             }
         }
-
+    
         return $widths;
-    }
+    }    
 }
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
