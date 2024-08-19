@@ -21,11 +21,29 @@ function get_commits($url, $ch)
         // Ejecuta la solicitud y obtiene la respuesta
         $response = curl_exec($ch);
 
+        // Verifica si hubo un error en la solicitud cURL
+        if (curl_errno($ch)) {
+            echo 'Error en cURL: ' . curl_error($ch);
+            break;
+        }
+
         // Decodifica la respuesta JSON
         $data = json_decode($response, true);
 
+        // Verifica si la decodificación fue exitosa
+        if ($data === null && json_last_error() !== JSON_ERROR_NONE) {
+            echo 'Error al decodificar JSON: ' . json_last_error_msg();
+            break;
+        }
+
         // Añade los commits obtenidos al array total de commits
-        $commits = array_merge($commits, $data);
+        if (is_array($data)) {
+            $commits = array_merge($commits, $data);
+        } else {
+            // Si $data no es un array, sal del bucle
+            echo 'Error: Datos no válidos recibidos de la API.';
+            break;
+        }
 
         // Incrementa el número de página
         $page++;
