@@ -1,6 +1,6 @@
 <?php
 // URL de la API de GitHub para obtener los commits
-$base_url = "https://api.github.com/repos/Bernard2806/ReservationSystem/commits";
+$base_url = "https://api.github.com/repos/EEST1Chivilcoy/ReservationSystem/commits";
 
 // Inicia una sesión cURL
 $ch = curl_init();
@@ -122,7 +122,7 @@ $GLOBALS['version'] = $version;
                 </ul>
                 <p>Agradecemos profundamente el compromiso y la dedicación de todos los participantes que hicieron posible este proyecto.</p>
                 <div class="modal-footer d-flex justify-content-center">
-                    <a href="https://github.com/Bernard2806/ReservationSystem" target="_blank" class="btn btn-outline-light">
+                    <a href="https://github.com/EEST1Chivilcoy/ReservationSystem" target="_blank" class="btn btn-outline-light">
                         <i class="bi bi-github"></i> Visita nuestro repositorio en GitHub
                     </a>
                 </div>
