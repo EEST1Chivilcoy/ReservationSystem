@@ -6,7 +6,7 @@ $base_url = "https://api.github.com/repos/Bernard2806/ReservationSystem/commits"
 $ch = curl_init();
 
 // Función para obtener commits con manejo de paginación
-function get_commits($url, $ch, $limit = null)
+function get_commits($url, $ch)
 {
     $commits = [];
     $page = 1;
@@ -48,30 +48,13 @@ function get_commits($url, $ch, $limit = null)
         // Incrementa el número de página
         $page++;
 
-        // Si hay un límite y se ha alcanzado, sal del bucle
-        if ($limit !== null && count($commits) >= $limit) {
-            break;
-        }
     } while (count($data) == $per_page); // Continúa mientras se obtenga el número máximo de commits por página
-
-    // Si se estableció un límite, corta el array de commits
-    if ($limit !== null && count($commits) > $limit) {
-        $commits = array_slice($commits, 0, $limit);
-    }
 
     return $commits;
 }
 
-// Verifica si el script se ejecuta en el dominio "reserva.000.pe"
-$host = $_SERVER['HTTP_HOST'];
-$commit_limit = null;
-
-if ($host === 'reserva.000.pe') {
-    $commit_limit = 100; // Limita a 100 commits
-}
-
-// Obtiene los commits con o sin límite, según el dominio
-$commits = get_commits($base_url, $ch, $commit_limit);
+// Obtiene todos los commits
+$commits = get_commits($base_url, $ch);
 
 // Cierra la sesión cURL
 curl_close($ch);
