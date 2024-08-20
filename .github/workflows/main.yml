@@ -12,29 +12,7 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v2
 
-      - name: Check for changes
-        id: check_changes
-        run: |
-          # Comprobar si estamos en el primer commit
-          if git rev-parse --verify HEAD~1 >/dev/null 2>&1; then
-            # No es el primer commit, podemos comparar con el anterior
-            git diff --name-only HEAD~1 HEAD > changed_files.txt
-          else
-            # Es el primer commit, comparamos con un árbol vacío
-            git diff-tree --no-commit-id --name-only -r $(git hash-object -t tree /dev/null) HEAD > changed_files.txt
-          fi
-          
-          # Comprobar si solo se modificaron .gitignore o README.md
-          if [ $(grep -vE '^(\.gitignore|README\.md)$' changed_files.txt | wc -l) -eq 0 ]; then
-            echo "Only .gitignore or README.md were modified. Skipping deployment."
-            echo "skip_deploy=true" >> $GITHUB_ENV
-          else
-            echo "Files other than .gitignore or README.md were modified. Proceeding with deployment."
-            echo "skip_deploy=false" >> $GITHUB_ENV
-          fi
-
       - name: FTP Deploy
-        if: env.skip_deploy == 'false'
         uses: sebastianpopp/ftp-action@v2.0.0
         with:
           host: ${{ secrets.FTP_HOST }}
