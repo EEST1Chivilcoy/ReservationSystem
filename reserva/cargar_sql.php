@@ -33,6 +33,28 @@ if ($p_boton == 0) {
         $p_info = $otro_salon;
     }
 
+    // Validar si ya existe una reserva en el mismo salón, fecha y horario
+    $consulta = "SELECT COUNT(*) as total FROM tabla WHERE info = ? AND fecha = ? AND ((horario < ? AND horario1 > ?) OR (horario >= ? AND horario < ?))";
+    $stmt = mysqli_prepare($conexion, $consulta);
+    if ($stmt) {
+        mysqli_stmt_bind_param($stmt, "ssssss", $p_info, $p_fecha, $p_horario1, $p_horario, $p_horario, $p_horario1);
+        mysqli_stmt_execute($stmt);
+        mysqli_stmt_bind_result($stmt, $total_reservas);
+        mysqli_stmt_fetch($stmt);
+        mysqli_stmt_close($stmt);
+
+        if ($total_reservas > 0) {
+            $Message = "El salón ya está reservado en la fecha y horario seleccionados.";
+            header("Location: ../index.php?error={$Message}");
+            exit;
+        }
+    } else {
+        $Message = "Error en la preparación de la consulta de validación.";
+        header("Location: ../index.php?error={$Message}");
+        exit;
+    }
+
+    // Si no hay reservas conflictivas, proceder a insertar la nueva reserva
     $alta = "INSERT INTO tabla (nombreapellido, curso, materia, horario, horario1, fecha, info, materiales) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
     $stmt = mysqli_prepare($conexion, $alta);
 
@@ -51,10 +73,11 @@ if ($p_boton == 0) {
         }
         mysqli_stmt_close($stmt);
     } else {
-        $Message = "Error en la preparación de la consulta.";
+        $Message = "Error en la preparación de la consulta de inserción.";
         header("Location: ../index.php?error={$Message}");
         exit;
     }
 
     mysqli_close($conexion);
 }
+?>
