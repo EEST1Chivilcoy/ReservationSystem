@@ -40,3 +40,12 @@ return [
 3. Importa la base de datos utilizando el archivo `bd.sql` ubicado en la raíz del repositorio. Este archivo contiene todos los comandos necesarios para crear la base de datos MySQL requerida.
 4. Sube el proyecto a tu servidor web y asegúrate de que los permisos sean correctos.
 5. Accede a la aplicación web y utiliza las funcionalidades según el tipo de cuenta (normal o administrador).
+
+---
+
+### Estado del Proyecto
+
+![Web Status](https://img.shields.io/website-up-down-green-red/http/reserva.000.pe)
+![Issue Open](https://img.shields.io/github/issues/EEST1Chivilcoy/ReservationSystem.svg)
+
+---
