@@ -25,8 +25,8 @@ if ($p_boton == 0) {
 } else {
     if($p_curso != "Reunión"){
         $division = $_POST["division"];
-        $p_curso =  $p_curso . $division;
-    }
+        $p_curso =  $p_curso . " " . $division;  // Se añade un espacio entre curso y división
+    }    
     // Si se seleccionó "Otro", tomar el valor del campo especificado
     if ($p_info == "Otro") {
         $otro_salon = $_POST["otro_salon"];
