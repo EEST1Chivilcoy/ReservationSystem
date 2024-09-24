@@ -8,7 +8,13 @@ if (!isset($_SESSION["nombreyapellido"])) {
     exit;
 }
 
-$nombreapellido = $_SESSION["nombreyapellido"];
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    if (!empty($_POST["NombreYApellido"])) {
+        $nombreapellido = $_POST["NombreYApellido"];
+    } else {
+        $nombreapellido = $_SESSION["nombreyapellido"];
+    }
+}
 
 $p_curso = $_POST['curso'];
 $p_materia = $_POST['materia'];

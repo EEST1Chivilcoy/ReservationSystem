@@ -1,5 +1,6 @@
 <?php
 require '../include/VerificacionSesion.php';
+$esAdmin = isset($_SESSION['EsAdmin']) && $_SESSION['EsAdmin'] == true;
 ?>
 
 <!DOCTYPE html>
@@ -90,6 +91,18 @@ require '../include/VerificacionSesion.php';
             <div class="col-3"></div>
             <div class="col-6">
                 <form action="cargar_sql.php" method="post" onsubmit="return validarFormulario()">
+                    <?php if ($esAdmin): ?>
+                        <div class="custom-control custom-switch">
+                            <input type="checkbox" class="custom-control-input" id="adminSwitch">
+                            <label class="custom-control-label" for="adminSwitch">¿Es para otra Persona?</label>
+                        </div>
+                        <div id="adminForm" class="mt-3" style="display: none;">
+                            <div class="form-group">
+                                <label for="NombreYApellido" style="color:white;" class="font-weight-bold">Ingrese Nombre y Apellido</label>
+                                <input type="text" id="NombreYApellido" name="NombreYApellido" placeholder="Ingrese Nombre y Apellido" class="form-control">
+                            </div>
+                        </div>
+                    <?php endif; ?>
                     <div class="form-group">
                         <div class="d-flex align-items-end">
                             <div style="flex: 0 0 auto; width: 200px; margin-right: 10px;">
@@ -143,7 +156,15 @@ require '../include/VerificacionSesion.php';
                     </div>
 
                     <script>
-                        
+                        document.getElementById('adminSwitch').addEventListener('change', function() {
+                            var adminForm = document.getElementById('adminForm');
+                            if (this.checked) {
+                                adminForm.style.display = 'block';
+                            } else {
+                                adminForm.style.display = 'none';
+                            }
+                        });
+
                         function validarFormulario() {
                             const horarioValido = validarHorario();
                             return horarioValido && validarHorarios(); // Asumiendo que `validarHorarios` es otra función que ya tienes
