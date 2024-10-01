@@ -18,5 +18,5 @@ jobs:
            server: ${{ secrets.FTP_HOST }}
            username: ${{ secrets.FTP_USER }}
            password: ${{ secrets.ftp_password }}
-           local-dir: ReservationSystem
+           local-dir: ReservationSystem/
            server-dir: htdocs/
