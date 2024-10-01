@@ -1,4 +1,4 @@
-name: Deploy to FTP
+name: Deploy website
 
 on:
   push:
@@ -9,13 +9,14 @@ jobs:
   deploy:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v2
+      - name: 🚚 Get latest code
+        uses: actions/checkout@v4
 
-      - name: FTP Deploy
-        uses: sebastianpopp/ftp-action@v2.0.0
+      - name: 📂 Sync files
+        uses: SamKirkland/FTP-Deploy-Action@v4.3.5
         with:
-          host: ${{ secrets.FTP_HOST }}
-          user: ${{ secrets.FTP_USER }}
-          password: ${{ secrets.FTP_PASSWORD }}
-          remoteDir: /htdocs  # Directorio remoto en tu servidor FTP
+           server: ${{ secrets.FTP_HOST }}
+           username: ${{ secrets.FTP_USER }}
+           password: ${{ secrets.ftp_password }}
+           local-dir: ReservationSystem
+           server-dir: htdocs/
