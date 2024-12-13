@@ -13,6 +13,14 @@
 
 ---
 
+### Equipo del Proyecto
+
+<a href="https://github.com/EEST1Chivilcoy/ReservationSystem/graphs/contributors">
+  <img src="https://contrib.rocks/image?repo=EEST1Chivilcoy/ReservationSystem" />
+</a>
+
+---
+
 ### Descripción
 
 Este repositorio contiene el código de una aplicación web para reservar el salón de audiovisuales, el comedor o el salón de actos. El sistema ofrece las siguientes funcionalidades:
