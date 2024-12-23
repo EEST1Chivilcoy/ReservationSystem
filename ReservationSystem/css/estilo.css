@@ -1,3 +1,7 @@
+body {
+  background: rgb(161, 192, 220);
+}
+
 footer {
   background-color: #635992;
   color: white;
@@ -30,4 +34,38 @@ footer {
 .footer-bottom {
   text-align: center;
   margin-top: 20px;
+}
+
+.custom-navbar {
+  background: #635992;
+}
+
+.custom-title {
+  color: rgb(39, 23, 111);
+  margin-left: 15px;
+}
+
+/* Estilos navideños */
+.navidad footer {
+  background-color: #c52f2f; /* Rojo navideño */
+  color: white;
+}
+
+.navidad .contenedor-footer {
+  border-bottom: 1px solid #ffcc00; /* Dorado */
+}
+
+.navidad .custom-navbar {
+  background: #c52f2f; /* Rojo navideño */
+}
+
+.navidad .custom-title {
+  color: #ffcc00; /* Dorado */
+}
+
+.navidad {
+  background: url("https://i.imgur.com/uzGg0e6.jpeg") no-repeat center center
+    fixed;
+  background-size: cover;
+  margin: 0; /* Opcional, para eliminar el margen por defecto del cuerpo */
 }
