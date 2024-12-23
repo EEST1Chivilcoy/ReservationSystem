@@ -25,6 +25,9 @@ $esAdmin = isset($_SESSION['EsAdmin']) && $_SESSION['EsAdmin'] == true;
     <!-- Moment.js (para manejar fechas) -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script>
 
+    <!-- FullCalendar (Calendario) -->
+    <script src='https://cdn.jsdelivr.net/npm/fullcalendar@6.1.15/index.global.min.js'></script>
+
     <?php
     include('include/conexion.php');
 
@@ -48,90 +51,16 @@ $esAdmin = isset($_SESSION['EsAdmin']) && $_SESSION['EsAdmin'] == true;
     $page = isset($_GET['page']) ? (int)$_GET['page'] : 1;
     $offset = ($page - 1) * $items_per_page;
 
-    $filtro = isset($_GET['filtro']) ? $_GET['filtro'] : 'normal';
-
-    if ($filtro == 'normal') {
-
-        // Contar el total de elementos
-        $query = "SELECT COUNT(*) as total
-        FROM tabla
-        WHERE fecha >= '$fecha_actual'";
-
-        $result = mysqli_query($conexion, $query);
-        $total_items = mysqli_fetch_assoc($result)['total'];
-        $total_pages = ceil($total_items / $items_per_page);
-
-        // Obtener los datos para la página actual
-        $consulta_ordenada = " SELECT *, DATE_FORMAT(fecha, '%d/%m/%Y') AS fecha_formateada 
-        FROM tabla 
-        WHERE fecha >= '$fecha_actual'
-        ORDER BY 
-        ABS(DATEDIFF(fecha, '$fecha_actual')) ASC,
-        TIME(horario) ASC
-        LIMIT $offset, $items_per_page
-        ";
-    } elseif ($filtro == 'hoy') {
-
-        // Contar el total de elementos
-        $query = "SELECT COUNT(*) as total
-        FROM tabla
-        WHERE fecha = '$fecha_actual'";
-
-        $result = mysqli_query($conexion, $query);
-        $total_items = mysqli_fetch_assoc($result)['total'];
-        $total_pages = ceil($total_items / $items_per_page);
-
-        // Obtener los datos para la página actual
-        $consulta_ordenada = " SELECT *, DATE_FORMAT(fecha, '%d/%m/%Y') AS fecha_formateada 
-        FROM tabla 
-        WHERE fecha = '$fecha_actual'
-        ORDER BY 
-        ABS(DATEDIFF(fecha, '$fecha_actual')) ASC,
-        TIME(horario) ASC
-        LIMIT $offset, $items_per_page
-        ";
-    } elseif ($filtro == 'ninguno') {
-
-        // Contar el total de elementos
-        $query = "SELECT COUNT(*) as total
-        FROM tabla";
-
-        $result = mysqli_query($conexion, $query);
-        $total_items = mysqli_fetch_assoc($result)['total'];
-        $total_pages = ceil($total_items / $items_per_page);
-
-        // Obtener los datos para la página actual
-        $consulta_ordenada = " SELECT *, DATE_FORMAT(fecha, '%d/%m/%Y') AS fecha_formateada 
-        FROM tabla 
-        ORDER BY 
-        ABS(DATEDIFF(fecha, '$fecha_actual')) ASC,
-        TIME(horario) ASC
-        LIMIT $offset, $items_per_page
-        ";
-    } else {
-
-        // Contar el total de elementos
-        $query = "SELECT COUNT(*) as total
-        FROM tabla
-        WHERE fecha >= '$fecha_actual'";
-
-        $result = mysqli_query($conexion, $query);
-        $total_items = mysqli_fetch_assoc($result)['total'];
-        $total_pages = ceil($total_items / $items_per_page);
-
-        // Obtener los datos para la página actual
-        $consulta_ordenada = " SELECT *, DATE_FORMAT(fecha, '%d/%m/%Y') AS fecha_formateada 
-        FROM tabla 
-        WHERE fecha >= '$fecha_actual'
-        ORDER BY 
-        ABS(DATEDIFF(fecha, '$fecha_actual')) ASC,
-        TIME(horario) ASC
-        LIMIT $offset, $items_per_page
-        ";
-    }
-
     $consulta_borrar = "DELETE FROM tabla WHERE fecha < DATE_SUB('" . $fecha_actual . "', INTERVAL 7 DAY)"; //Ahora esta consulta borra despues de 7 Dias (Una semana)
     mysqli_query($conexion, $consulta_borrar) or die('Error en consulta de fechas');
+
+    $consulta_ordenada = " SELECT *, DATE_FORMAT(fecha, '%d/%m/%Y') AS fecha_formateada 
+    FROM tabla 
+    ORDER BY 
+    ABS(DATEDIFF(fecha, '$fecha_actual')) ASC,
+    TIME(horario) ASC
+    LIMIT $offset, $items_per_page
+    ";
 
     $resultado = mysqli_query($conexion, $consulta_ordenada) or die('Error en consulta');
     $num_filas = mysqli_num_rows($resultado);
@@ -243,7 +172,151 @@ $esAdmin = isset($_SESSION['EsAdmin']) && $_SESSION['EsAdmin'] == true;
             padding: 0;
             color: white;
         }
+
+        /* Estilos base del calendario */
+        .fc {
+            background-color: #1a2635;
+            color: #e0e0e0;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            border: 1px solid rgba(161, 192, 220, 0.2);
+        }
+
+        /* Encabezados y bordes */
+        .fc-theme-standard td,
+        .fc-theme-standard th,
+        .fc-theme-standard .fc-scrollgrid {
+            border-color: rgba(161, 192, 220, 0.2);
+        }
+
+        .fc-col-header {
+            background-color: #243447;
+        }
+
+        /* Botones */
+        .fc .fc-button {
+            background-color: #243447;
+            border-color: rgba(161, 192, 220, 0.2);
+            color: #e0e0e0;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+
+        .fc .fc-button:hover {
+            background-color: #2c3e50;
+            border-color: rgba(161, 192, 220, 0.4);
+        }
+
+        .fc .fc-button-primary:not(:disabled).fc-button-active,
+        .fc .fc-button-primary:not(:disabled):active {
+            background-color: #34495e;
+            border-color: rgba(161, 192, 220, 0.4);
+        }
+
+        /* Día actual */
+        .fc-day-today {
+            background-color: rgba(161, 192, 220, 0.15) !important;
+        }
+
+        /* Números y texto */
+        .fc-daygrid-day-number,
+        .fc-col-header-cell-cushion {
+            color: #e0e0e0;
+            text-decoration: none !important;
+        }
+
+        /* Eventos */
+        .fc-event {
+            background-color: rgb(161, 192, 220);
+            border-color: rgb(161, 192, 220);
+            color: #1a2635;
+            transition: transform 0.2s ease;
+        }
+
+        .fc-event:hover {
+            transform: scale(1.02);
+        }
+
+        /* Día no del mes actual */
+        .fc-day-other {
+            background-color: #1c2837;
+        }
+
+        /* Hover sobre días */
+        .fc-daygrid-day:hover {
+            background-color: rgba(161, 192, 220, 0.05);
+        }
+
+        /* Popover de eventos */
+        .fc-popover {
+            background-color: #243447;
+            border-color: rgba(161, 192, 220, 0.2);
+        }
+
+        .fc-popover-header {
+            background-color: #2c3e50;
+            color: #e0e0e0;
+        }
     </style>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            var calendarEl = document.getElementById('calendar');
+            var calendar = new FullCalendar.Calendar(calendarEl, {
+                locale: 'es',
+                initialView: 'timeGridWeek',
+                headerToolbar: {
+                    left: 'prev,next today',
+                    center: 'title',
+                    right: 'dayGridMonth,timeGridWeek,timeGridDay'
+                },
+                buttonText: {
+                    today: 'Hoy',
+                    month: 'Mes',
+                    week: 'Semana',
+                    day: 'Día'
+                },
+                slotMinTime: '07:00:00',
+                slotMaxTime: '23:00:00',
+                allDaySlot: false,
+                height: 'auto',
+                events: 'get_events.php',
+                eventClick: function(info) {
+                    showEventDetails(info.event);
+                }
+            });
+            calendar.render();
+
+            function showEventDetails(event) {
+                const details = `
+                    <p><strong>Nombre:</strong> ${event.extendedProps.nombreapellido}</p>
+                    <p><strong>Curso:</strong> ${event.extendedProps.curso}</p>
+                    <p><strong>Materia:</strong> ${event.extendedProps.materia}</p>
+                    <p><strong>Salón:</strong> ${event.extendedProps.info}</p>
+                    <p><strong>Materiales:</strong> ${event.extendedProps.materiales}</p>
+                `;
+
+                document.getElementById('eventDetails').innerHTML = details;
+
+                const modal = new bootstrap.Modal(document.getElementById('eventModal'));
+                modal.show();
+
+                if (document.getElementById('editEvent')) {
+                    document.getElementById('editEvent').onclick = () => {
+                        window.location.href = `reserva/modifica_reserva.php?id=${event.extendedProps.id}`;
+                    };
+                }
+
+                if (document.getElementById('deleteEvent')) {
+                    document.getElementById('deleteEvent').onclick = () => {
+                        if (confirm('¿Estás seguro de que deseas eliminar esta reserva?')) {
+                            window.location.href = `reserva/baja_sql.php?id=${event.extendedProps.id}`;
+                        }
+                    };
+                }
+            }
+        });
+    </script>
 </head>
 
 <body>
@@ -261,118 +334,103 @@ $esAdmin = isset($_SESSION['EsAdmin']) && $_SESSION['EsAdmin'] == true;
     <br>
     <h3 class="text-center font-italic" style="color: white">INFO</h3>
     <br>
-    </div>
+
+
     <div class="card-group">
+
         <div class="card mb-3 mx-2 rounded" style="background:#696969">
+
             <img src="img/audio_visuales.jpg" class="card-img-top rounded" alt="...">
+
             <div class="card-body">
                 <h3 class="card-title" style="color:white; text-align:center;">AUDIOVISUALES</h3>
                 <p class="card-text">Esta sala tiene una capacidad máxima de 30 personas.
                     Se recomienda reservar con amplia anticipación.</p>
             </div>
+
         </div>
+
         <div class="card mb-3 mx-2 rounded" style="background:#545454">
+
             <img src="img/comedor.jpg" class="card-img-top rounded" alt="...">
+
             <div class="card-body">
                 <h3 class="card-title" style="color:white; text-align:center;">COMEDOR</h3>
                 <p class="card-text">Esta sala tiene capacidad aproximada de 50 personas o más.
                     Pueden asistir grupos de Aula individualmente o en conjunto.</p>
             </div>
+
         </div>
+
         <div class="card mb-3 mx-2 rounded" style="background:#696969">
+
             <img src="img/actos.jpg" class="card-img-top rounded" alt="...">
+
             <div class="card-body">
                 <h3 class="card-title" style="color:white; text-align:center;">SALÓN DE ACTOS</h3>
                 <p class="card-text">Esta sala tiene capacidad aproximada de 100 personas o más.
                     Pueden asistir grupos de Aula individualmente o en conjunto.</p>
             </div>
+
         </div>
+
     </div>
+
     <?php if ($loggedIn) : ?>
+
         <br>
+
         <div class="d-flex justify-content-center">
             <a href="reserva/cargar_reserva.php?tabla=" class="btn btn-primary btn-lg w-50 position-relative" style="color:white; text-decoration: none;">
                 <i class="bi bi-calendar-check-fill"></i> Reservar
             </a>
         </div>
+
         <br>
+
         <div class="d-flex justify-content-center">
             <a class="btn btn-danger btn-lg w-50 position-relative" href="logout.php">
                 <i class="bi bi-box-arrow-right"></i> Cerrar sesión
             </a>
         </div>
+
     <?php else : ?>
+
         <br>
+
         <div class="d-flex justify-content-center">
             <a class="btn btn-dark btn-lg w-50 position-relative" href="iniciar_sesion.php">
                 <i class="bi bi-person-fill"></i> Iniciar sesión / Registrarse
             </a>
         </div>
+
     <?php endif; ?>
+
     <br>
+
     <div class="titulo">
         <h1 class="text-center font-italic" style="color:white;">TURNOS</h1>
     </div>
-    </div><br>
+
+    </div>
+
+    <br>
+
     <!-- Fila 2 (Tabla)-->
     <div class="container">
+
         <div class="row">
+
             <div class="col-1"></div>
+
             <div class="col-10">
+
                 <?php if ($num_filas > 0) : ?>
-                    <div class="table-responsive">
-                        <table class="table table-bordered table-sm table-hover table-dark table-striped">
-                            <thead style="background-color: #003333;">
-                                <tr style="color: white;" class="text-center font-italic">
-                                    <td>Nombre y Apellido</td>
-                                    <td>Curso</td>
-                                    <td>Materia</td>
-                                    <td>Horario (Inicio)</td>
-                                    <td>Horario (Fin)</td>
-                                    <td>Fecha</td>
-                                    <td>Salón</td>
-                                    <td>Materiales</td>
-                                    <?php if ($esAdmin) : ?>
-                                        <td>Opciones</td>
-                                    <?php endif; ?>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <?php
-                                while ($d = mysqli_fetch_array($resultado)) {
-                                    echo "<tr>";
-                                    echo "<td>" . $d['nombreapellido'] . "</td>";
-                                    echo "<td>" . $d['curso'] . "</td>";
-                                    echo "<td>" . $d['materia'] . "</td>";
-                                    echo "<td>" . $d['horario'] . "</td>";
-                                    echo "<td>" . $d['horario1'] . "</td>";
-                                    echo "<td>" . $d['fecha_formateada'] . "</td>";
-                                    echo "<td>" . $d['info'] . "</td>";
-                                    echo "<td>" . $d['materiales'] . "</td>";
-                                    if ($esAdmin) {
-                                        echo "<td class='actions'>
-                                        <a href='reserva/modifica_reserva.php?id=" . $d['ID'] . "&nombreapellido=" . urlencode($d['nombreapellido']) .
-                                            "&curso=" . urlencode($d['curso']) . "&materia=" . urlencode($d['materia']) .
-                                            "&horario=" . urlencode($d['horario']) . "&horario1=" . urlencode($d['horario1']) . "&fecha=" . urlencode($d['fecha']) .
-                                            "&info=" . urlencode($d['info']) . "&materiales=" . urlencode($d['materiales']) . "' class='btn btn-link'>
-                                        <i class='bi bi-pencil'></i> <!-- Editar icon -->
-                                        </a>
-                                        
-                                        <i class='bi bi-dash'></i>
 
-                                        <a href='#' class='btn btn-link' onclick=\"openDeleteModal('{$d['ID']}', '" . urlencode($d['nombreapellido']) . "', '" . urlencode($d['curso']) . "', '" . urlencode($d['materia']) . "', '" . urlencode($d['horario']) . "', '" . urlencode($d['horario1']) . "', '" . urlencode($d['fecha']) . "', '" . urlencode($d['info']) . "', '" . urlencode($d['materiales']) . "')\">
-                                            <i class='bi bi-trash'></i> <!-- Borrar icon -->
-                                        </a>
-
-                                        </td>";
-                                    }
-                                    echo "</tr>";
-                                }
-                                ?>
-
-                            </tbody>
-                        </table>
+                    <div class="container">
+                        <div id='calendar'></div>
                     </div>
+
                 <?php else : ?>
                     <div class="alert alert-custom-dark text-center" role="alert">
                         <h4 class="alert-heading">No hay turnos disponibles</h4>
@@ -387,63 +445,31 @@ $esAdmin = isset($_SESSION['EsAdmin']) && $_SESSION['EsAdmin'] == true;
                         <?php endif; ?>
                     </div>
                 <?php endif; ?>
-
-                <nav aria-label="Page navigation">
-                    <div class="d-flex justify-content-between align-items-center">
-                        <?php if ($esAdmin) : ?>
-                            <!-- Contenedor del filtro con fondo oscuro -->
-                            <div class="bg-dark text-light p-3 rounded">
-                                <label for="filtro" class="form-label">Filtro: </label>
-                                <select id="filtro" class="form-select bg-secondary text-light" onchange="window.location.href=this.value;">
-                                    <option value="?filtro=normal&page=1" <?= !isset($_GET['filtro']) || $_GET['filtro'] == 'normal' ? 'selected' : '' ?>>Normal</option>
-                                    <option value="?filtro=hoy&page=1" <?= isset($_GET['filtro']) && $_GET['filtro'] == 'hoy' ? 'selected' : '' ?>>Hoy</option>
-                                    <option value="?filtro=ninguno&page=1" <?= isset($_GET['filtro']) && $_GET['filtro'] == 'ninguno' ? 'selected' : '' ?>>Ninguno (ver todos los registros)</option>
-                                </select>
-                            </div>
-                        <?php endif; ?>
-
-                        <!-- Paginación -->
-                        <?php if ($total_pages > 1) : ?>
-                            <ul class="pagination mb-0">
-                                <li class="page-item <?= $page == 1 ? 'disabled' : '' ?>">
-                                    <a class="page-link bg-dark text-light border-dark" href="?page=<?= $page - 1 ?>&filtro=<?= isset($_GET['filtro']) ? $_GET['filtro'] : 'normal' ?>" aria-label="Previous">
-                                        <span aria-hidden="true">&laquo;</span>
-                                    </a>
-                                </li>
-                                <?php for ($i = 1; $i <= $total_pages; $i++) : ?>
-                                    <li class="page-item <?= $page == $i ? 'active' : '' ?>">
-                                        <a class="page-link bg-dark text-light border-dark" href="?page=<?= $i ?>&filtro=<?= isset($_GET['filtro']) ? $_GET['filtro'] : 'normal' ?>"><?= $i ?></a>
-                                    </li>
-                                <?php endfor; ?>
-                                <li class="page-item <?= $page == $total_pages ? 'disabled' : '' ?>">
-                                    <a class="page-link bg-dark text-light border-dark" href="?page=<?= $page + 1 ?>&filtro=<?= isset($_GET['filtro']) ? $_GET['filtro'] : 'normal' ?>" aria-label="Next">
-                                        <span aria-hidden="true">&raquo;</span>
-                                    </a>
-                                </li>
-                            </ul>
-                        <?php endif; ?>
-                    </div>
-                </nav>
-
             </div>
-            <div class="col-1"></div>
+            <div class="col-1">
+            </div>
         </div>
     </div>
+
     <?php if ($esAdmin) : ?>
         <br>
+
         <div class="d-flex justify-content-center mt-5">
             <button type="button" class="btn btn-secondary btn-lg w-50 position-relative" data-toggle="modal" data-target="#printModal">
                 <i class="bi bi-printer-fill"></i> Imprimir Registros
             </button>
         </div>
+
         <br>
         <div class="d-flex justify-content-center">
             <a href="Admin/gestion.php" class="btn btn-warning btn-lg w-50 position-relative">
                 <i class="bi bi-pencil-square"></i> Modificar Usuarios
             </a>
         </div>
+
         <br>
     <?php endif; ?>
+
     <br>
 
     <?php
@@ -474,7 +500,25 @@ $esAdmin = isset($_SESSION['EsAdmin']) && $_SESSION['EsAdmin'] == true;
         </div>
     </div>
 
-
+    <!-- Event Details Modal -->
+    <div class="modal fade" id="eventModal" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content bg-dark text-white">
+                <div class="modal-header">
+                    <h5 class="modal-title">Detalles de la Reserva</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body" id="eventDetails"></div>
+                <div class="modal-footer">
+                    <?php if ($esAdmin) : ?>
+                        <button type="button" class="btn btn-warning" id="editEvent">Editar</button>
+                        <button type="button" class="btn btn-danger" id="deleteEvent">Eliminar</button>
+                    <?php endif; ?>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                </div>
+            </div>
+        </div>
+    </div>
 
     <!-- Modal Imprimir Registros-->
     <div class="modal fade" id="printModal" tabindex="-1" aria-labelledby="printModalLabel" aria-hidden="true">

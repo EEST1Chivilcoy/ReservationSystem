@@ -116,16 +116,22 @@ $GLOBALS['version'] = $version;
                 <p>Este proyecto ha sido posible gracias a la colaboración y el esfuerzo continuo de varios individuos y grupos:</p>
                 <ul>
                     <li>El Profesor Sergio Cáffaro, quien proporcionó la idea inicial y la guía conceptual del proyecto.</li>
-                    <li>Los estudiantes de 6to año de 2023, quienes desarrollaron la versión original de la página.</li>
-                    <li>Los estudiantes de 6to año de 2024, quienes realizaron mejoras y completaron funcionalidades adicionales.</li>
-                    <li>Bernardo Gonzalez, estudiante de 7mo año del 2024, por su valiosa contribución en términos de experiencia y conocimientos adicionales.</li>
+                    <li>Bernardo Gonzalez, estudiante de 7mo año del 2024, quien desarrolló y mantuvo el código fuente en GitHub.</li>
+                    <li>Los estudiantes de 6to año de 2023 y 2024, quienes participaron en el desarrollo conceptual y pruebas del proyecto.</li>
                 </ul>
-                <p>Agradecemos profundamente el compromiso y la dedicación de todos los participantes que hicieron posible este proyecto.</p>
-                <div class="modal-footer d-flex justify-content-center">
-                    <a href="https://github.com/EEST1Chivilcoy/ReservationSystem" target="_blank" class="btn btn-outline-light">
-                        <i class="bi bi-github"></i> Visita nuestro repositorio en GitHub
+                <p>Agradecemos profundamente el compromiso y la dedicación de todos los participantes que hicieron posible este proyecto. En el futuro, esta sección incluirá automáticamente a todos los colaboradores que contribuyan al repositorio en GitHub.</p>
+
+                <!-- Imagen de contribuyentes -->
+                <div class="text-center my-4">
+                    <a href="https://github.com/EEST1Chivilcoy/ReservationSystem/graphs/contributors" target="_blank">
+                        <img src="https://contrib.rocks/image?repo=EEST1Chivilcoy/ReservationSystem" alt="Contribuyentes del proyecto" class="img-fluid">
                     </a>
                 </div>
+            </div>
+            <div class="modal-footer d-flex justify-content-center">
+                <a href="https://github.com/EEST1Chivilcoy/ReservationSystem" target="_blank" class="btn btn-outline-light">
+                    <i class="bi bi-github"></i> Visita nuestro repositorio en GitHub
+                </a>
             </div>
         </div>
     </div>

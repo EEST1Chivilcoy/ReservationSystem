@@ -397,5 +397,5 @@ FodyWeavers.xsd
 # JetBrains Rider
 *.sln.iml
 
-include/config_database.php
+ReservationSystem/include/config_database.php
 .vscode/settings.json
