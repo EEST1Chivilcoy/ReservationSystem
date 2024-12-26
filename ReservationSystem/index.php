@@ -67,6 +67,19 @@ $esAdmin = isset($_SESSION['EsAdmin']) && $_SESSION['EsAdmin'] == true;
 
     mysqli_close($conexion);
     ?>
+
+    <?php
+    $today = new DateTime();
+    $month = (int)$today->format('m');
+    $day = (int)$today->format('d');
+
+    $isChristmasWeek = $month === 12 && $day >= 20 && $day <= 26;
+
+    if ($isChristmasWeek) {
+        echo '<script src="https://app.embed.im/snow.js" defer></script>';
+    }
+    ?>
+
     <style>
         .card {
             background-color: rgb(161, 192, 220);
