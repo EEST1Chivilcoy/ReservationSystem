@@ -470,6 +470,7 @@ $esAdmin = isset($_SESSION['EsAdmin']) && $_SESSION['EsAdmin'] == true;
     </div>
 
     <?php if ($esAdmin) : ?>
+
         <br>
 
         <div class="d-flex justify-content-center mt-5">
@@ -479,6 +480,15 @@ $esAdmin = isset($_SESSION['EsAdmin']) && $_SESSION['EsAdmin'] == true;
         </div>
 
         <br>
+
+        <div class="d-flex justify-content-center">
+            <button type="button" class="btn btn-info btn-lg w-50 position-relative" data-toggle="modal" data-target="#printQrModal">
+                <i class="bi bi-qr-code"></i> Generar QR
+            </button>
+        </div>
+
+        <br>
+
         <div class="d-flex justify-content-center">
             <a href="Admin/gestion.php" class="btn btn-warning btn-lg w-50 position-relative">
                 <i class="bi bi-pencil-square"></i> Modificar Usuarios
@@ -486,6 +496,7 @@ $esAdmin = isset($_SESSION['EsAdmin']) && $_SESSION['EsAdmin'] == true;
         </div>
 
         <br>
+
     <?php endif; ?>
 
     <br>
@@ -511,6 +522,26 @@ $esAdmin = isset($_SESSION['EsAdmin']) && $_SESSION['EsAdmin'] == true;
                         <button type="button" class="btn btn-danger" id="deleteEvent">Eliminar</button>
                     <?php endif; ?>
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Imprimir QR -->
+    <div class="modal fade" id="printQrModal" tabindex="-1" aria-labelledby="printQrModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="printQrModalLabel">Imprimir QR</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Cerrar">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body text-center">
+                    <img src="generatePrintQR.php" alt="QR Code" class="img-fluid">
+                    <br>
+                    <br>
+                    <a href="generatePrintQR.php" class="btn btn-primary">Imprimir QR</a>
                 </div>
             </div>
         </div>
