@@ -26,15 +26,18 @@ require '../include/VerificacionAdmin.php'
 
     <!-- Archivos a incluir -->
     <?php
+    include '../include/conexion.php';
+
     $id_tabla = $_GET['id'];
-    $usuario = $_GET['nombreapellido'];
-    $curso = $_GET['curso'];
-    $materia = $_GET['materia'];
-    $horario = $_GET['horario'];
-    $horario1 = $_GET['horario1'];
-    $fecha = $_GET['fecha'];
-    $info = $_GET['info'];
-    $materiales = $_GET['materiales'];
+
+    $query = "SELECT nombreapellido, curso, materia, horario, horario1, fecha, info, materiales FROM tabla WHERE id = ?";
+    $stmt = $conexion->prepare($query);
+    $stmt->bind_param("i", $id_tabla);
+    $stmt->execute();
+    $stmt->bind_result($usuario, $curso, $materia, $horario, $horario1, $fecha, $info, $materiales);
+    $stmt->fetch();
+    $stmt->close();
+    $conexion->close();
     ?>
 </head>
 
@@ -50,9 +53,10 @@ require '../include/VerificacionAdmin.php'
             </div>
         </div>
     </nav>
+
     <br>
+
     <br>
-    <!-- Formulario -->
 
     <div class="container">
 
@@ -107,7 +111,6 @@ require '../include/VerificacionAdmin.php'
                         <input type="text" id="materiales" name="materiales" value="<?php echo $materiales; ?>" class="form-control">
                     </div>
 
-                    <!-- Botones rediseñados -->
                     <button type="submit" class="btn btn-warning btn-block" name="boton" value="1">
                         <i class="bi bi-pencil-square me-2"></i> Modifica la reserva
                     </button>
