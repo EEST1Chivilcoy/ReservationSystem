@@ -8,7 +8,7 @@
 ### Estado del Proyecto
 
 ![Build Status](https://github.com/EEST1Chivilcoy/ReservationSystem/actions/workflows/main.yml/badge.svg)
-![Web Status](https://img.shields.io/website-up-down-green-red/http/reserva.000.pe)
+![Web Status](https://img.shields.io/website-up-down-green-red/http/reserva.great-site.net)
 ![Issue Open](https://img.shields.io/github/issues/EEST1Chivilcoy/ReservationSystem.svg)
 
 ---
