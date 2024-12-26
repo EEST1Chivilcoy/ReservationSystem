@@ -2,8 +2,7 @@
 include('include/conexion.php');
 
 $query = "SELECT ID, nombreapellido, curso, materia, horario, horario1, fecha, info, materiales 
-          FROM tabla 
-          WHERE fecha >= CURDATE()";
+          FROM tabla";
 
 $result = mysqli_query($conexion, $query);
 $events = array();
