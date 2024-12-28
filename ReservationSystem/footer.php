@@ -47,7 +47,6 @@ function get_commits($url, $ch)
 
         // Incrementa el número de página
         $page++;
-
     } while (count($data) == $per_page); // Continúa mientras se obtenga el número máximo de commits por página
 
     return $commits;
@@ -109,24 +108,47 @@ $GLOBALS['version'] = $version;
                 </button>
             </div>
             <div class="modal-body">
-                <!-- Imagen centrada -->
+
+                <!-- Imagen del sistema centrada -->
                 <div class="text-center">
                     <img src="https://i.imgur.com/fSjgaVI.jpeg" alt="Logo del Sistema" class="img-fluid mb-4" style="max-width: 200px;">
                 </div>
-                <p>Este proyecto ha sido posible gracias a la colaboración y el esfuerzo continuo de varios individuos y grupos:</p>
-                <ul>
-                    <li>El Profesor Sergio Cáffaro, quien proporcionó la idea inicial y la guía conceptual del proyecto.</li>
-                    <li>Bernardo Gonzalez, estudiante de 7mo año del 2024, quien desarrolló y mantuvo el código fuente en GitHub.</li>
-                    <li>Los estudiantes de 6to año de 2023 y 2024, quienes participaron en el desarrollo conceptual y pruebas del proyecto.</li>
-                </ul>
-                <p>Agradecemos profundamente el compromiso y la dedicación de todos los participantes que hicieron posible este proyecto. En el futuro, esta sección incluirá automáticamente a todos los colaboradores que contribuyan al repositorio en GitHub.</p>
 
-                <!-- Imagen de contribuyentes -->
+                <!-- Introducción -->
+                <p class="text-justify">
+                    Este proyecto es el fruto de la colaboración de un equipo comprometido con la innovación y la mejora continua. Aquí reconocemos a quienes han contribuido significativamente a su desarrollo.
+                </p>
+
+                <!-- Colaboradores principales -->
+                <h3 class="mt-4">Colaboradores principales:</h3>
+                <ul>
+                    <li>
+                        <strong>Profesor Sergio Cáffaro:</strong> Generador de la idea inicial y guía conceptual del proyecto.
+                    </li>
+                    <li>
+                        <strong>Bernardo Gonzalez:</strong> Estudiante de 7mo año (2024), desarrollador principal y encargado del mantenimiento en GitHub.
+                    </li>
+                    <li>
+                        <strong>Estudiantes de 6to año (2023-2024):</strong> Colaboradores en el diseño conceptual y las pruebas del sistema.
+                    </li>
+                </ul>
+
+                <!-- Agradecimiento general -->
+                <p class="text-justify">
+                    Extendemos nuestro agradecimiento a todas las personas que han contribuido con su tiempo, conocimiento y esfuerzo. Este proyecto es un reflejo del trabajo en equipo y la dedicación compartida.
+                </p>
+
+                <!-- Sección separada para contribuyentes de GitHub -->
+                <h3 class="mt-4">Contribuyentes en GitHub:</h3>
+                <p class="text-justify">
+                    A continuación, se muestra la lista de personas que han contribuido directamente al repositorio del proyecto. Esta lista se actualiza automáticamente:
+                </p>
                 <div class="text-center my-4">
                     <a href="https://github.com/EEST1Chivilcoy/ReservationSystem/graphs/contributors" target="_blank">
-                        <img src="https://contrib.rocks/image?repo=EEST1Chivilcoy/ReservationSystem" alt="Contribuyentes del proyecto" class="img-fluid">
+                        <img src="https://contrib.rocks/image?repo=EEST1Chivilcoy/ReservationSystem" alt="Contribuyentes del proyecto en GitHub" class="img-fluid rounded shadow">
                     </a>
                 </div>
+
             </div>
             <div class="modal-footer d-flex justify-content-center">
                 <a href="https://github.com/EEST1Chivilcoy/ReservationSystem" target="_blank" class="btn btn-outline-light">
