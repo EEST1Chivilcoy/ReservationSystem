@@ -538,10 +538,10 @@ $esAdmin = isset($_SESSION['EsAdmin']) && $_SESSION['EsAdmin'] == true;
                     </button>
                 </div>
                 <div class="modal-body text-center">
-                    <img src="generatePrintQR.php" alt="QR Code" class="img-fluid">
+                    <img src="generatePrintQR.php" alt="QR Code" class="img-fluid" style="width: 300px; height: 300px; display: block; margin: 0 auto;">
                     <br>
                     <br>
-                    <a href="generatePrintQR.php" class="btn btn-primary">Imprimir QR</a>
+                    <button onclick="window.open('generatePrintQR.php?print=true', '_blank', 'width=800,height=800')" class="btn btn-primary">Imprimir QR</button>
                 </div>
             </div>
         </div>
