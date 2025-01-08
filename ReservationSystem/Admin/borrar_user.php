@@ -15,10 +15,6 @@ require '../include/VerificacionAdmin.php'
     <link rel="stylesheet" href="../css/estilo.css">
     <link rel="icon" href="../img/logo.png" type="image/svg+xml">
     <style>
-        body {
-            background: rgb(161, 192, 220);
-        }
-
         label {
             color: white;
         }
@@ -34,19 +30,20 @@ require '../include/VerificacionAdmin.php'
 </head>
 
 <body>
-    <!-- Titulo de la pagina -->
-    <nav class="navbar bg-body-tertiary" style="background:#635992;">
+    <nav class="navbar bg-body-tertiary custom-navbar">
         <div class="container-fluid">
             <div class="d-flex align-items-center">
                 <a class="navbar-brand" href="../index.php">
                     <img src="../img/logo.png" alt="Logo" width="65" height="65" class="d-inline-block align-text-top">
                 </a>
-                <h1 class="navbar-text text-center font-italic mb-0" style="color: rgb(39, 23, 111); margin-left: 15px;">ELIMINAR USUARIO</h1>
+                <h1 class="navbar-text text-center font-italic mb-0 custom-title">ELIMINAR USUARIO</h1>
             </div>
         </div>
     </nav>
+
     <br>
     <br>
+
     <!-- Formulario -->
     <div class="container">
 

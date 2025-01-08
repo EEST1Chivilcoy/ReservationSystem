@@ -29,7 +29,6 @@
         }
 
         body {
-            background: rgb(161, 192, 220);
             display: flex;
             flex-direction: column;
         }
@@ -51,22 +50,24 @@
 </head>
 
 <body>
-    <!-- Titulo de la pagina -->
-    <nav class="navbar bg-body-tertiary" style="background:#635992;">
+    <nav class="navbar bg-body-tertiary custom-navbar">
         <div class="container-fluid">
             <div class="d-flex align-items-center">
                 <a class="navbar-brand" href="../index.php">
                     <img src="../img/logo.png" alt="Logo" width="65" height="65" class="d-inline-block align-text-top">
                 </a>
-                <h1 class="navbar-text text-center font-italic mb-0" style="color: rgb(39, 23, 111); margin-left: 15px;">GESTION DE USUARIOS</h1>
+                <h1 class="navbar-text text-center font-italic mb-0 custom-title">GESTION DE USUARIOS</h1>
             </div>
         </div>
     </nav>
+
     <br>
     <br>
+
     <div class="titulo">
         <h1 class="text-center font-italic" style="color:white;">USUARIOS</h1>
     </div>
+
     <br>
 
     <div class="container">

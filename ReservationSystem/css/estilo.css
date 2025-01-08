@@ -1,9 +1,9 @@
 body {
-  background: rgb(161, 192, 220);
+  background: linear-gradient(180deg, #a1c0dc, #4a5d7a);
 }
 
 footer {
-  background-color: #635992;
+  background: linear-gradient(90deg, #635992, #8c7ab9, #635992);
   color: white;
   padding: 30px 0;
 }
@@ -37,7 +37,7 @@ footer {
 }
 
 .custom-navbar {
-  background: #635992;
+  background: linear-gradient(90deg, #635992, #8c7ab9, #635992);
 }
 
 .custom-title {

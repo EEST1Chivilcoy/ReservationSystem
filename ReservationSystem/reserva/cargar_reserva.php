@@ -13,11 +13,8 @@ $esAdmin = isset($_SESSION['EsAdmin']) && $_SESSION['EsAdmin'] == true;
     <link rel="stylesheet" href="../css/bootstrap.min.css">
     <link rel="stylesheet" href="../css/estilo.css">
     <link rel="icon" href="../img/logo.png" type="image/svg+xml">
-    <style>
-        body {
-            background: rgb(161, 192, 220);
-        }
 
+    <style>
         label {
             color: white;
         }
@@ -68,22 +65,23 @@ $esAdmin = isset($_SESSION['EsAdmin']) && $_SESSION['EsAdmin'] == true;
             font-weight: normal;
         }
     </style>
+
 </head>
 
 <body>
-    <nav class="navbar bg-body-tertiary" style="background:#635992;">
+    <nav class="navbar bg-body-tertiary custom-navbar">
         <div class="container-fluid">
             <div class="d-flex align-items-center">
                 <a class="navbar-brand" href="../index.php">
                     <img src="../img/logo.png" alt="Logo" width="65" height="65" class="d-inline-block align-text-top">
                 </a>
-                <h1 class="navbar-text text-center font-italic mb-0" style="color: rgb(39, 23, 111); margin-left: 15px;">RESERVACIÓN</h1>
+                <h1 class="navbar-text text-center font-italic mb-0 custom-title">RESERVACIÓN</h1>
             </div>
         </div>
     </nav>
-    <br>
-    <br>
 
+    <br>
+    <br>
 
     <!-- Formulario -->
     <div class="container" style="margin: bottom 30cm;">

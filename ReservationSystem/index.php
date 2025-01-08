@@ -353,7 +353,6 @@ $esAdmin = isset($_SESSION['EsAdmin']) && $_SESSION['EsAdmin'] == true;
     <h3 class="text-center font-italic" style="color: white">INFO</h3>
     <br>
 
-
     <div class="card-group">
 
         <div class="card mb-3 mx-2 rounded" style="background:#696969">
