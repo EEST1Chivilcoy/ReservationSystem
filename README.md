@@ -31,6 +31,18 @@ Este repositorio contiene el código de una aplicación web para reservar el sal
 - **Reserva de espacios para proyecciones**: Los salones pueden ser reservados para visualizar contenido en un proyector o televisor (en el caso del comedor y el salón de audiovisuales).
 - **Solicitud del proyector**: Los usuarios pueden solicitar el proyector y especificar el salón de la escuela donde desean usarlo.
 
+---
+
+### Carpeta de Campo
+
+Para acceder a la carpeta de campo puedes utilizar el siguiente enlace:
+
+[Acceder a la Carpeta de Campo](https://eest1-my.sharepoint.com/:w:/g/personal/bgonzalezerramuspe_eest1chivilcoy_edu_ar/ER6xcTBiaGVJsqDT-ypvZ9gBeBjIRkoIRmwKzd5tHGXRgg?e=KefGDp) 
+
+
+--- 
+
+
 ### Configuración
 
 Para que el proyecto funcione correctamente, es **imprescindible** crear un archivo llamado `config_database.php` en el directorio `include` con el siguiente contenido:
