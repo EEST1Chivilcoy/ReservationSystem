@@ -325,6 +325,7 @@ $esAdmin = isset($_SESSION['EsAdmin']) && $_SESSION['EsAdmin'] == true;
                     <p><strong>Nombre:</strong> ${event.extendedProps.nombreapellido}</p>
                     <p><strong>Curso:</strong> ${event.extendedProps.curso}</p>
                     <p><strong>Materia:</strong> ${event.extendedProps.materia}</p>
+                    <p><strong>Horario:</strong> ${event.start.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })} - ${event.end.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</p>
                     <p><strong>Salón:</strong> ${event.extendedProps.info}</p>
                     <p><strong>Materiales:</strong> ${event.extendedProps.materiales}</p>
                 `;
