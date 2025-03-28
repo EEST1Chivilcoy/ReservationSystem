@@ -301,7 +301,22 @@ $esAdmin = isset($_SESSION['EsAdmin']) && $_SESSION['EsAdmin'] == true;
                 events: 'get_events.php',
                 eventClick: function(info) {
                     showEventDetails(info.event);
-                }
+                },
+                eventDidMount: function(info) {
+                    // Asignar un color único basado en el ID del evento
+                    const colors = ['#FF5733', '#33FF57', '#3357FF', '#FF33A1', '#A133FF'];
+                    const eventId = parseInt(info.event.id, 10);
+                    const color = colors[eventId % colors.length];
+                    info.el.style.backgroundColor = color;
+                    info.el.style.borderColor = color;
+                },
+                eventOverlap: false, // Evitar superposición de eventos
+                slotEventOverlap: false, // Evitar superposición en vistas de tiempo
+                eventConstraint: {
+                    start: '07:00', // Limitar eventos al horario mínimo
+                    end: '23:00'    // Limitar eventos al horario máximo
+                },
+                eventSpacing: 5 // Espaciado entre eventos para mayor claridad
             });
             calendar.render();
 
