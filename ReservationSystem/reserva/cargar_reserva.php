@@ -82,21 +82,19 @@
 </head>
 
 <body class="bg-dark-900 text-gray-200 min-h-screen flex flex-col font-sans custom-scrollbar">
-    <!-- Navbar -->
-    <nav class="bg-dark-850 border-b border-gray-800 shadow-lg sticky top-0 z-50">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="flex justify-between items-center h-16">
-                <div class="flex items-center">
+    <!-- Navbar rediseñado -->
+    <nav class="bg-gray-800 border-b border-gray-700 shadow-lg">
+        <div class="container mx-auto px-4 py-3">
+            <div class="flex justify-between items-center">
+                <div class="flex items-center space-x-4">
                     <a href="../index.php" class="flex items-center space-x-3">
-                        <div class="w-10 h-10 bg-primary-600 rounded-full flex items-center justify-center overflow-hidden border-2 border-primary-500 shadow-lg">
-                            <img src="../img/logo.png" alt="Logo" class="h-9 w-9 object-cover">
-                        </div>
-                        <span class="font-display font-bold text-xl text-white tracking-tight hidden sm:block">Sistema de Reservas</span>
+                        <img src="../img/logo.png" alt="Logo" class="h-12 w-12">
+                        <h1 class="text-xl md:text-2xl font-bold text-white font-display">Sistema de Reserva de Salones</h1>
                     </a>
                 </div>
 
-                <div class="hidden md:flex items-center space-x-3">
-                    <a href="../index.php" class="inline-flex items-center px-4 py-2 bg-dark-800 text-sm font-medium rounded-md text-gray-300 hover:text-white hover:bg-primary-700 transition-all duration-200 ease-in-out">
+                <div class="hidden md:flex items-center space-x-4">
+                    <a href="../index.php" class="text-white bg-gray-700 hover:bg-gray-600 font-medium px-4 py-2 rounded-lg transition-all flex items-center">
                         <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" viewBox="0 0 20 20" fill="currentColor">
                             <path fill-rule="evenodd" d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z" clip-rule="evenodd" />
                         </svg>
@@ -116,8 +114,8 @@
                     </button>
 
                     <!-- Mobile menu -->
-                    <div x-show="open" @click.away="open = false" class="absolute right-0 mt-2 w-48 bg-dark-850 rounded-md shadow-lg py-1 z-50">
-                        <a href="../index.php" class="block px-4 py-2 text-sm text-gray-300 hover:bg-dark-800">Inicio</a>
+                    <div x-show="open" @click.away="open = false" class="absolute right-0 mt-2 w-48 bg-gray-800 rounded-md shadow-lg py-1 z-50">
+                        <a href="../index.php" class="block px-4 py-2 text-sm text-gray-300 hover:bg-gray-700">Inicio</a>
                     </div>
                 </div>
             </div>
