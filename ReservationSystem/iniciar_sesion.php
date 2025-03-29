@@ -44,22 +44,16 @@
 <body class="bg-gray-900 text-gray-100 min-h-screen flex flex-col">
     <!-- Navbar rediseñado -->
     <nav class="bg-gray-800 border-b border-gray-700 shadow-lg">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="flex justify-between h-16">
-                <div class="flex items-center">
-                    <div class="flex-shrink-0 flex items-center">
-                        <img src="img/logo.png" alt="Logo" class="h-10 w-10 rounded-full border-2 border-blue-500">
-                        <span class="ml-3 text-xl font-bold font-display tracking-wider text-blue-400">SISTEMA DE RESERVAS</span>
-                    </div>
+        <div class="container mx-auto px-4 py-3">
+            <div class="flex justify-between items-center">
+                <div class="flex items-center space-x-4">
+                    <img src="img/logo.png" alt="Logo" class="h-12 w-12">
+                    <h1 class="text-xl md:text-2xl font-bold text-white">RESERVA DE SALONES</h1>
                 </div>
 
-                <!-- Menú de navegación para escritorio -->
                 <div class="hidden md:flex items-center space-x-4">
-                    <a href="index.php" class="text-gray-300 hover:text-white px-3 py-2 rounded-md text-sm font-medium transition duration-150 ease-in-out hover:bg-gray-700">
+                    <a href="index.php" class="text-white bg-gray-700 hover:bg-gray-600 font-medium px-4 py-2 rounded-lg transition-all flex items-center">
                         Inicio
-                    </a>
-                    <a href="reservas.php" class="text-gray-300 hover:text-white px-3 py-2 rounded-md text-sm font-medium transition duration-150 ease-in-out hover:bg-gray-700">
-                        Ver Reservas
                     </a>
                 </div>
 
@@ -163,7 +157,7 @@
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex flex-col md:flex-row justify-between items-center">
                 <div class="mb-4 md:mb-0 flex items-center">
-                    <img src="img/logo.png" alt="Logo" class="h-10 w-10 mr-3 rounded-full border border-gray-600">
+                    <img src="https://i.imgur.com/fSjgaVI.jpeg" alt="Logo" class="h-10 w-10 mr-3 rounded-full border border-gray-600">
                     <div>
                         <span class="text-gray-200 font-medium">Sistema de Reserva de Salones</span>
                         <p class="text-gray-400 text-xs">Gestión eficiente de espacios educativos</p>
