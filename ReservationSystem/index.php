@@ -696,13 +696,13 @@ $esAdmin = isset($_SESSION['EsAdmin']) && $_SESSION['EsAdmin'] == true;
         <div class="container mx-auto px-4">
             <div class="flex flex-col md:flex-row justify-between items-center">
                 <div class="mb-4 md:mb-0">
-                    <img src="img/logo.png" alt="Logo" class="h-10 w-10 inline-block">
+                    <img src="https://i.imgur.com/fSjgaVI.jpeg" alt="Logo" class="h-10 w-10 inline-block">
                     <span class="ml-2 text-white font-medium">Sistema de Reserva de Salones</span>
                 </div>
                 
                 <div class="text-center md:text-right">
-                    <p class="text-gray-400 text-sm">&copy; <?php echo date('Y'); ?> - Sistema de Reserva de Salones</p>
-                    <p class="text-gray-500 text-xs mt-1">Desarrollado por el Equipo de Sistemas</p>
+                    <p class="text-gray-400 text-sm">&copy; <?php echo date('Y'); ?> - Sistema de Reserva de Salones V2</p>
+                    <p class="text-gray-500 text-xs mt-1">Desarrollado por G. Erramuspe, Bernardo</p>
                 </div>
             </div>
         </div>
