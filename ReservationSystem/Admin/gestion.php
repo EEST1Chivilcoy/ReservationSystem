@@ -66,7 +66,7 @@
                 <div class="flex items-center space-x-4">
                     <a href="../index.php" class="flex items-center space-x-3">
                         <img src="../img/logo.png" alt="Logo" class="h-12 w-12">
-                        <h1 class="text-xl md:text-2xl font-bold text-white font-display">Sistema de Gestión</h1>
+                        <h1 class="text-xl md:text-2xl font-bold text-white font-display">Sistema de Reserva de Salones</h1>
                     </a>
                 </div>
 
@@ -271,12 +271,12 @@
         <div class="container mx-auto px-4">
             <div class="flex flex-col md:flex-row justify-between items-center">
                 <div class="mb-4 md:mb-0">
-                    <img src="../img/logo.png" alt="Logo" class="h-10 w-10 inline-block">
-                    <span class="ml-2 text-white font-medium">Sistema de Gestión</span>
+                    <img src="https://i.imgur.com/fSjgaVI.jpeg" alt="Logo" class="h-10 w-10 inline-block">
+                    <span class="ml-2 text-white font-medium">Sistema de Reserva de Salones</span>
                 </div>
 
                 <div class="text-center md:text-right">
-                    <p class="text-gray-400 text-sm">&copy; <?php echo date('Y'); ?> - Sistema de Gestión V2</p>
+                    <p class="text-gray-400 text-sm">&copy; <?php echo date('Y'); ?> - Sistema de Reserva de Salones V2</p>
                     <p class="text-gray-500 text-xs mt-1">Desarrollado por G. Erramuspe, Bernardo</p>
                 </div>
             </div>
