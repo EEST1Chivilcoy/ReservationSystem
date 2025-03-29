@@ -267,7 +267,7 @@
     </div>
 
     <!-- Footer rediseñado -->
-    <footer class="bg-dark-800 border-t border-gray-700 py-6 mt-10">
+    <footer class="bg-gray-800 border-t border-gray-700 py-6 mt-10">
         <div class="container mx-auto px-4">
             <div class="flex flex-col md:flex-row justify-between items-center">
                 <div class="mb-4 md:mb-0 flex items-center">
