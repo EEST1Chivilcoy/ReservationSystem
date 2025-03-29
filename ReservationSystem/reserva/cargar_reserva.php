@@ -1,3 +1,8 @@
+<?php
+require '../include/VerificacionSesion.php';
+$esAdmin = isset($_SESSION['EsAdmin']) && $_SESSION['EsAdmin'] == true;
+?>
+
 <!DOCTYPE html>
 <html lang="es" class="dark">
 
