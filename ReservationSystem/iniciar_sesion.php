@@ -160,7 +160,7 @@
 
             <!-- Ayuda adicional -->
             <div class="mt-6 text-center text-sm text-gray-400">
-                <p>¿Necesitas ayuda? <a href="#" class="text-blue-400 hover:text-blue-300">Contacta a soporte</a></p>
+                <p>¿Necesitas ayuda? <a href="tel:02346431330" class="text-blue-400 hover:text-blue-300">Contacta a soporte</a></p>
             </div>
         </div>
     </main>
