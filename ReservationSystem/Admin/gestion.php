@@ -266,13 +266,16 @@
         </a>
     </div>
 
-    <!-- Footer -->
-    <footer class="bg-gray-800 border-t border-gray-700 py-6">
+    <!-- Footer rediseñado -->
+    <footer class="bg-dark-800 border-t border-gray-700 py-6 mt-10">
         <div class="container mx-auto px-4">
             <div class="flex flex-col md:flex-row justify-between items-center">
-                <div class="mb-4 md:mb-0">
-                    <img src="https://i.imgur.com/fSjgaVI.jpeg" alt="Logo" class="h-10 w-10 inline-block">
-                    <span class="ml-2 text-white font-medium">Sistema de Reserva de Salones</span>
+                <div class="mb-4 md:mb-0 flex items-center">
+                    <img src="https://i.imgur.com/fSjgaVI.jpeg" alt="Logo" class="h-10 w-10 mr-3 rounded-full border border-gray-600">
+                    <div>
+                        <span class="text-gray-200 font-medium">Sistema de Reserva de Salones</span>
+                        <p class="text-gray-400 text-xs">Gestión eficiente de espacios educativos</p>
+                    </div>
                 </div>
 
                 <div class="text-center md:text-right">
