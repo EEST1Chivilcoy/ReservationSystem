@@ -442,7 +442,7 @@ $esAdmin = isset($_SESSION['EsAdmin']) && $_SESSION['EsAdmin'] == true;
             <div class="flex justify-between items-center">
                 <div class="flex items-center space-x-4">
                     <img src="img/logo.png" alt="Logo" class="h-12 w-12">
-                    <h1 class="text-xl md:text-2xl font-bold text-white">RESERVA DE SALONES</h1>
+                    <h1 class="text-xl md:text-2xl font-bold text-white">Sistema de Reserva de Salones</h1>
                 </div>
                 
                 <div class="hidden md:flex items-center space-x-4">
