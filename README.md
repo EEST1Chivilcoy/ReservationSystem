@@ -33,16 +33,6 @@ Este repositorio contiene el código de una aplicación web para reservar el sal
 
 ---
 
-### Carpeta de Campo
-
-Para acceder a la carpeta de campo puedes utilizar el siguiente enlace:
-
-[Acceder a la Carpeta de Campo](https://eest1-my.sharepoint.com/:w:/g/personal/bgonzalezerramuspe_eest1chivilcoy_edu_ar/ER6xcTBiaGVJsqDT-ypvZ9gBeBjIRkoIRmwKzd5tHGXRgg?e=KefGDp) 
-
-
---- 
-
-
 ### Configuración
 
 Para que el proyecto funcione correctamente, es **imprescindible** crear un archivo llamado `config_database.php` en el directorio `include` con el siguiente contenido:
