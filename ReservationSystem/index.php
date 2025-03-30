@@ -433,8 +433,38 @@ $esAdmin = isset($_SESSION['EsAdmin']) && $_SESSION['EsAdmin'] == true;
 <body class="bg-gray-900 text-gray-200 min-h-screen flex flex-col" x-data="{ 
     showEventModal: false,
     showPrintModal: false,
-    showPrintQrModal: false
+    showPrintQrModal: false,
+    showErrorModal: <?php echo isset($_GET['error']) ? 'true' : 'false'; ?>,
+    errorMessage: '<?php echo isset($_GET['error']) ? htmlspecialchars($_GET['error'], ENT_QUOTES, 'UTF-8') : ''; ?>'
 }" @open-modal.window="$event.detail === 'eventModal' ? showEventModal = true : ($event.detail === 'printModal' ? showPrintModal = true : ($event.detail === 'printQrModal' ? showPrintQrModal = true : null))">
+
+    <!-- Error Modal -->
+    <div x-show="showErrorModal" class="fixed inset-0 overflow-y-auto z-50 flex items-center justify-center" x-transition:enter="transition ease-out duration-300" x-transition:enter-start="opacity-0" x-transition:enter-end="opacity-100" x-transition:leave="transition ease-in duration-200" x-transition:leave-start="opacity-100" x-transition:leave-end="opacity-0">
+        <div class="fixed inset-0 bg-black bg-opacity-75 transition-opacity" @click="showErrorModal = false"></div>
+        
+        <div class="relative bg-gray-800 rounded-lg max-w-md w-full mx-4 overflow-hidden shadow-xl transform transition-all" x-transition:enter="transition ease-out duration-300" x-transition:enter-start="opacity-0 translate-y-4" x-transition:enter-end="opacity-100 translate-y-0" x-transition:leave="transition ease-in duration-200" x-transition:leave-start="opacity-100 translate-y-0" x-transition:leave-end="opacity-0 translate-y-4">
+            <div class="px-4 pt-5 pb-4 sm:p-6">
+                <div class="flex justify-between items-center mb-4">
+                    <h3 class="text-lg font-medium leading-6 text-white">Error</h3>
+                    <button type="button" class="text-gray-400 hover:text-white" @click="showErrorModal = false">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                        </svg>
+                    </button>
+                </div>
+                
+                <div class="mt-2">
+                    <p class="text-gray-300" x-text="errorMessage"></p>
+                </div>
+                
+                <div class="mt-5 sm:mt-6 flex justify-end">
+                    <button type="button" class="inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-gray-600 text-base font-medium text-white hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500 sm:text-sm" @click="showErrorModal = false">
+                        Cerrar
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
 
     <!-- Navigation Bar -->
     <nav class="bg-gray-800 border-b border-gray-700 shadow-lg">
