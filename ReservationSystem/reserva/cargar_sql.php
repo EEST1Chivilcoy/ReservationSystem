@@ -10,32 +10,32 @@ if (!isset($_SESSION["nombreyapellido"])) {
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     if (!empty($_POST["NombreYApellido"])) {
-        $nombreapellido = $_POST["NombreYApellido"];
+        $nombreapellido = htmlspecialchars($_POST["NombreYApellido"], ENT_QUOTES, 'UTF-8');
     } else {
         $nombreapellido = $_SESSION["nombreyapellido"];
     }
 }
 
-$p_curso = $_POST['curso'];
-$p_materia = $_POST['materia'];
-$p_horario = $_POST['horario'];
-$p_horario1 = $_POST['horario1'];
-$p_fecha = $_POST['fecha'];
-$p_info = $_POST['info'];
-$p_materiales = $_POST['materiales'];
-$p_boton = $_POST['boton'];
+$p_curso = htmlspecialchars($_POST['curso'], ENT_QUOTES, 'UTF-8');
+$p_materia = htmlspecialchars($_POST['materia'], ENT_QUOTES, 'UTF-8');
+$p_horario = htmlspecialchars($_POST['horario'], ENT_QUOTES, 'UTF-8');
+$p_horario1 = htmlspecialchars($_POST['horario1'], ENT_QUOTES, 'UTF-8');
+$p_fecha = htmlspecialchars($_POST['fecha'], ENT_QUOTES, 'UTF-8');
+$p_info = htmlspecialchars($_POST['info'], ENT_QUOTES, 'UTF-8');
+$p_materiales = htmlspecialchars($_POST['materiales'], ENT_QUOTES, 'UTF-8');
+$p_boton = intval($_POST['boton']);
 
 if ($p_boton == 0) {
     header("Location: ../index.php");
     exit();
 } else {
-    if($p_curso != "Reunión"){
-        $division = $_POST["division"];
-        $p_curso =  $p_curso . " " . $division;  // Se añade un espacio entre curso y división
-    }    
+    if ($p_curso != "Reunión") {
+        $division = htmlspecialchars($_POST["division"], ENT_QUOTES, 'UTF-8');
+        $p_curso = $p_curso . " " . $division;  // Se añade un espacio entre curso y división
+    }
     // Si se seleccionó "Otro", tomar el valor del campo especificado
     if ($p_info == "Otro") {
-        $otro_salon = $_POST["otro_salon"];
+        $otro_salon = htmlspecialchars($_POST["otro_salon"], ENT_QUOTES, 'UTF-8');
         $p_info = $otro_salon;
     }
 
@@ -51,12 +51,12 @@ if ($p_boton == 0) {
 
         if ($total_reservas > 0) {
             $Message = "El salón ya está reservado en la fecha y horario seleccionados.";
-            header("Location: ../index.php?error={$Message}");
+            header("Location: ../index.php?error=" . urlencode($Message));
             exit;
         }
     } else {
         $Message = "Error en la preparación de la consulta de validación.";
-        header("Location: ../index.php?error={$Message}");
+        header("Location: ../index.php?error=" . urlencode($Message));
         exit;
     }
 
@@ -70,20 +70,19 @@ if ($p_boton == 0) {
 
         if ($resultado_alta) {
             $Message = "Se ha creado la entrada correctamente.";
-            header("Location: ../index.php?success={$Message}");
+            header("Location: ../index.php?success=" . urlencode($Message));
             exit;
         } else {
             $Message = "Error al intentar crear la entrada.";
-            header("Location: ../index.php?error={$Message}");
+            header("Location: ../index.php?error=" . urlencode($Message));
             exit;
         }
         mysqli_stmt_close($stmt);
     } else {
         $Message = "Error en la preparación de la consulta de inserción.";
-        header("Location: ../index.php?error={$Message}");
+        header("Location: ../index.php?error=" . urlencode($Message));
         exit;
     }
 
     mysqli_close($conexion);
 }
-?>
