@@ -444,22 +444,34 @@ $esAdmin = isset($_SESSION['EsAdmin']) && $_SESSION['EsAdmin'] == true;
         
         <div class="relative bg-gray-800 rounded-lg max-w-md w-full mx-4 overflow-hidden shadow-xl transform transition-all" x-transition:enter="transition ease-out duration-300" x-transition:enter-start="opacity-0 translate-y-4" x-transition:enter-end="opacity-100 translate-y-0" x-transition:leave="transition ease-in duration-200" x-transition:leave-start="opacity-100 translate-y-0" x-transition:leave-end="opacity-0 translate-y-4">
             <div class="px-4 pt-5 pb-4 sm:p-6">
-                <div class="flex justify-between items-center mb-4">
-                    <h3 class="text-lg font-medium leading-6 text-white">Error</h3>
-                    <button type="button" class="text-gray-400 hover:text-white" @click="showErrorModal = false">
+                <!-- Error Icon and Header -->
+                <div class="flex items-center mb-4">
+                    <div class="mx-auto flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-full bg-red-100">
+                        <svg class="h-6 w-6 text-red-600" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v3.75m-9.303 3.376c-.866 1.5.217 3.374 1.948 3.374h14.71c1.73 0 2.813-1.874 1.948-3.374L13.949 3.378c-.866-1.5-3.032-1.5-3.898 0L2.697 16.126zM12 15.75h.007v.008H12v-.008z" />
+                        </svg>
+                    </div>
+                    <h3 class="ml-3 text-lg font-medium leading-6 text-white">Error</h3>
+                    <button type="button" class="ml-auto text-gray-400 hover:text-white" @click="showErrorModal = false">
                         <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
                         </svg>
                     </button>
                 </div>
                 
-                <div class="mt-2">
-                    <p class="text-gray-300" x-text="errorMessage"></p>
+                <!-- Error Message -->
+                <div class="mt-3 text-center sm:mt-5">
+                    <div class="mt-2">
+                        <p class="text-gray-300" x-text="errorMessage"></p>
+                    </div>
                 </div>
                 
-                <div class="mt-5 sm:mt-6 flex justify-end">
-                    <button type="button" class="inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-gray-600 text-base font-medium text-white hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500 sm:text-sm" @click="showErrorModal = false">
-                        Cerrar
+                <!-- Action Buttons -->
+                <div class="mt-5 sm:mt-6 flex justify-center">
+                    <button type="button" 
+                            class="inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-red-600 text-base font-medium text-white hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 sm:text-sm transition-colors duration-200" 
+                            @click="showErrorModal = false">
+                        Entendido
                     </button>
                 </div>
             </div>
