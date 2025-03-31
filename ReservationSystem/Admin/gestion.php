@@ -113,31 +113,7 @@
         <div class="mb-6 flex flex-col sm:flex-row justify-between items-center">
             <div class="mb-4 sm:mb-0">
                 <h2 class="text-2xl font-semibold text-white">Lista de Usuarios</h2>
-                <p class="text-gray-400 text-sm mt-1">Gestión completa de cuentas de usuario</p>
-            </div>
-
-            <div class="flex space-x-3">
-                <a href="agregar_usuario.php" class="inline-flex items-center px-4 py-2 bg-primary-600 hover:bg-primary-700 rounded-lg text-white font-medium transition-colors">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" viewBox="0 0 20 20" fill="currentColor">
-                        <path fill-rule="evenodd" d="M10 5a1 1 0 011 1v3h3a1 1 0 110 2h-3v3a1 1 0 11-2 0v-3H6a1 1 0 110-2h3V6a1 1 0 011-1z" clip-rule="evenodd" />
-                    </svg>
-                    Nuevo Usuario
-                </a>
-
-                <div x-data="{ open: false }" class="relative">
-                    <button @click="open = !open" class="inline-flex items-center px-4 py-2 bg-gray-700 hover:bg-gray-600 rounded-lg text-white font-medium transition-colors">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" viewBox="0 0 20 20" fill="currentColor">
-                            <path fill-rule="evenodd" d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z" clip-rule="evenodd" />
-                        </svg>
-                        Filtrar
-                    </button>
-
-                    <div x-show="open" @click.away="open = false" class="absolute right-0 mt-2 w-48 bg-gray-800 rounded-md shadow-lg py-1 z-10">
-                        <a href="#" class="block px-4 py-2 text-sm text-gray-300 hover:bg-gray-700">Todos los usuarios</a>
-                        <a href="#" class="block px-4 py-2 text-sm text-gray-300 hover:bg-gray-700">Administradores</a>
-                        <a href="#" class="block px-4 py-2 text-sm text-gray-300 hover:bg-gray-700">Usuarios estándar</a>
-                    </div>
-                </div>
+                <p class="text-gray-400 text-sm mt-1">Gestión completa de cuentas de usuario. Mostrando 10 usuarios por página. Use la barra de búsqueda para encontrar cualquier usuario.</p>
             </div>
         </div>
 
@@ -168,7 +144,10 @@
                     </thead>
                     <tbody class="divide-y divide-gray-700 bg-gray-800">
                         <?php
+                        $counter = 0;
                         while ($d = mysqli_fetch_array($resultado)) {
+                            if ($counter >= 10) break; // Mostrar solo 10 usuarios
+                            $counter++;
                             echo "<tr class=\"hover:bg-gray-700 transition-colors\">";
                             echo "<td class=\"px-6 py-4 whitespace-nowrap\">
                                 <div class=\"flex items-center\">
@@ -209,7 +188,7 @@
                                             <path fill-rule=\"evenodd\" d=\"M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z\" clip-rule=\"evenodd\" />
                                         </svg>
                                     </a>
-                                    <a href='baja_sql.php?id=" . $d['ID'] . "' 
+                                    <a href='#' onclick=\"confirmDelete(" . $d['ID'] . ")\" 
                                         class=\"text-red-400 hover:text-red-300 transition-colors\" title=\"Eliminar\">
                                         <svg xmlns=\"http://www.w3.org/2000/svg\" class=\"h-5 w-5\" viewBox=\"0 0 20 20\" fill=\"currentColor\">
                                             <path fill-rule=\"evenodd\" d=\"M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z\" clip-rule=\"evenodd\" />
@@ -224,36 +203,8 @@
                     </tbody>
                 </table>
             </div>
-
-            <!-- Pagination -->
-            <div class="bg-gray-700 px-4 py-3 flex items-center justify-between sm:px-6">
-                <div class="hidden sm:flex-1 sm:flex sm:items-center sm:justify-between">
-                    <div>
-                        <p class="text-sm text-gray-400">
-                            Mostrando <span class="font-medium">1</span> a <span class="font-medium">10</span> de <span class="font-medium">20</span> usuarios
-                        </p>
-                    </div>
-                    <div>
-                        <nav class="relative z-0 inline-flex rounded-md shadow-sm -space-x-px" aria-label="Pagination">
-                            <a href="#" class="relative inline-flex items-center px-2 py-2 rounded-l-md border border-gray-600 bg-gray-800 text-sm font-medium text-gray-400 hover:bg-gray-700">
-                                <span class="sr-only">Anterior</span>
-                                <svg class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
-                                    <path fill-rule="evenodd" d="M12.707 5.293a1 1 0 010 1.414L9.414 10l3.293 3.293a1 1 0 01-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z" clip-rule="evenodd" />
-                                </svg>
-                            </a>
-                            <a href="#" class="relative inline-flex items-center px-4 py-2 border border-gray-600 bg-gray-700 text-sm font-medium text-white">1</a>
-                            <a href="#" class="relative inline-flex items-center px-4 py-2 border border-gray-600 bg-gray-800 text-sm font-medium text-gray-400 hover:bg-gray-700">2</a>
-                            <a href="#" class="relative inline-flex items-center px-2 py-2 rounded-r-md border border-gray-600 bg-gray-800 text-sm font-medium text-gray-400 hover:bg-gray-700">
-                                <span class="sr-only">Siguiente</span>
-                                <svg class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
-                                    <path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd" />
-                                </svg>
-                            </a>
-                        </nav>
-                    </div>
-                </div>
-            </div>
         </div>
+
     </div>
 
     <!-- Back to Home Button -->
@@ -303,6 +254,13 @@
                 }
             });
         });
+
+        // Confirm delete functionality
+        function confirmDelete(userId) {
+            if (confirm('¿Está seguro de que desea eliminar este usuario? Esta acción no se puede deshacer.')) {
+                window.location.href = `baja_sql.php?id=${userId}`;
+            }
+        }
     </script>
 </body>
 
