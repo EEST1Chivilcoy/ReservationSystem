@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Gestión de Usuarios</title>
-    <link rel="icon" href="../img/logo.png" type="image/svg+xml">
+    <link rel="icon" href="https://i.imgur.com/fSjgaVI.jpeg" type="image/svg+xml">
 
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>

@@ -10,6 +10,7 @@ $esAdmin = isset($_SESSION['EsAdmin']) && $_SESSION['EsAdmin'] == true;
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Sistema de Reserva de Salones</title>
+    <link rel="icon" href="https://i.imgur.com/fSjgaVI.jpeg" type="image/svg+xml">
 
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
