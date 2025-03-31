@@ -171,12 +171,12 @@
 
                             echo "<td class=\"px-6 py-4 whitespace-nowrap text-right text-sm font-medium\">
                                 <div class=\"flex justify-end space-x-3\">
-                                    <a href='modifica_user.php?id=" . $d['ID'] . "&usuario=" . urlencode($d['usuario']) . "&NombreYApellido=" . urlencode($d['NombreYApellido']) . "&esAdmin=" . urlencode($d['esAdmin']) . "' 
+                                    <button onclick=\"openEditModal(" . $d['ID'] . ", '" . addslashes($d['usuario']) . "', '" . addslashes($d['NombreYApellido']) . "', " . $d['esAdmin'] . ")\" 
                                         class=\"text-primary-400 hover:text-primary-300 transition-colors\" title=\"Editar\">
                                         <svg xmlns=\"http://www.w3.org/2000/svg\" class=\"h-5 w-5\" viewBox=\"0 0 20 20\" fill=\"currentColor\">
                                             <path d=\"M13.586 3.586a2 2 0 112.828 2.828l-.793.793-2.828-2.828.793-.793zM11.379 5.793L3 14.172V17h2.828l8.38-8.379-2.83-2.828z\" />
                                         </svg>
-                                    </a>
+                                    </button>
                                     <a href='#' onclick=\"confirmDelete(" . $d['ID'] . ")\" 
                                         class=\"text-red-400 hover:text-red-300 transition-colors\" title=\"Eliminar\">
                                         <svg xmlns=\"http://www.w3.org/2000/svg\" class=\"h-5 w-5\" viewBox=\"0 0 20 20\" fill=\"currentColor\">
@@ -204,6 +204,39 @@
             </svg>
             Volver al Inicio
         </a>
+    </div>
+
+    <!-- Modal para modificar usuario -->
+    <div id="editUserModal" class="fixed inset-0 bg-gray-900 bg-opacity-75 flex items-center justify-center hidden">
+        <div class="bg-gray-800 rounded-lg shadow-lg w-full max-w-md p-6">
+            <h2 class="text-xl font-semibold text-white mb-4">Modificar Usuario</h2>
+            <form id="editUserForm" method="GET" action="modifica_sql.php">
+                <input type="hidden" id="editUserId" name="ID">
+                <div class="mb-4">
+                    <label for="editUsuario" class="block text-sm font-medium text-gray-300">Usuario</label>
+                    <input type="text" id="editUsuario" name="usuario" class="block w-full mt-1 px-3 py-2 bg-gray-700 text-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500" required>
+                </div>
+                <div class="mb-4">
+                    <label for="editContraseña" class="block text-sm font-medium text-gray-300">Contraseña</label>
+                    <input type="text" id="editContraseña" name="contraseña" class="block w-full mt-1 px-3 py-2 bg-gray-700 text-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500" placeholder="********">
+                </div>
+                <div class="mb-4">
+                    <label for="editNombreApellido" class="block text-sm font-medium text-gray-300">Nombre y Apellido</label>
+                    <input type="text" id="editNombreApellido" name="nombreyapellido" class="block w-full mt-1 px-3 py-2 bg-gray-700 text-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500" required>
+                </div>
+                <div class="mb-4">
+                    <label for="editEsAdmin" class="block text-sm font-medium text-gray-300">Rol</label>
+                    <select id="editEsAdmin" name="esAdmin" class="block w-full mt-1 px-3 py-2 bg-gray-700 text-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500">
+                        <option value="1">Administrador</option>
+                        <option value="0">Usuario estándar</option>
+                    </select>
+                </div>
+                <div class="flex justify-end space-x-3">
+                    <button type="button" onclick="closeEditModal()" class="px-4 py-2 bg-gray-600 text-white rounded-lg hover:bg-gray-500">Cancelar</button>
+                    <button type="submit" class="px-4 py-2 bg-primary-500 text-white rounded-lg hover:bg-primary-400">Guardar</button>
+                </div>
+            </form>
+        </div>
     </div>
 
     <!-- Footer rediseñado -->
@@ -249,6 +282,21 @@
             if (confirm('¿Está seguro de que desea eliminar este usuario? Esta acción no se puede deshacer.')) {
                 window.location.href = `baja_sql.php?id=${userId}`;
             }
+        }
+
+        // Abrir el modal con datos del usuario
+        function openEditModal(id, usuario, nombreApellido, esAdmin) {
+            document.getElementById('editUserId').value = id;
+            document.getElementById('editUsuario').value = usuario;
+            document.getElementById('editContraseña').value = '********';
+            document.getElementById('editNombreApellido').value = nombreApellido;
+            document.getElementById('editEsAdmin').value = esAdmin ? '1' : '0';
+            document.getElementById('editUserModal').classList.remove('hidden');
+        }
+
+        // Cerrar el modal
+        function closeEditModal() {
+            document.getElementById('editUserModal').classList.add('hidden');
         }
     </script>
 </body>
