@@ -138,7 +138,6 @@
                             <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">Usuario</th>
                             <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">Nombre y Apellido</th>
                             <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">Rol</th>
-                            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">Estado</th>
                             <th scope="col" class="px-6 py-3 text-right text-xs font-medium text-gray-300 uppercase tracking-wider">Acciones</th>
                         </tr>
                     </thead>
@@ -170,22 +169,12 @@
                             }
                             echo "</td>";
 
-                            echo "<td class=\"px-6 py-4 whitespace-nowrap\">
-                                <span class=\"px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800\">Activo</span>
-                            </td>";
-
                             echo "<td class=\"px-6 py-4 whitespace-nowrap text-right text-sm font-medium\">
                                 <div class=\"flex justify-end space-x-3\">
                                     <a href='modifica_user.php?id=" . $d['ID'] . "&usuario=" . urlencode($d['usuario']) . "&NombreYApellido=" . urlencode($d['NombreYApellido']) . "&esAdmin=" . urlencode($d['esAdmin']) . "' 
                                         class=\"text-primary-400 hover:text-primary-300 transition-colors\" title=\"Editar\">
                                         <svg xmlns=\"http://www.w3.org/2000/svg\" class=\"h-5 w-5\" viewBox=\"0 0 20 20\" fill=\"currentColor\">
                                             <path d=\"M13.586 3.586a2 2 0 112.828 2.828l-.793.793-2.828-2.828.793-.793zM11.379 5.793L3 14.172V17h2.828l8.38-8.379-2.83-2.828z\" />
-                                        </svg>
-                                    </a>
-                                    <a href='cambiar_password.php?id=" . $d['ID'] . "&usuario=" . urlencode($d['usuario']) . "' 
-                                        class=\"text-yellow-400 hover:text-yellow-300 transition-colors\" title=\"Cambiar contraseña\">
-                                        <svg xmlns=\"http://www.w3.org/2000/svg\" class=\"h-5 w-5\" viewBox=\"0 0 20 20\" fill=\"currentColor\">
-                                            <path fill-rule=\"evenodd\" d=\"M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z\" clip-rule=\"evenodd\" />
                                         </svg>
                                     </a>
                                     <a href='#' onclick=\"confirmDelete(" . $d['ID'] . ")\" 
