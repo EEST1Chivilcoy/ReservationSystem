@@ -384,7 +384,76 @@ $esAdmin = isset($_SESSION['EsAdmin']) && $_SESSION['EsAdmin'] == true;
     <script>
         function validarFormulario() {
             const horarioValido = validarHorario();
-            return horarioValido && validarHorarios();
+            const camposValidos = validarCamposObligatorios();
+            return horarioValido && validarHorarios() && camposValidos;
+        }
+
+        function validarCamposObligatorios() {
+            const curso = document.getElementById('curso').value;
+            const materia = document.getElementById('materia').value;
+            const fecha = document.getElementById('fecha').value;
+            const horario = document.getElementById('horario').value;
+            const horario1 = document.getElementById('horario1').value;
+            const sitio = document.getElementById('info').value;
+
+            if (!curso) {
+                alert('El campo "Curso" es obligatorio.');
+                return false;
+            }
+
+            if (!materia) {
+                alert('El campo "Materia" es obligatorio.');
+                return false;
+            }
+
+            if (!fecha) {
+                alert('El campo "Fecha de Reserva" es obligatorio.');
+                return false;
+            }
+
+            if (!horario) {
+                alert('El campo "Hora de Inicio" es obligatorio.');
+                return false;
+            }
+
+            if (!horario1) {
+                alert('El campo "Hora de Fin" es obligatorio.');
+                return false;
+            }
+
+            if (!sitio) {
+                alert('El campo "Sitio a Reservar" es obligatorio.');
+                return false;
+            }
+
+            const showDivision = document.querySelector('[x-data]').__x.$data.showDivision;
+            if (showDivision) {
+                const division = document.getElementById('division').value;
+                if (!division) {
+                    alert('El campo "División" es obligatorio.');
+                    return false;
+                }
+            }
+
+            const showOtroSalon = document.querySelector('[x-data]').__x.$data.showOtroSalon;
+            if (showOtroSalon) {
+                const otroSalon = document.getElementById('otro_salon').value;
+                if (!otroSalon) {
+                    alert('El campo "Especificar otro salón" es obligatorio.');
+                    return false;
+                }
+            }
+
+            const showAdminForm = document.querySelector('[x-data]').__x.$data.showAdminForm;
+            if (showAdminForm) {
+                const nombreYApellido = document.getElementById('NombreYApellido').value;
+                if (!nombreYApellido) {
+                    alert('El campo "Nombre y Apellido" es obligatorio si es para otra persona.');
+                    return false;
+                }
+            }
+
+            return true;
         }
 
         function validarHorario() {
