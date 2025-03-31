@@ -2,31 +2,35 @@
 require "../include/VerificacionAdmin.php";
 include("../include/conexion.php");
 
-$p_ID = $_POST['ID'];
-$p_curso = $_POST['curso'];
-$p_materia = $_POST['materia'];
-$p_horario = $_POST['horario'];
-$p_horario1 = $_POST['horario1'];
-$p_fecha = $_POST['fecha'];
-$p_info = $_POST['info'];
-$p_materiales = $_POST['materiales'];
-$p_boton = $_POST['boton'];
+$p_ID = htmlspecialchars($_GET['ID'], ENT_QUOTES, 'UTF-8');
+$p_curso = htmlspecialchars($_GET['curso'], ENT_QUOTES, 'UTF-8');
+$p_materia = htmlspecialchars($_GET['materia'], ENT_QUOTES, 'UTF-8');
+$p_horario = htmlspecialchars($_GET['horario'], ENT_QUOTES, 'UTF-8');
+$p_horario1 = htmlspecialchars($_GET['horario1'], ENT_QUOTES, 'UTF-8');
+$p_fecha = htmlspecialchars($_GET['fecha'], ENT_QUOTES, 'UTF-8');
+$p_info = htmlspecialchars($_GET['info'], ENT_QUOTES, 'UTF-8');
+$p_materiales = htmlspecialchars($_GET['materiales'], ENT_QUOTES, 'UTF-8');
 
-if ($p_boton == 0) {
-   header("Location: ../index.php");
-   exit();
-} else {
-   $p_ID =  mysqli_real_escape_string($conexion, $p_ID);
-   $modifica = "UPDATE tabla SET curso='$p_curso',materia='$p_materia',horario='$p_horario', horario1='$p_horario1',fecha='$p_fecha',info='$p_info', materiales='$p_materiales' WHERE ID='$p_ID'";
+$modifica = "UPDATE tabla SET curso = ?, materia = ?, horario = ?, horario1 = ?, fecha = ?, info = ?, materiales = ? WHERE ID = ?";
+$stmt = mysqli_prepare($conexion, $modifica);
 
-   $resultado_modifica = mysqli_query($conexion, $modifica);
+if ($stmt) {
+   mysqli_stmt_bind_param($stmt, "ssssssss", $p_curso, $p_materia, $p_horario, $p_horario1, $p_fecha, $p_info, $p_materiales, $p_ID);
+   $resultado_modifica = mysqli_stmt_execute($stmt);
 
-   if($resultado_modifica){
-      header("Location: ../index.php");
+   if ($resultado_modifica) {
+      header("Location: ../index.php?success=" . urlencode("Registro modificado correctamente."));
+      exit();
+   } else {
+      $Message = "Error al intentar editar el registro.";
+      header("Location: ../index.php?error=" . urlencode($Message));
       exit();
    }
-   else{
-      // Manejar el caso en que la edicion falló
-      echo "Error al intentar editar el registro.";
-   }
+   mysqli_stmt_close($stmt);
+} else {
+   $Message = "Error en la preparación de la consulta de modificación.";
+   header("Location: ../index.php?error=" . urlencode($Message));
+   exit();
 }
+
+mysqli_close($conexion);
