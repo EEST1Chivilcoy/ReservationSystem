@@ -284,14 +284,14 @@ $esAdmin = isset($_SESSION['EsAdmin']) && $_SESSION['EsAdmin'] == true;
                             <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-green-500" viewBox="0 0 20 20" fill="currentColor">
                                 <path d="M10.394 2.08a1 1 0 00-.788 0l-7 3a1 1 0 000 1.84L5.25 8.051a.999.999 0 01.356-.257l4-1.714a1 1 0 11.788 1.838l-2.328.996.002 1.069c0 .54-.18 1.070-.267 1.645-.087.576-.097 1.156-.03 1.727a4.993 4.993 0 00.699 2.132 4.993 4.993 0 002.682 2.078 5.3 5.3 0 002.229.356 5.305 5.305 0 002.229-.356 4.993 4.993 0 002.682-2.078 4.993 4.993 0 00.699-2.132c.067-.571.057-1.151-.03-1.727-.087-.575-.267-1.106-.267-1.645l.002-1.069 2.328-.996a1 1 0 10-.788-1.838l-4 1.714a.999.999 0 01-.356.257l-2.644-1.131V7.94l2.252.968a1 1 0 10.788-1.838l-3.04-1.3z" />
                             </svg>
-                            <p class="text-gray-200"><span class="font-medium">${event.extendedProps.curso === 'Reunión' ? 'Evento' : 'Curso'}:</span> ${event.extendedProps.curso}</p>
+                            <p class="text-gray-200"><span class="font-medium">${event.extendedProps.curso === 'Reunión' || event.extendedProps.curso === 'Charla/Conferencia' || event.extendedProps.curso === 'Acto' ? 'Evento' : 'Curso'}:</span> ${event.extendedProps.curso}</p>
                         </div>
                         
                         <div class="flex items-center space-x-2">
                             <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-purple-500" viewBox="0 0 20 20" fill="currentColor">
                                 <path d="M9 4.804A7.968 7.968 0 005.5 4c-1.255 0-2.443.29-3.5.804v10A7.969 7.969 0 015.5 14c1.669 0 3.218.51 4.5 1.385A7.962 7.962 0 0114.5 14c1.255 0 2.443.29 3.5.804v-10A7.968 7.968 0 0014.5 4c-1.255 0-2.443.29-3.5.804V12a1 1 0 11-2 0V4.804z" />
                             </svg>
-                            <p class="text-gray-200"><span class="font-medium">${event.extendedProps.curso === 'Reunión' ? 'Motivo' : 'Materia'}:</span> ${event.extendedProps.materia}</p>
+                            <p class="text-gray-200"><span class="font-medium">${event.extendedProps.curso === 'Reunión' || event.extendedProps.curso === 'Charla/Conferencia' || event.extendedProps.curso === 'Acto' ? 'Motivo' : 'Materia'}:</span> ${event.extendedProps.materia}</p>
                         </div>
                         
                         <div class="flex items-center space-x-2">
