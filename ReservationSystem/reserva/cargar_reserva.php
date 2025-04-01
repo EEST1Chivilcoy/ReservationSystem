@@ -146,7 +146,7 @@ $esAdmin = isset($_SESSION['EsAdmin']) && $_SESSION['EsAdmin'] == true;
           curso: 'Reunión',
           sitio: 'Salon de actos',
           updateDivision() {
-            this.showDivision = this.curso !== 'Reunión';
+            this.showDivision = this.curso !== 'Reunión' && this.curso !== 'Charla/Conferencia' && this.curso !== 'Acto';
           },
           updateOtroSalon() {
             this.showOtroSalon = this.sitio === 'Otro';
@@ -204,10 +204,12 @@ $esAdmin = isset($_SESSION['EsAdmin']) && $_SESSION['EsAdmin'] == true;
                             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                                 <!-- Selección de Curso -->
                                 <div>
-                                    <label for="curso" class="block text-sm font-medium text-gray-300 mb-1">Curso</label>
+                                    <label for="curso" class="block text-sm font-medium text-gray-300 mb-1" x-text="['Reunión', 'Charla/Conferencia', 'Acto'].includes(curso) ? 'Evento' : 'Curso'">Curso</label>
                                     <select id="curso" name="curso" x-model="curso" @change="updateDivision()"
                                         class="w-full bg-dark-800 border border-gray-700 text-white rounded-md px-4 py-2 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-all">
                                         <option value="Reunión">Reunión</option>
+                                        <option value="Charla/Conferencia">Charla/Conferencia</option>
+                                        <option value="Acto">Acto</option>
                                         <option value="1º">1º</option>
                                         <option value="2º">2º</option>
                                         <option value="3º">3º</option>
@@ -228,8 +230,8 @@ $esAdmin = isset($_SESSION['EsAdmin']) && $_SESSION['EsAdmin'] == true;
 
                             <!-- Materia -->
                             <div>
-                                <label for="materia" class="block text-sm font-medium text-gray-300 mb-1">Materia</label>
-                                <input type="text" id="materia" name="materia" placeholder="Ingrese el nombre de la materia"
+                                <label for="materia" class="block text-sm font-medium text-gray-300 mb-1" x-text="['Reunión', 'Charla/Conferencia', 'Acto'].includes(curso) ? 'Motivo' : 'Materia'">Materia</label>
+                                <input type="text" id="materia" name="materia" :placeholder="['Reunión', 'Charla/Conferencia', 'Acto'].includes(curso) ? 'Ingrese el motivo' : 'Ingrese el nombre de la materia'"
                                     class="w-full bg-dark-800 border border-gray-700 text-white rounded-md px-4 py-2 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-all">
                             </div>
                         </div>
