@@ -50,10 +50,10 @@
     require "../include/VerificacionAdmin.php";
     include('../include/conexion.php');
 
+    // Cargar todos los usuarios
     $consulta = "SELECT * FROM usuarios";
-
     $resultado = mysqli_query($conexion, $consulta) or die('Error en consulta');
-
+    $usuarios = mysqli_fetch_all($resultado, MYSQLI_ASSOC); // Obtener todos los usuarios como un array
     mysqli_close($conexion);
     ?>
 </head>
@@ -141,12 +141,9 @@
                             <th scope="col" class="px-6 py-3 text-right text-xs font-medium text-gray-300 uppercase tracking-wider">Acciones</th>
                         </tr>
                     </thead>
-                    <tbody class="divide-y divide-gray-700 bg-gray-800">
+                    <tbody class="divide-y divide-gray-700 bg-gray-800" id="userTableBody">
                         <?php
-                        $counter = 0;
-                        while ($d = mysqli_fetch_array($resultado)) {
-                            if ($counter >= 10) break; // Mostrar solo 10 usuarios
-                            $counter++;
+                        foreach ($usuarios as $d) {
                             echo "<tr class=\"hover:bg-gray-700 transition-colors\">";
                             echo "<td class=\"px-6 py-4 whitespace-nowrap\">
                                 <div class=\"flex items-center\">
@@ -263,11 +260,11 @@
         // Search functionality
         document.getElementById('search').addEventListener('keyup', function() {
             const searchValue = this.value.toLowerCase();
-            const tableRows = document.querySelectorAll('tbody tr');
+            const tableRows = document.querySelectorAll('#userTableBody tr');
 
             tableRows.forEach(row => {
-                const userName = row.querySelector('td:first-child').textContent.toLowerCase();
-                const fullName = row.querySelector('td:nth-child(2)').textContent.toLowerCase();
+                const userName = row.querySelector('td:first-child .text-sm.font-medium').textContent.toLowerCase();
+                const fullName = row.querySelector('td:nth-child(2) .text-sm').textContent.toLowerCase();
 
                 if (userName.includes(searchValue) || fullName.includes(searchValue)) {
                     row.style.display = '';
