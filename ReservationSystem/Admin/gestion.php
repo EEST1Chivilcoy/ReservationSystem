@@ -50,10 +50,21 @@
     require "../include/VerificacionAdmin.php";
     include('../include/conexion.php');
 
-    // Cargar todos los usuarios
-    $consulta = "SELECT * FROM usuarios";
+    // Parámetros de paginación
+    $usuariosPorPagina = 10;
+    $paginaActual = isset($_GET['pagina']) ? (int)$_GET['pagina'] : 1;
+    $offset = ($paginaActual - 1) * $usuariosPorPagina;
+
+    // Contar el total de usuarios
+    $totalUsuariosConsulta = "SELECT COUNT(*) as total FROM usuarios";
+    $totalUsuariosResultado = mysqli_query($conexion, $totalUsuariosConsulta);
+    $totalUsuarios = mysqli_fetch_assoc($totalUsuariosResultado)['total'];
+    $totalPaginas = ceil($totalUsuarios / $usuariosPorPagina);
+
+    // Cargar usuarios con límite y offset
+    $consulta = "SELECT * FROM usuarios LIMIT $usuariosPorPagina OFFSET $offset";
     $resultado = mysqli_query($conexion, $consulta) or die('Error en consulta');
-    $usuarios = mysqli_fetch_all($resultado, MYSQLI_ASSOC); // Obtener todos los usuarios como un array
+    $usuarios = mysqli_fetch_all($resultado, MYSQLI_ASSOC);
     mysqli_close($conexion);
     ?>
 </head>
@@ -191,6 +202,17 @@
             </div>
         </div>
 
+        <!-- Paginación -->
+        <div class="flex justify-center mt-6">
+            <?php if ($paginaActual > 1): ?>
+                <a href="?pagina=<?php echo $paginaActual - 1; ?>" class="px-4 py-2 bg-gray-700 text-white rounded-lg hover:bg-gray-600">Anterior</a>
+            <?php endif; ?>
+            <span class="px-4 py-2 bg-gray-800 text-gray-300 rounded-lg mx-2">Página <?php echo $paginaActual; ?> de <?php echo $totalPaginas; ?></span>
+            <?php if ($paginaActual < $totalPaginas): ?>
+                <a href="?pagina=<?php echo $paginaActual + 1; ?>" class="px-4 py-2 bg-gray-700 text-white rounded-lg hover:bg-gray-600">Siguiente</a>
+            <?php endif; ?>
+        </div>
+
     </div>
 
     <!-- Back to Home Button -->
@@ -257,21 +279,12 @@
     </footer>
 
     <script>
-        // Search functionality
+        // Search functionality (modificado para redirigir con el término de búsqueda)
         document.getElementById('search').addEventListener('keyup', function() {
             const searchValue = this.value.toLowerCase();
-            const tableRows = document.querySelectorAll('#userTableBody tr');
-
-            tableRows.forEach(row => {
-                const userName = row.querySelector('td:first-child .text-sm.font-medium').textContent.toLowerCase();
-                const fullName = row.querySelector('td:nth-child(2) .text-sm').textContent.toLowerCase();
-
-                if (userName.includes(searchValue) || fullName.includes(searchValue)) {
-                    row.style.display = '';
-                } else {
-                    row.style.display = 'none';
-                }
-            });
+            if (searchValue.trim() !== '') {
+                window.location.href = `?search=${encodeURIComponent(searchValue)}`;
+            }
         });
 
         // Confirm delete functionality
