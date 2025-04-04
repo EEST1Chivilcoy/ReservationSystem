@@ -50,19 +50,28 @@
     require "../include/VerificacionAdmin.php";
     include('../include/conexion.php');
 
-    // Parámetros de paginación
+    // Parámetros de búsqueda y paginación
+    $search = isset($_GET['search']) ? mysqli_real_escape_string($conexion, $_GET['search']) : '';
     $usuariosPorPagina = 10;
     $paginaActual = isset($_GET['pagina']) ? (int)$_GET['pagina'] : 1;
     $offset = ($paginaActual - 1) * $usuariosPorPagina;
 
-    // Contar el total de usuarios
-    $totalUsuariosConsulta = "SELECT COUNT(*) as total FROM usuarios";
+    // Contar el total de usuarios (con o sin búsqueda)
+    if ($search) {
+        $totalUsuariosConsulta = "SELECT COUNT(*) as total FROM usuarios WHERE usuario LIKE '%$search%' OR NombreYApellido LIKE '%$search%'";
+    } else {
+        $totalUsuariosConsulta = "SELECT COUNT(*) as total FROM usuarios";
+    }
     $totalUsuariosResultado = mysqli_query($conexion, $totalUsuariosConsulta);
     $totalUsuarios = mysqli_fetch_assoc($totalUsuariosResultado)['total'];
     $totalPaginas = ceil($totalUsuarios / $usuariosPorPagina);
 
-    // Cargar usuarios con límite y offset
-    $consulta = "SELECT * FROM usuarios LIMIT $usuariosPorPagina OFFSET $offset";
+    // Cargar usuarios con límite, offset y búsqueda
+    if ($search) {
+        $consulta = "SELECT * FROM usuarios WHERE usuario LIKE '%$search%' OR NombreYApellido LIKE '%$search%' LIMIT $usuariosPorPagina OFFSET $offset";
+    } else {
+        $consulta = "SELECT * FROM usuarios LIMIT $usuariosPorPagina OFFSET $offset";
+    }
     $resultado = mysqli_query($conexion, $consulta) or die('Error en consulta');
     $usuarios = mysqli_fetch_all($resultado, MYSQLI_ASSOC);
     mysqli_close($conexion);
@@ -205,11 +214,11 @@
         <!-- Paginación -->
         <div class="flex justify-center mt-6">
             <?php if ($paginaActual > 1): ?>
-                <a href="?pagina=<?php echo $paginaActual - 1; ?>" class="px-4 py-2 bg-gray-700 text-white rounded-lg hover:bg-gray-600">Anterior</a>
+                <a href="?pagina=<?php echo $paginaActual - 1; ?><?php echo $search ? '&search=' . urlencode($search) : ''; ?>" class="px-4 py-2 bg-gray-700 text-white rounded-lg hover:bg-gray-600">Anterior</a>
             <?php endif; ?>
             <span class="px-4 py-2 bg-gray-800 text-gray-300 rounded-lg mx-2">Página <?php echo $paginaActual; ?> de <?php echo $totalPaginas; ?></span>
             <?php if ($paginaActual < $totalPaginas): ?>
-                <a href="?pagina=<?php echo $paginaActual + 1; ?>" class="px-4 py-2 bg-gray-700 text-white rounded-lg hover:bg-gray-600">Siguiente</a>
+                <a href="?pagina=<?php echo $paginaActual + 1; ?><?php echo $search ? '&search=' . urlencode($search) : ''; ?>" class="px-4 py-2 bg-gray-700 text-white rounded-lg hover:bg-gray-600">Siguiente</a>
             <?php endif; ?>
         </div>
 
@@ -279,12 +288,17 @@
     </footer>
 
     <script>
-        // Search functionality (modificado para redirigir con el término de búsqueda)
+        // Search functionality (modificado para mantener la paginación)
         document.getElementById('search').addEventListener('keyup', function() {
             const searchValue = this.value.toLowerCase();
+            const urlParams = new URLSearchParams(window.location.search);
             if (searchValue.trim() !== '') {
-                window.location.href = `?search=${encodeURIComponent(searchValue)}`;
+                urlParams.set('search', searchValue);
+            } else {
+                urlParams.delete('search');
             }
+            urlParams.set('pagina', 1); // Reiniciar a la primera página al buscar
+            window.location.search = urlParams.toString();
         });
 
         // Confirm delete functionality
