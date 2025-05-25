@@ -1,12 +1,16 @@
 <?php
-// Cargar el archivo de configuración
-$config = require 'config_database.php';
+// Cargar autoload de Composer
+require_once dirname(__DIR__, 1) . '/vendor/autoload.php';
 
-// Obtener los valores de la configuración
-$usuario = $config['db']['usuario'];
-$clave = $config['db']['clave'];
-$servidor = $config['db']['servidor'];
-$basededatos = $config['db']['basededatos'];
+// Cargar variables de entorno desde .env
+$dotenv = Dotenv\Dotenv::createImmutable(dirname(__DIR__));
+$dotenv->load();
+
+// Obtener los valores desde .env
+$usuario = $_ENV['DB_USER'];
+$clave = $_ENV['DB_PASS'];
+$servidor = $_ENV['DB_HOST'];
+$basededatos = $_ENV['DB_NAME'];
 
 // Establecer la conexión con la base de datos
 $conexion = mysqli_connect($servidor, $usuario, $clave, $basededatos);

@@ -1,0 +1,19 @@
+{
+    "name": "eest1chivilcoy/reservation-system",
+    "description": "Sistema de reservas para espacios en la escuela.",
+    "require": {
+        "vlucas/phpdotenv": "^5.6"
+    },
+    "license": "MIT",
+    "autoload": {
+        "psr-4": {
+            "Eest1chivilcoy\\ReservationSystem\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "Bernardo",
+            "email": "berramuspegonzalez@gmail.com"
+        }
+    ]
+}
