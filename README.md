@@ -33,30 +33,44 @@ Este repositorio contiene el código de una aplicación web para reservar el sal
 
 ---
 
-### Configuración
+### **Configuración**
 
-Para que el proyecto funcione correctamente, es **imprescindible** crear un archivo llamado `config_database.php` en el directorio `include` con el siguiente contenido:
+Para que el proyecto funcione correctamente, es **imprescindible** crear un archivo `.env` en la raíz del repositorio con el siguiente contenido:
 
-```php
-<?php
-return [
-    'db' => [
-        'usuario' => 'tu_usuario',
-        'clave' => 'tu_clave',
-        'servidor' => 'tu_servidor',
-        'basededatos' => 'tu_basededatos',
-    ],
-];
-?>
+```env
+DB_HOST=localhost
+DB_USER=tu_usuario
+DB_PASS=tu_clave
+DB_NAME=tu_basededatos
 ```
 
-### Instrucciones de uso
+Además, asegúrate de instalar las dependencias necesarias con Composer:
 
-1. Clona el repositorio a tu máquina local.
-2. Crea el archivo `config_database.php` en el directorio `include` con las credenciales de tu base de datos.
-3. Importa la base de datos utilizando el archivo `bd.sql` ubicado en la raíz del repositorio. Este archivo contiene todos los comandos necesarios para crear la base de datos MySQL requerida.
-4. Sube el proyecto a tu servidor web y asegúrate de que los permisos sean correctos.
-5. Accede a la aplicación web y utiliza las funcionalidades según el tipo de cuenta (normal o administrador).
+```sh
+composer install
+```
+
+Esto generará la carpeta `vendor/` con las librerías necesarias, incluyendo `vlucas/phpdotenv` para manejar el archivo `.env`.
+
+---
+
+### **Instrucciones de uso**
+
+1. **Clona el repositorio** a tu máquina local:
+   ```sh
+   git clone https://github.com/EEST1Chivilcoy/ReservationSystem.git
+   ```
+2. **Crea el archivo `.env`** en la raíz del proyecto con tus credenciales de la base de datos.
+3. **Instala Composer** si aún no lo tienes:
+   - Descárgalo desde [getcomposer.org](https://getcomposer.org/download/)
+   - Verifica la instalación con:
+     ```sh
+     composer --version
+     ```
+4. **Ejecuta `composer install`** para instalar las dependencias y asegurarte de que el autoload funcione correctamente.
+5. **Importa la base de datos** utilizando el archivo `bd.sql` ubicado en la raíz del repositorio. Este archivo contiene todos los comandos necesarios para crear la base de datos MySQL requerida.
+6. **Sube el proyecto** a tu servidor web y verifica los permisos.
+7. **Accede a la aplicación web** y utiliza las funcionalidades según el tipo de cuenta (normal o administrador).
 
 ---
 
