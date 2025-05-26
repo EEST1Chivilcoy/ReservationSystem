@@ -808,7 +808,7 @@ $esAdmin = isset($_SESSION['EsAdmin']) && $_SESSION['EsAdmin'] == true;
                         Generar QR
                     </button>
 
-                    <a href="Admin/gestion.php"
+                    <a href="admin/gestion.php"
                         class="bg-amber-600 hover:bg-amber-500 text-white font-medium py-3 px-4 rounded-lg shadow transition-all flex items-center justify-center">
                         <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" viewBox="0 0 20 20"
                             fill="currentColor">
