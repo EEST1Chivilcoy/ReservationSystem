@@ -1,22 +1,32 @@
-name: Deploy website
+name: 🚀 Deploy a InfinityFree por FTP
 
 on:
   push:
     branches:
-      - main  # Ajusta según tu rama principal
+      - main # Ajusta según tu rama principal
 
 jobs:
   deploy:
     runs-on: ubuntu-latest
     steps:
-      - name: 🚚 Get latest code
+      - name: 📥 Checkout del código
         uses: actions/checkout@v4
 
-      - name: 📂 Sync files
+      - name: 🛠️ Instalar PHP y Composer
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: "8.3"
+          tools: composer
+
+      - name: 📦 Instalar dependencias en ReservationSystem
+        working-directory: ./ReservationSystem
+        run: composer install --no-dev --optimize-autoloader
+
+      - name: 📤 Subir carpeta ReservationSystem por FTP
         uses: SamKirkland/FTP-Deploy-Action@v4.3.5
         with:
-           server: ${{ secrets.FTP_HOST }}
-           username: ${{ secrets.FTP_USER }}
-           password: ${{ secrets.ftp_password }}
-           local-dir: ReservationSystem/
-           server-dir: htdocs/
+          server: ${{ secrets.FTP_HOST }}
+          username: ${{ secrets.FTP_USER }}
+          password: ${{ secrets.ftp_password }}
+          local-dir: ReservationSystem/
+          server-dir: htdocs/
