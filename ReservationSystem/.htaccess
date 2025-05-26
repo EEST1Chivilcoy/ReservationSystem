@@ -9,6 +9,4 @@ RewriteCond %{HTTPS} off
 RewriteCond %{HTTP_HOST} !^(localhost|127\.0\.0\.1) [NC]
 RewriteRule ^(.*)$ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
 
-<Files "include/config_database.php">
-    Require all denied
-</Files>
+ErrorDocument 500 /mantenimiento.html
