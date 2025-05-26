@@ -378,10 +378,10 @@ FodyWeavers.xsd
 
 # VS Code files for those working on multiple tools
 .vscode/*
-!.vscode/settings.json
-!.vscode/tasks.json
-!.vscode/launch.json
-!.vscode/extensions.json
+.vscode/settings.json
+.vscode/tasks.json
+.vscode/launch.json
+.vscode/extensions.json
 *.code-workspace
 
 # Local History for Visual Studio Code
@@ -397,8 +397,30 @@ FodyWeavers.xsd
 # JetBrains Rider
 *.sln.iml
 
-# Visual Studio Code Configuración
-.vscode/settings.json
+# Dependencias instaladas por Composer
+/ReservationSystem/vendor/
 
-# Ignorar archivos de configuración sensibles
+# Archivos de Composer que no se deben versionar
+/ReservationSystem/composer.lock
+
+# Archivos temporales
+*.log
+*.cache
+*.tmp
+
+# Configuraciones de entorno
 .env
+.env.local
+.env.*.local
+
+# Archivos del IDE
+.idea/
+.vscode/
+
+# Archivos del sistema
+.DS_Store
+Thumbs.db
+
+# Cachés de frameworks (si usás alguno)
+cache/
+storage/
