@@ -1,62 +1,55 @@
 <?php
-// Requerimientos
-require('fpdf/tfpdf.php'); // Libreria TFPDF (Soporta UTF-8)
-include('include/conexion.php'); //Conexion SQL
+require_once __DIR__ . '/vendor/autoload.php'; // Autoload de Composer
+include('include/conexion.php'); // Conexión SQL
 
-class PDF extends tFPDF
+use TCPDF;
+
+class PDF extends TCPDF
 {
-    function __construct($orientation = 'P', $unit = 'mm', $size = 'A4')
+    public function Header()
     {
-        parent::__construct($orientation, $unit, $size);
-        $this->AddFont('DejaVu', '', 'DejaVuSans.php');
-    }
-
-    function Header()
-    {
-        // Mostrar el encabezado solo en la primera página
-        if ($this->PageNo() == 1) {
-            // Set background color for the title
+        if ($this->getPage() == 1) {
+            // Fondo morado claro
             $this->SetFillColor(99, 89, 146);
-            // Set text color
+            // Color del texto
             $this->SetTextColor(39, 23, 111);
-            // Set font
-            $this->SetFont('DejaVu', '', 30);
-            // Title
-            $this->Cell(0, 40, 'Registro de Turnos', 0, 1, 'C', 1);
+            // Fuente
+            $this->SetFont('dejavusans', '', 30);
+            // Título centrado
+            $this->Cell(0, 20, 'Registro de Turnos', 0, 1, 'C', 1);
             // Logo
-            $this->Image('img/logo.png', 250, 15, 30);
+            $this->Image('img/logo.png', 250, 10, 30);
             $this->Ln(10);
         }
     }
 
-    function Footer()
+    public function Footer()
     {
         $this->SetY(-15);
-        $this->SetFont('DejaVu', '', 8);
-        $this->Cell(0, 10, utf8_decode('Fecha de impresión: ' . date('d/m/Y H:i:s')), 0, 0, 'R');
+        $this->SetFont('dejavusans', '', 8);
+        $this->Cell(0, 10, 'Fecha de impresión: ' . date('d/m/Y H:i:s'), 0, 0, 'R');
     }
 
-    function AutoAdjustColumnWidths($headers, $data)
+    public function AutoAdjustColumnWidths($headers, $data)
     {
         $widths = [];
-        $this->SetFont('DejaVu', '', 12);
-    
-        // Calcular el ancho máximo para cada columna
+
+        $this->SetFont('dejavusans', '', 12);
         foreach ($headers as $header) {
-            $widths[] = $this->GetStringWidth(utf8_decode($header)) + 1; // Ancho de los encabezados con margen de 1 unidad
+            $widths[] = $this->GetStringWidth($header) + 2;
         }
-    
+
         foreach ($data as $row) {
             foreach ($row as $key => $value) {
-                $width = $this->GetStringWidth(utf8_decode($value)) + 1; // Ancho del contenido con margen de 1 unidad
+                $width = $this->GetStringWidth($value) + 2;
                 if ($width > $widths[$key]) {
-                    $widths[$key] = $width; // Ancho máximo de cada columna
+                    $widths[$key] = $width;
                 }
             }
         }
-    
+
         return $widths;
-    }    
+    }
 }
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
@@ -64,15 +57,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $startDate = $data['startDate'];
     $endDate = $data['endDate'];
 
-    // Verificar la conexión
     if (!$conexion) {
         die(json_encode(["error" => "Conexión fallida: " . mysqli_connect_error()]));
     }
 
-    // Asegurarse de que la conexión use UTF-8
     mysqli_set_charset($conexion, "utf8mb4");
 
-    // Usar consultas preparadas para prevenir inyección SQL
     $sql = "SELECT * FROM tabla WHERE fecha BETWEEN ? AND ?";
     $stmt = $conexion->prepare($sql);
     $stmt->bind_param("ss", $startDate, $endDate);
@@ -83,38 +73,41 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         die(json_encode(["error" => "Error en la consulta: " . $conexion->error]));
     }
 
-    $pdf = new PDF('L');
+    // Crear PDF
+    $pdf = new PDF('L', 'mm', 'A4', true, 'UTF-8');
+    $pdf->SetCreator(PDF_CREATOR);
+    $pdf->SetAuthor('Sistema');
+    $pdf->SetTitle('Registro de Turnos');
+    $pdf->SetMargins(10, 25, 10);
     $pdf->AddPage();
-    $pdf->AddFont('DejaVu', '', 'DejaVuSans.php');
-    $pdf->SetFont('DejaVu', '', 12);
+    $pdf->SetFont('dejavusans', '', 12);
 
-    // Encabezados y datos
     $headers = ['Nombre y Apellido', 'Curso', 'Materia', 'Salón', 'Materiales', 'Horario inicio', 'Horario fin', 'Fecha'];
     $data = [];
+
     while ($row = $result->fetch_assoc()) {
         $data[] = [
-            utf8_decode($row['nombreapellido']),
-            utf8_decode($row['curso']),
-            utf8_decode($row['materia']),
-            utf8_decode($row['info']),
-            utf8_decode($row['materiales']),
+            $row['nombreapellido'],
+            $row['curso'],
+            $row['materia'],
+            $row['info'],
+            $row['materiales'],
             $row['horario'],
             $row['horario1'],
             $row['fecha']
         ];
     }
 
-    // Obtener anchos ajustados automáticamente
     $widths = $pdf->AutoAdjustColumnWidths($headers, $data);
 
-    // Dibujar los encabezados
+    // Encabezados
     foreach ($headers as $i => $header) {
-        $pdf->Cell($widths[$i], 10, utf8_decode($header), 1, 0, 'C');
+        $pdf->Cell($widths[$i], 10, $header, 1, 0, 'C');
     }
     $pdf->Ln();
 
-    // Dibujar las filas de datos
-    $pdf->SetFont('DejaVu', '', 10);
+    // Filas
+    $pdf->SetFont('dejavusans', '', 10);
     foreach ($data as $row) {
         foreach ($row as $i => $cell) {
             $pdf->Cell($widths[$i], 10, $cell, 1, 0, 'L');
@@ -125,16 +118,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $stmt->close();
     $conexion->close();
 
-    // Generar nombre de archivo amigable
     $fileName = 'registros_' . date('Ymd_His') . '.pdf';
     $pdfFile = 'pdfs/' . $fileName;
 
-    // Asegurarse de que el directorio exista
     if (!is_dir('pdfs')) {
         mkdir('pdfs', 0755, true);
     }
 
-    $pdf->Output('F', $pdfFile);
+    $pdf->Output($pdfFile, 'F');
 
     if (file_exists($pdfFile)) {
         echo json_encode(['pdf' => $pdfFile]);
