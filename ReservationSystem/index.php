@@ -577,7 +577,7 @@ $esAdmin = isset($_SESSION['EsAdmin']) && $_SESSION['EsAdmin'] == true;
             <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
                 <!-- Card 1: Audiovisuales -->
                 <div class="bg-gradient-to-br from-gray-800 to-gray-900 rounded-xl shadow-xl overflow-hidden card-hover">
-                    <img src="img/audio_visuales.jpg" class="h-48 w-full object-cover" alt="Sala de Audiovisuales">
+                    <img src="img/audio_visuales.webp" class="h-48 w-full object-cover" alt="Sala de Audiovisuales">
                     <div class="p-6">
                         <div class="flex items-center mb-3">
                         <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-blue-500 mr-2" viewBox="0 0 20 20" fill="currentColor">
@@ -600,7 +600,7 @@ $esAdmin = isset($_SESSION['EsAdmin']) && $_SESSION['EsAdmin'] == true;
                 
                 <!-- Card 2: Comedor -->
                 <div class="bg-gradient-to-br from-gray-800 to-gray-900 rounded-xl shadow-xl overflow-hidden card-hover">
-                    <img src="img/comedor.jpg" class="h-48 w-full object-cover" alt="Comedor">
+                    <img src="img/comedor.webp" class="h-48 w-full object-cover" alt="Comedor">
                     <div class="p-6">
                         <div class="flex items-center mb-3">
                             <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-green-500 mr-2" viewBox="0 0 20 20" fill="currentColor">
@@ -622,7 +622,7 @@ $esAdmin = isset($_SESSION['EsAdmin']) && $_SESSION['EsAdmin'] == true;
                 
                 <!-- Card 3: Salón de Actos -->
                 <div class="bg-gradient-to-br from-gray-800 to-gray-900 rounded-xl shadow-xl overflow-hidden card-hover">
-                    <img src="img/actos.jpg" class="h-48 w-full object-cover" alt="Salón de Actos">
+                    <img src="img/actos.webp" class="h-48 w-full object-cover" alt="Salón de Actos">
                     <div class="p-6">
                         <div class="flex items-center mb-3">
                             <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-yellow-500 mr-2" viewBox="0 0 20 20" fill="currentColor">
