@@ -16,6 +16,9 @@ jobs:
         id: composer-cache
         run: echo "dir=$(composer config cache-files-dir)" >> $GITHUB_OUTPUT
 
+      - name: 💾 Crear carpeta de caché si no existe
+        run: mkdir -p ${{ steps.composer-cache.outputs.dir }}
+
       - name: 💾 Configurar caché de Composer
         uses: actions/cache@v4
         with:
