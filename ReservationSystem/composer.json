@@ -3,7 +3,7 @@
     "description": "Sistema de reservas para espacios en la escuela.",
     "require": {
         "vlucas/phpdotenv": "^5.6",
-        "tecnickcom/tcpdf": "^6.9"
+        "setasign/tfpdf": "^1.33"
     },
     "license": "MIT",
     "autoload": {
