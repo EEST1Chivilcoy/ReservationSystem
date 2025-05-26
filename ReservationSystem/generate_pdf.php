@@ -1,5 +1,6 @@
 <?php
 // Requerimientos
+require_once __DIR__ . '/vendor/autoload.php';
 include('include/conexion.php'); //Conexion SQL
 
 class PDF extends tFPDF
