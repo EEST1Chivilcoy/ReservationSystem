@@ -12,6 +12,18 @@ jobs:
       - name: 📥 Checkout del código
         uses: actions/checkout@v4
 
+      - name: 💾 Obtener directorio de caché de Composer
+        id: composer-cache
+        run: echo "dir=$(composer config cache-files-dir)" >> $GITHUB_OUTPUT
+
+      - name: 💾 Configurar caché de Composer
+        uses: actions/cache@v4
+        with:
+          path: ${{ steps.composer-cache.outputs.dir }}
+          key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-composer-
+
       - name: 🛠️ Instalar PHP y Composer
         uses: shivammathur/setup-php@v2
         with:
