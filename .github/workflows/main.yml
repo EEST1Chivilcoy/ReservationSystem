@@ -3,7 +3,7 @@ name: 🚀 Deploy a InfinityFree por FTP
 on:
   push:
     branches:
-      - main # Ajusta según tu rama principal
+      - main
 
 jobs:
   deploy:
@@ -17,6 +17,14 @@ jobs:
         with:
           php-version: "8.3"
           tools: composer
+
+      - name: 💾 Cache de Composer
+        uses: actions/cache@v4
+        with:
+          path: ~/.composer/cache
+          key: ${{ runner.os }}-composer-${{ hashFiles('ReservationSystem/composer.json') }}
+          restore-keys: |
+            ${{ runner.os }}-composer-
 
       - name: 📦 Instalar dependencias en ReservationSystem
         working-directory: ./ReservationSystem

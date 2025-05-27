@@ -400,9 +400,6 @@ FodyWeavers.xsd
 # Dependencias instaladas por Composer
 /ReservationSystem/vendor/
 
-# Archivos de Composer que no se deben versionar
-/ReservationSystem/composer.lock
-
 # Archivos temporales
 *.log
 *.cache
