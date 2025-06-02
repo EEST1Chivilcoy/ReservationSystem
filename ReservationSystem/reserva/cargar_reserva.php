@@ -13,7 +13,7 @@ $esAdmin = isset($_SESSION['EsAdmin']) && $_SESSION['EsAdmin'] == true;
     <link rel="icon" href="https://i.imgur.com/fSjgaVI.jpeg" type="image/svg+xml">
 
     <!-- Tailwind CSS -->
-    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
 
     <!-- Alpine.js para interacciones UI -->
     <script src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js" defer></script>

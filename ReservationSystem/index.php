@@ -15,7 +15,7 @@ $esAdmin = isset($_SESSION['EsAdmin']) && $_SESSION['EsAdmin'] == true;
     <link rel="icon" href="https://i.imgur.com/fSjgaVI.jpeg" type="image/svg+xml">
 
     <!-- Tailwind CSS -->
-    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
 
     <!-- jQuery and Popper.js -->
     <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>

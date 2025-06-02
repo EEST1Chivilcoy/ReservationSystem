@@ -8,7 +8,7 @@
     <link rel="icon" href="https://i.imgur.com/fSjgaVI.jpeg" type="image/svg+xml">
 
     <!-- Tailwind CSS -->
-    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
     <script>
         tailwind.config = {
             darkMode: 'class',
