@@ -233,29 +233,62 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         // Generar nombre de archivo amigable
         $fileName = 'registros_turnos_' . date('Ymd_His') . '.pdf';
-        $pdfDir = 'pdfs';
+        $pdfDir = __DIR__ . '/pdfs'; // Usar ruta absoluta
         $pdfFile = $pdfDir . '/' . $fileName;
 
-        // Asegurarse de que el directorio exista
+        // Asegurarse de que el directorio exista y tenga permisos correctos
         if (!is_dir($pdfDir)) {
-            if (!mkdir($pdfDir, 0755, true)) {
-                throw new Exception('No se pudo crear el directorio de PDFs');
+            if (!mkdir($pdfDir, 0777, true)) {
+                throw new Exception('No se pudo crear el directorio de PDFs en: ' . $pdfDir);
             }
         }
 
-        // Generar el PDF
-        $pdf->Output($pdfFile, 'F');
+        // Verificar permisos del directorio
+        if (!is_writable($pdfDir)) {
+            chmod($pdfDir, 0777);
+            if (!is_writable($pdfDir)) {
+                throw new Exception('El directorio PDFs no tiene permisos de escritura: ' . $pdfDir);
+            }
+        }
+
+        // Verificar si ya existe un archivo con el mismo nombre y eliminarlo
+        if (file_exists($pdfFile)) {
+            unlink($pdfFile);
+        }
+
+        try {
+            // Generar el PDF
+            $pdf->Output($pdfFile, 'F');
+        } catch (Exception $outputError) {
+            // Si falla, intentar con ruta temporal del sistema
+            $tempDir = sys_get_temp_dir();
+            $tempFile = $tempDir . '/' . $fileName;
+
+            try {
+                $pdf->Output($tempFile, 'F');
+
+                // Mover el archivo temporal al directorio deseado
+                if (copy($tempFile, $pdfFile)) {
+                    unlink($tempFile);
+                } else {
+                    $pdfFile = $tempFile; // Usar el archivo temporal como fallback
+                }
+            } catch (Exception $tempError) {
+                throw new Exception('Error al generar PDF: ' . $outputError->getMessage() . ' | Temp error: ' . $tempError->getMessage());
+            }
+        }
 
         if (file_exists($pdfFile)) {
             echo json_encode([
                 'success' => true,
-                'pdf' => $pdfFile,
+                'pdf' => str_replace(__DIR__ . '/', '', $pdfFile), // Ruta relativa para el cliente
                 'filename' => $fileName,
                 'records' => count($tableData),
-                'message' => 'PDF generado exitosamente'
+                'message' => 'PDF generado exitosamente',
+                'full_path' => $pdfFile // Para debugging
             ]);
         } else {
-            throw new Exception('No se pudo generar el archivo PDF');
+            throw new Exception('No se pudo generar el archivo PDF en: ' . $pdfFile);
         }
 
     } catch (Exception $e) {
