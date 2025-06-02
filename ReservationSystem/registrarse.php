@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Registrarse | Sistema de Reserva de Salones</title>
     <link rel="icon" href="https://i.imgur.com/fSjgaVI.jpeg" type="image/svg+xml">
-    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
     <script>
         tailwind.config = {
             darkMode: 'class',
