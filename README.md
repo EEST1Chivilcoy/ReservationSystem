@@ -18,7 +18,7 @@
 - **Idea y concepto original:** Sergio Caffaro (Profesor)
 - **Creador de la segunda versión:** Bernardo G. Erramuspe
 - **Desarrollo de la primera versión:** Estudiantes de 6to año (2023-2024)
-- **Diseño de la primera interfaz y levantamiento de requerimientos:** Estudiantes de 6to año (2024)
+- **Diseño de la primera interfaz y levantamiento de requerimientos:** Estudiantes de 6to año (2023)
 
 ---
 
