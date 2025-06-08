@@ -198,7 +198,7 @@
 
                 <div class="text-center md:text-right">
                     <p class="text-gray-400 text-sm">&copy; <?php echo date('Y'); ?> - Sistema de Reserva de Salones V2</p>
-                    <p class="text-gray-500 text-xs mt-1">Desarrollado por G. Erramuspe, Bernardo</p>
+                    <p class="text-gray-500 text-xs mt-1">Desarrollado por Bernardo G. Erramuspe, estudiante de 7mo año en 2024</p>
                 </div>
             </div>
         </div>
