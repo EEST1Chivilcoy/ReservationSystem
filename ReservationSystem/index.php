@@ -89,7 +89,7 @@ $esAdmin = isset($_SESSION['EsAdmin']) && $_SESSION['EsAdmin'] == true;
         $error = error_get_last();
         if ($error !== null && in_array($error['type'], [E_ERROR, E_PARSE, E_CORE_ERROR, E_COMPILE_ERROR])) {
             ob_clean();
-            header('Location: mantenimiento.html');
+            header('Location: maintenance.html');
             exit;
         }
     });
