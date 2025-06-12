@@ -1,94 +1,57 @@
--- phpMyAdmin SQL Dump
--- version 4.9.0.1
--- https://www.phpmyadmin.net/
---
--- Servidor: sql209.infinityfree.com
--- Tiempo de generación: 09-08-2024 a las 20:46:57
--- Versión del servidor: 10.4.17-MariaDB
--- Versión de PHP: 7.2.22
+-- Script para crear base de datos y tablas (MyISAM)
+-- Incluye dos usuarios por defecto con contraseñas hasheadas
+-- Zona horaria: Argentina (UTC-3)
 
+-- Configuración inicial
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 SET AUTOCOMMIT = 0;
 START TRANSACTION;
-SET time_zone = "+00:00";
+SET time_zone = "-03:00";
+SET NAMES utf8mb4 COLLATE utf8mb4_general_ci;
 
-
-/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
-/*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
-/*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
-/*!40101 SET NAMES utf8mb4 */;
-
---
--- Base de datos: `if0_34848196_reserva`
---
+-- Crear base de datos
+CREATE DATABASE IF NOT EXISTS `ReservationSystem` DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;
+USE `ReservationSystem`;
 
 -- --------------------------------------------------------
+-- Tabla: tabla (reservas)
+-- --------------------------------------------------------
 
---
--- Estructura de tabla para la tabla `tabla`
---
-
+DROP TABLE IF EXISTS `tabla`;
 CREATE TABLE `tabla` (
-  `ID` int(11) NOT NULL,
-  `nombreapellido` varchar(100) NOT NULL,
-  `curso` varchar(45) NOT NULL,
-  `materia` varchar(45) DEFAULT NULL,
-  `horario` time NOT NULL,
-  `horario1` time NOT NULL,
-  `fecha` date NOT NULL,
-  `info` varchar(50) NOT NULL,
-  `materiales` varchar(255) DEFAULT NULL
+  `ID` INT(11) NOT NULL AUTO_INCREMENT,
+  `nombreapellido` VARCHAR(100) NOT NULL,
+  `curso` VARCHAR(45) NOT NULL,
+  `materia` VARCHAR(45) DEFAULT NULL,
+  `horario` TIME NOT NULL,
+  `horario1` TIME NOT NULL,
+  `fecha` DATE NOT NULL,
+  `info` VARCHAR(50) NOT NULL,
+  `materiales` VARCHAR(255) DEFAULT NULL,
+  PRIMARY KEY (`ID`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4;
-
 
 -- --------------------------------------------------------
+-- Tabla: usuarios (usuarios del sistema)
+-- --------------------------------------------------------
 
---
--- Estructura de tabla para la tabla `usuarios`
---
-
+DROP TABLE IF EXISTS `usuarios`;
 CREATE TABLE `usuarios` (
-  `ID` int(11) NOT NULL,
-  `usuario` varchar(50) NOT NULL,
-  `clave` varchar(255) NOT NULL,
-  `NombreYApellido` varchar(255) NOT NULL,
-  `esAdmin` tinyint(1) NOT NULL DEFAULT 0
+  `ID` INT(11) NOT NULL AUTO_INCREMENT,
+  `usuario` VARCHAR(50) NOT NULL,
+  `clave` VARCHAR(255) NOT NULL,
+  `NombreYApellido` VARCHAR(255) NOT NULL,
+  `esAdmin` TINYINT(1) NOT NULL DEFAULT 0,
+  PRIMARY KEY (`ID`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4;
 
+-- --------------------------------------------------------
+-- Inserción de usuarios predeterminados con claves BCRYPT
+-- --------------------------------------------------------
 
---
--- Índices para tablas volcadas
---
+INSERT INTO `usuarios` (`usuario`, `clave`, `NombreYApellido`, `esAdmin`) VALUES
+('admin', '$2y$10$asqZ1UiHQ.qLsA28QaZ7uONwZQv2rqTEJo/8yMP67UPHFl3yA7PxW', 'Administrador del Sistema', 1),
+('prueba', '$2y$10$sm1phFtuoyZ4R9PN3E3YxeZd96rznq6Aax56BGRZ1kEX3GR8DdZga', 'Usuario de Prueba', 0);
 
---
--- Indices de la tabla `tabla`
---
-ALTER TABLE `tabla`
-  ADD PRIMARY KEY (`ID`);
-
---
--- Indices de la tabla `usuarios`
---
-ALTER TABLE `usuarios`
-  ADD PRIMARY KEY (`ID`);
-
---
--- AUTO_INCREMENT de las tablas volcadas
---
-
---
--- AUTO_INCREMENT de la tabla `tabla`
---
-ALTER TABLE `tabla`
-  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT;
-
---
--- AUTO_INCREMENT de la tabla `usuarios`
---
-ALTER TABLE `usuarios`
-  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT;
+-- Confirmar cambios
 COMMIT;
-
-/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
-/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
-/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
