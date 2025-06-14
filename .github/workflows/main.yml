@@ -8,6 +8,7 @@ on:
 jobs:
   deploy:
     runs-on: ubuntu-latest
+    environment: infinityfree-prod
     steps:
       - name: 📥 Checkout del código
         uses: actions/checkout@v4
