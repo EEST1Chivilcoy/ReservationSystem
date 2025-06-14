@@ -8,7 +8,10 @@ on:
 jobs:
   deploy:
     runs-on: ubuntu-latest
-    environment: infinityfree-prod
+    environment: 
+      name: infinityfree-prod
+      url: ${{ vars.DEPLOY_URL }}
+      
     steps:
       - name: 📥 Checkout del código
         uses: actions/checkout@v4
