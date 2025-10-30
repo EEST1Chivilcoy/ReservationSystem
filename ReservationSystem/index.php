@@ -31,9 +31,6 @@ $esAdmin = isset($_SESSION['EsAdmin']) && $_SESSION['EsAdmin'] == true;
     <!-- FullCalendar -->
     <script src='https://cdn.jsdelivr.net/npm/fullcalendar@6.1.15/index.global.min.js'></script>
 
-    <!-- Heroicons -->
-    <script src="https://unpkg.com/@heroicons/core@2.0.0/24/outline/esm/index.js"></script>
-
     <!-- Custom Tailwind config -->
     <script>
         tailwind.config = {
