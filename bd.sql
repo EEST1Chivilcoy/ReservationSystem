@@ -53,5 +53,8 @@ INSERT INTO `usuarios` (`usuario`, `clave`, `NombreYApellido`, `esAdmin`) VALUES
 ('admin', '$2y$10$asqZ1UiHQ.qLsA28QaZ7uONwZQv2rqTEJo/8yMP67UPHFl3yA7PxW', 'Administrador del Sistema', 1),
 ('prueba', '$2y$10$sm1phFtuoyZ4R9PN3E3YxeZd96rznq6Aax56BGRZ1kEX3GR8DdZga', 'Usuario de Prueba', 0);
 
+ALTER TABLE tabla ADD INDEX idx_fecha (fecha);
+ALTER TABLE tabla ADD INDEX idx_fecha_horario (fecha, horario);
+
 -- Confirmar cambios
 COMMIT;

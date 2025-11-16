@@ -124,9 +124,6 @@ $esAdmin = isset($_SESSION['EsAdmin']) && $_SESSION['EsAdmin'] == true;
 
     $hayRegistros = hayRegistrosDisponibles($conexion);
 
-    $consulta_borrar = "DELETE FROM tabla WHERE fecha < DATE_SUB('" . $fecha_actual . "', INTERVAL 7 DAY)";
-    mysqli_query($conexion, $consulta_borrar) or die('Error en consulta de fechas');
-
     $resultado_existencia = mysqli_query($conexion, "SELECT COUNT(*) as count FROM tabla");
     $fila_existencia = mysqli_fetch_assoc($resultado_existencia);
     $num_filas = $fila_existencia['count'];
