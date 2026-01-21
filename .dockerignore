@@ -1,0 +1,23 @@
+# Git
+.git
+.gitignore
+.github
+
+# Docker
+docker-compose.yml
+Dockerfile
+.dockerignore
+
+# Composer dependencies (install inside container)
+vendor/
+ReservationSystem/vendor/
+
+# Local configuration
+.env
+ReservationSystem/.env
+
+# IDEs
+.vscode
+.idea
+*.sublime-project
+*.sublime-workspace

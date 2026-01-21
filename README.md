@@ -78,3 +78,18 @@ Esto generará la carpeta `vendor/` con las librerías necesarias, incluyendo `v
 [<img alt="Deployed with FTP Deploy Action" src="https://img.shields.io/badge/Deployed With-FTP DEPLOY ACTION-%3CCOLOR%3E?style=for-the-badge&color=0077b6">](https://github.com/SamKirkland/FTP-Deploy-Action)
 
 ---
+
+### 🐳 Despliegue con Docker
+
+¡También puedes levantar el proyecto usando Docker! Es la forma más fácil de empezar.
+
+1.  Asegúrate de tener Docker y Docker Compose instalados.
+2.  Ejecuta el siguiente comando en la raíz del proyecto:
+    ```sh
+    docker-compose up -d --build
+    ```
+3.  Accede a la aplicación en [http://localhost](http://localhost).
+4.  La base de datos se inicializará automáticamente con los datos necesarios.
+
+**Nota:** La configuración de Docker ya incluye las variables de entorno necesarias para conectar la aplicación con la base de datos dentro del contenedor.
+
