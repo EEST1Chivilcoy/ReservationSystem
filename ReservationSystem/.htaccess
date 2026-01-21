@@ -1,22 +1,5 @@
-AddDefaultCharset UTF-8
-
-Options -Indexes
-
-RewriteEngine On
-
-# Redirigir a HTTPS solo si no es localhost
-RewriteCond %{HTTPS} off
-RewriteCond %{HTTP_HOST} !^(localhost|127\.0\.0\.1) [NC]
-RewriteRule ^(.*)$ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
-
-# Página de error 500 (mantenimiento)
-ErrorDocument 500 /maintenance.html
-
-# Página de error 404 (página no encontrada)
-ErrorDocument 404 /not-found.html
-
-# Evitar acceso directo a archivos .env y sensibles
-<FilesMatch "^(\.env|composer\.json|composer\.lock|README\.md)$">
-    Order allow,deny
-    Deny from all
-</FilesMatch>
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+    RewriteRule ^$ public/index.php [L]
+    RewriteRule ^((?!public/).*)$ public/$1 [L]
+</IfModule>
