@@ -8,7 +8,7 @@
     "license": "MIT",
     "autoload": {
         "psr-4": {
-            "Eest1chivilcoy\\ReservationSystem\\": "src/"
+            "App\\": "app/"
         }
     },
     "authors": [
