@@ -13,9 +13,6 @@ services:
       - DB_PASS=app_password
     depends_on:
       - db
-    volumes:
-      # Montar el código fuente para desarrollo (opcional)
-      # - ./ReservationSystem:/var/www/html
 
   db:
     image: mysql:8.0

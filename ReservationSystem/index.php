@@ -1,9 +1,68 @@
 <?php
+ob_start(); // Iniciar buffer de salida inmediatamente
 session_start();
+
+// Configuración y Lógica Principal
 $loggedIn = isset($_SESSION['loggedIn']) && $_SESSION['loggedIn'] == true;
 $esAdmin = isset($_SESSION['EsAdmin']) && $_SESSION['EsAdmin'] == true;
-?>
 
+// Capturar errores no fatales (warnings, notices, etc.)
+set_error_handler(function ($errno, $errstr, $errfile, $errline) {
+    echo "<script>console.warn('PHP Warning: " . addslashes($errstr) . " en " . $errfile . ":" . $errline . "');</script>";
+});
+
+// Capturar errores fatales
+register_shutdown_function(function () {
+    $error = error_get_last();
+    if ($error !== null) {
+        // Aquí ya no filtramos solo fatales, mostramos todo
+        echo "<script>console.error('Error detectado: " . addslashes($error['message']) . " en " . $error['file'] . ":" . $error['line'] . "');</script>";
+    }
+});
+
+// Detectar si estamos en localhost
+$isLocalhost = in_array($_SERVER['HTTP_HOST'], ['localhost', '127.0.0.1']);
+
+// Configuración de errores según el entorno
+if ($isLocalhost) {
+    ini_set('display_errors', 1);
+    error_reporting(E_ALL);
+} else {
+    ini_set('display_errors', 0);
+    error_reporting(E_ALL);
+}
+
+// Inclusiones y base de datos
+include('include/conexion.php');
+
+// Set timezone to Argentina
+date_default_timezone_set('America/Argentina/Buenos_Aires');
+
+$fecha_actual = date('Y/m/d');
+
+function hayRegistrosDisponibles($conexion)
+{
+    $consulta = "SELECT COUNT(*) as count FROM tabla";
+    $resultado = mysqli_query($conexion, $consulta);
+    if (!$resultado) return false;
+    $fila = mysqli_fetch_assoc($resultado);
+    return $fila['count'] > 0;
+}
+
+$hayRegistros = hayRegistrosDisponibles($conexion);
+
+$resultado_existencia = mysqli_query($conexion, "SELECT COUNT(*) as count FROM tabla");
+$fila_existencia = mysqli_fetch_assoc($resultado_existencia);
+$num_filas = $fila_existencia['count'];
+
+mysqli_close($conexion);
+
+// Lógica de Navidad
+$today = new DateTime();
+$month = (int) $today->format('m');
+$day = (int) $today->format('d');
+$isChristmasWeek = $month === 12 && $day >= 20 && $day <= 26;
+?>
 <!DOCTYPE html>
 <html lang="es">
 
@@ -49,6 +108,7 @@ $esAdmin = isset($_SESSION['EsAdmin']) && $_SESSION['EsAdmin'] == true;
                             700: '#0369a1',
                             800: '#075985',
                             900: '#0c4a6e',
+                            51: '#f0f9ff',
                         },
                         secondary: {
                             50: '#f8fafc',
@@ -79,65 +139,8 @@ $esAdmin = isset($_SESSION['EsAdmin']) && $_SESSION['EsAdmin'] == true;
     <link
         href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Montserrat:wght@400;500;600;700&display=swap"
         rel="stylesheet">
-
+    
     <?php
-
-    ob_start();
-
-    // Registrar función para capturar errores fatales
-    register_shutdown_function(function () {
-        $error = error_get_last();
-        if ($error !== null && in_array($error['type'], [E_ERROR, E_PARSE, E_CORE_ERROR, E_COMPILE_ERROR])) {
-            ob_clean();
-            header('Location: maintenance.html');
-            exit;
-        }
-    });
-
-    // Detectar si estamos en localhost
-    $isLocalhost = in_array($_SERVER['HTTP_HOST'], ['localhost', '127.0.0.1']);
-
-    // Configuración de errores según el entorno
-    if ($isLocalhost) {
-        ini_set('display_errors', 1); // Mostrar errores
-        error_reporting(E_ALL);
-    } else {
-        ini_set('display_errors', 0); // Ocultar errores en producción
-        error_reporting(E_ALL);
-    }
-
-    include('include/conexion.php');
-
-    // Set timezone to Argentina
-    date_default_timezone_set('America/Argentina/Buenos_Aires');
-
-    $fecha_actual = date('Y/m/d');
-
-    function hayRegistrosDisponibles($conexion)
-    {
-        $consulta = "SELECT COUNT(*) as count FROM tabla";
-        $resultado = mysqli_query($conexion, $consulta);
-        if (!$resultado) return false;
-        $fila = mysqli_fetch_assoc($resultado);
-        return $fila['count'] > 0;
-    }
-
-    $hayRegistros = hayRegistrosDisponibles($conexion);
-
-    $resultado_existencia = mysqli_query($conexion, "SELECT COUNT(*) as count FROM tabla");
-    $fila_existencia = mysqli_fetch_assoc($resultado_existencia);
-    $num_filas = $fila_existencia['count'];
-
-    mysqli_close($conexion);
-    ?>
-
-    <?php
-    $today = new DateTime();
-    $month = (int) $today->format('m');
-    $day = (int) $today->format('d');
-
-    $isChristmasWeek = $month === 12 && $day >= 20 && $day <= 26;
-
     if ($isChristmasWeek) {
         echo '<script src="https://app.embed.im/snow.js" defer></script>';
     }
