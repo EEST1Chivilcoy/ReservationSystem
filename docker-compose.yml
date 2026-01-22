@@ -11,6 +11,7 @@ services:
       - DB_NAME=ReservationSystem
       - DB_USER=app_user
       - DB_PASS=app_password
+      - APP_DEBUG=true
     depends_on:
       - db
 

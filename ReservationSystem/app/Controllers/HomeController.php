@@ -17,12 +17,12 @@ class HomeController extends Controller
         $isChristmasWeek = $month === 12 && $day >= 20 && $day <= 26;
 
         // Comprobar si hay reservas para decidir qué mostrar
-        $reservationModel = new Reservation();
-        $hasReservations = $reservationModel->hasReservations();
+        // $reservationModel = new Reservation();
+        // $hasReservations = $reservationModel->hasReservations(); // REMOVED: Method does not exist and is unused
 
         $data = [
             'isChristmasWeek' => $isChristmasWeek,
-            'hasReservations' => $hasReservations,
+            'hasReservations' => false,
             'loggedIn' => $_SESSION['loggedIn'] ?? false,
             'isAdmin' => $_SESSION['EsAdmin'] ?? false,
             'userName' => $_SESSION['nombreyapellido'] ?? null
