@@ -29,7 +29,7 @@ Sigue estos pasos para desplegar el proyecto en un entorno local clásico (AMP s
 
 #### 1. Clonar el repositorio
 ```sh
-git clone [https://github.com/EEST1Chivilcoy/ReservationSystem.git](https://github.com/EEST1Chivilcoy/ReservationSystem.git)
+git clone https://github.com/EEST1Chivilcoy/ReservationSystem.git
 cd ReservationSystem
 
 ```
