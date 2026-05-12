@@ -370,7 +370,7 @@ $isChristmasWeek = $month === 12 && $day >= 20 && $day <= 26;
                 if (document.getElementById('editEvent')) {
                     document.getElementById('editEvent').onclick = () => {
                         populateEditModal(event);
-                        document.querySelector('[x-data]').__x.$data.showEventModal = false;
+                        window.dispatchEvent(new CustomEvent('close-modal', { detail: 'eventModal' }));
                         window.dispatchEvent(new CustomEvent('open-modal', { detail: 'editModal' }));
                     };
                 }
@@ -538,7 +538,8 @@ $isChristmasWeek = $month === 12 && $day >= 20 && $day <= 26;
     showErrorModal: <?php echo isset($_GET['error']) ? 'true' : 'false'; ?>,
     errorMessage: '<?php echo isset($_GET['error']) ? htmlspecialchars($_GET['error'], ENT_QUOTES, 'UTF-8') : ''; ?>'
 }"
-    @open-modal.window="$event.detail === 'eventModal' ? showEventModal = true : ($event.detail === 'editModal' ? showEditModal = true : ($event.detail === 'printModal' ? showPrintModal = true : ($event.detail === 'printQrModal' ? showPrintQrModal = true : null)))">
+    @open-modal.window="$event.detail === 'eventModal' ? showEventModal = true : ($event.detail === 'editModal' ? showEditModal = true : ($event.detail === 'printModal' ? showPrintModal = true : ($event.detail === 'printQrModal' ? showPrintQrModal = true : null)))"
+    @close-modal.window="$event.detail === 'eventModal' ? showEventModal = false : ($event.detail === 'editModal' ? showEditModal = false : ($event.detail === 'printModal' ? showPrintModal = false : ($event.detail === 'printQrModal' ? showPrintQrModal = false : null)))">
 
     <div x-show="showErrorModal" class="fixed inset-0 overflow-y-auto z-50 flex items-center justify-center"
         x-transition:enter="transition ease-out duration-300" x-transition:enter-start="opacity-0"
