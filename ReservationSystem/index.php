@@ -369,7 +369,9 @@ $isChristmasWeek = $month === 12 && $day >= 20 && $day <= 26;
 
                 if (document.getElementById('editEvent')) {
                     document.getElementById('editEvent').onclick = () => {
-                        window.location.href = `reserva/modifica_reserva.php?id=${event.extendedProps.id}`;
+                        populateEditModal(event);
+                        document.querySelector('[x-data]').__x.$data.showEventModal = false;
+                        window.dispatchEvent(new CustomEvent('open-modal', { detail: 'editModal' }));
                     };
                 }
 
@@ -382,6 +384,88 @@ $isChristmasWeek = $month === 12 && $day >= 20 && $day <= 26;
                 }
                 window.dispatchEvent(new CustomEvent('open-modal', { detail: 'eventModal' }));
             }
+
+            window.populateEditModal = function(event) {
+                document.getElementById('edit_ID').value = event.extendedProps.id;
+                
+                let cursoFull = event.extendedProps.curso;
+                let curso = cursoFull;
+                let division = '';
+                
+                const cursosBasicos = ['Reunión', 'Charla/Conferencia', 'Acto', 'Charla/conferencia'];
+                if (!cursosBasicos.includes(cursoFull) && cursoFull.includes(' ')) {
+                    let parts = cursoFull.split(' ');
+                    curso = parts[0];
+                    division = parts.slice(1).join(' ');
+                }
+                
+                let sitio = event.extendedProps.info;
+                const sitiosBasicos = ['Salon de actos', 'Comedor', 'Audiovisuales', 'Salón de actos'];
+                if (sitiosBasicos.includes(sitio) || sitio === '') {
+                    // It is a basic room
+                } else {
+                    document.getElementById('edit_otro_salon').value = sitio;
+                    sitio = 'Otro';
+                }
+
+                document.getElementById('edit_materia').value = event.extendedProps.materia;
+                document.getElementById('edit_fecha').value = moment(event.start).format('YYYY-MM-DD');
+                document.getElementById('edit_horario').value = moment(event.start).format('HH:mm');
+                document.getElementById('edit_horario1').value = moment(event.end).format('HH:mm');
+                document.getElementById('edit_materiales').value = event.extendedProps.materiales;
+                
+                window.dispatchEvent(new CustomEvent('populate-edit', { detail: { curso: curso, division: division, sitio: sitio } }));
+            };
+
+            window.validarEditFormulario = function() {
+                const curso = document.getElementById('edit_curso').value;
+                const materia = document.getElementById('edit_materia').value;
+                const fecha = document.getElementById('edit_fecha').value;
+                const horario = document.getElementById('edit_horario').value;
+                const horario1 = document.getElementById('edit_horario1').value;
+                const sitio = document.getElementById('edit_info').value;
+
+                if (!curso || !materia || !fecha || !horario || !horario1 || !sitio) {
+                    alert('Todos los campos principales son obligatorios.');
+                    return false;
+                }
+
+                if (!['Reunión', 'Charla/Conferencia', 'Acto'].includes(curso)) {
+                    const division = document.getElementById('edit_division').value;
+                    if (!division) {
+                        alert('El campo "División" es obligatorio.');
+                        return false;
+                    }
+                }
+
+                if (sitio === 'Otro') {
+                    const otroSalon = document.getElementById('edit_otro_salon').value;
+                    if (!otroSalon) {
+                        alert('El campo "Especificar otro salón" es obligatorio.');
+                        return false;
+                    }
+                }
+
+                const hora = horario.split(':')[0];
+                const horaMinutos = parseInt(hora);
+
+                if (sitio === 'Comedor') {
+                    if (horaMinutos < 14) {
+                        alert('Si el sitio es Comedor, el horario debe ser posterior a las 2 PM (14:00).');
+                        return false;
+                    }
+                }
+
+                const [horaInicioH, horaInicioM] = horario.split(':').map(Number);
+                const [horaFinH, horaFinM] = horario1.split(':').map(Number);
+
+                if (horaFinH < horaInicioH || (horaFinH === horaInicioH && horaFinM < horaInicioM)) {
+                    alert('La hora de fin no puede ser anterior a la hora de inicio.');
+                    return false;
+                }
+
+                return true;
+            };
 
             $.ajax({
                 url: 'get_oldest_date.php',
@@ -448,12 +532,13 @@ $isChristmasWeek = $month === 12 && $day >= 20 && $day <= 26;
 
 <body class="bg-gray-900 text-gray-200 min-h-screen flex flex-col" x-data="{
     showEventModal: false,
+    showEditModal: false,
     showPrintModal: false,
     showPrintQrModal: false,
     showErrorModal: <?php echo isset($_GET['error']) ? 'true' : 'false'; ?>,
     errorMessage: '<?php echo isset($_GET['error']) ? htmlspecialchars($_GET['error'], ENT_QUOTES, 'UTF-8') : ''; ?>'
 }"
-    @open-modal.window="$event.detail === 'eventModal' ? showEventModal = true : ($event.detail === 'printModal' ? showPrintModal = true : ($event.detail === 'printQrModal' ? showPrintQrModal = true : null))">
+    @open-modal.window="$event.detail === 'eventModal' ? showEventModal = true : ($event.detail === 'editModal' ? showEditModal = true : ($event.detail === 'printModal' ? showPrintModal = true : ($event.detail === 'printQrModal' ? showPrintQrModal = true : null)))">
 
     <div x-show="showErrorModal" class="fixed inset-0 overflow-y-auto z-50 flex items-center justify-center"
         x-transition:enter="transition ease-out duration-300" x-transition:enter-start="opacity-0"
@@ -696,6 +781,112 @@ $isChristmasWeek = $month === 12 && $day >= 20 && $day <= 26;
                     <?php endif; ?>
                     <button type="button" class="inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-gray-600 text-base font-medium text-white hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500 sm:text-sm" @click="showEventModal = false">Cerrar</button>
                 </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Editar Reserva -->
+    <div x-show="showEditModal" class="fixed inset-0 overflow-y-auto z-50 flex items-center justify-center" x-transition:enter="transition ease-out duration-300" x-transition:enter-start="opacity-0" x-transition:enter-end="opacity-100" x-transition:leave="transition ease-in duration-200" x-transition:leave-start="opacity-100" x-transition:leave-end="opacity-0" style="display: none;">
+        <div class="fixed inset-0 bg-black bg-opacity-75 transition-opacity" @click="showEditModal = false"></div>
+        <div class="relative bg-gray-800 rounded-lg max-w-2xl w-full mx-4 overflow-hidden shadow-xl transform transition-all" x-transition:enter="transition ease-out duration-300" x-transition:enter-start="opacity-0 translate-y-4" x-transition:enter-end="opacity-100 translate-y-0" x-transition:leave="transition ease-in duration-200" x-transition:leave-start="opacity-100 translate-y-0" x-transition:leave-end="opacity-0 translate-y-4">
+            <div class="px-4 pt-5 pb-4 sm:p-6" x-data="{ 
+                curso: '', 
+                sitio: '',
+                division: '',
+                showDivision: false,
+                showOtroSalon: false,
+                updateDivision() {
+                    this.showDivision = !['Reunión', 'Charla/Conferencia', 'Acto', 'Charla/conferencia'].includes(this.curso);
+                },
+                updateOtroSalon() {
+                    this.showOtroSalon = this.sitio === 'Otro';
+                }
+            }" @populate-edit.window="
+                curso = $event.detail.curso; 
+                division = $event.detail.division;
+                sitio = $event.detail.sitio; 
+                document.getElementById('edit_curso').value = curso;
+                document.getElementById('edit_division').value = division;
+                document.getElementById('edit_info').value = sitio;
+                updateDivision(); 
+                updateOtroSalon();
+            ">
+                <div class="flex items-center justify-between mb-4 border-b border-gray-700 pb-3">
+                    <h3 class="text-lg font-medium leading-6 text-white">Editar Reserva</h3>
+                    <button type="button" class="text-gray-400 hover:text-white" @click="showEditModal = false"><svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" /></svg></button>
+                </div>
+                <form action="reserva/modifica_sql.php" method="POST" onsubmit="return window.validarEditFormulario()">
+                    <input type="hidden" name="ID" id="edit_ID">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div>
+                            <label for="edit_curso" class="block text-sm font-medium text-gray-300 mb-1" x-text="['Reunión', 'Charla/Conferencia', 'Acto', 'Charla/conferencia'].includes(curso) ? 'Evento' : 'Curso'">Curso</label>
+                            <select id="edit_curso" name="curso" x-model="curso" @change="updateDivision()"
+                                class="w-full bg-gray-700 border border-gray-600 text-white rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500">
+                                <option value="Reunión">Reunión</option>
+                                <option value="Charla/Conferencia">Charla/Conferencia</option>
+                                <option value="Acto">Acto</option>
+                                <option value="1º">1º</option>
+                                <option value="2º">2º</option>
+                                <option value="3º">3º</option>
+                                <option value="4º">4º</option>
+                                <option value="5º">5º</option>
+                                <option value="6º">6º</option>
+                                <option value="7º">7º</option>
+                            </select>
+                        </div>
+                        <div x-show="showDivision" x-transition>
+                            <label for="edit_division" class="block text-sm font-medium text-gray-300 mb-1">División</label>
+                            <input type="text" id="edit_division" name="division" x-model="division" placeholder="Ej: A, B, C..."
+                                class="w-full bg-gray-700 border border-gray-600 text-white rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500">
+                        </div>
+                        <div :class="showDivision ? 'col-span-1 md:col-span-2' : 'col-span-1 md:col-span-1'">
+                            <label for="edit_materia" class="block text-sm font-medium text-gray-300 mb-1" x-text="['Reunión', 'Charla/Conferencia', 'Acto', 'Charla/conferencia'].includes(curso) ? 'Motivo' : 'Materia'">Materia</label>
+                            <input type="text" id="edit_materia" name="materia"
+                                class="w-full bg-gray-700 border border-gray-600 text-white rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500">
+                        </div>
+                        <div>
+                            <label for="edit_fecha" class="block text-sm font-medium text-gray-300 mb-1">Fecha</label>
+                            <input type="date" id="edit_fecha" name="fecha"
+                                class="w-full bg-gray-700 border border-gray-600 text-white rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500">
+                        </div>
+                        <div class="grid grid-cols-2 gap-2">
+                            <div>
+                                <label for="edit_horario" class="block text-sm font-medium text-gray-300 mb-1">Hora Inicio</label>
+                                <input type="time" id="edit_horario" name="horario"
+                                    class="w-full bg-gray-700 border border-gray-600 text-white rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500">
+                            </div>
+                            <div>
+                                <label for="edit_horario1" class="block text-sm font-medium text-gray-300 mb-1">Hora Fin</label>
+                                <input type="time" id="edit_horario1" name="horario1"
+                                    class="w-full bg-gray-700 border border-gray-600 text-white rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500">
+                            </div>
+                        </div>
+                        <div>
+                            <label for="edit_info" class="block text-sm font-medium text-gray-300 mb-1">Sitio a Reservar</label>
+                            <select id="edit_info" name="info" x-model="sitio" @change="updateOtroSalon()"
+                                class="w-full bg-gray-700 border border-gray-600 text-white rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500">
+                                <option value="Salon de actos">Salón de actos</option>
+                                <option value="Comedor">Comedor</option>
+                                <option value="Audiovisuales">Audiovisuales</option>
+                                <option value="Otro">Otro (Especificar)</option>
+                            </select>
+                        </div>
+                        <div x-show="showOtroSalon" x-transition>
+                            <label for="edit_otro_salon" class="block text-sm font-medium text-gray-300 mb-1">Especificar otro salón</label>
+                            <input type="text" id="edit_otro_salon" name="otro_salon" placeholder="Describa el salón"
+                                class="w-full bg-gray-700 border border-gray-600 text-white rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500">
+                        </div>
+                        <div class="col-span-1 md:col-span-2">
+                            <label for="edit_materiales" class="block text-sm font-medium text-gray-300 mb-1">Materiales necesarios</label>
+                            <textarea id="edit_materiales" name="materiales" rows="2"
+                                class="w-full bg-gray-700 border border-gray-600 text-white rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"></textarea>
+                        </div>
+                    </div>
+                    <div class="mt-5 sm:mt-6 flex justify-end space-x-2 border-t border-gray-700 pt-3">
+                        <button type="submit" class="inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-blue-600 text-base font-medium text-white hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 sm:text-sm">Guardar Cambios</button>
+                        <button type="button" class="inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-gray-600 text-base font-medium text-white hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500 sm:text-sm" @click="showEditModal = false">Cancelar</button>
+                    </div>
+                </form>
             </div>
         </div>
     </div>
