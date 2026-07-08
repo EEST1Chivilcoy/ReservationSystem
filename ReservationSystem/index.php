@@ -1069,11 +1069,40 @@ if ($esAdmin) {
     <div x-show="showCancelModal" class="fixed inset-0 overflow-y-auto z-50 flex items-center justify-center" style="display: none;">
         <div class="fixed inset-0 bg-black bg-opacity-80 transition-opacity" @click="showCancelModal = false"></div>
         <div class="relative bg-gray-800 rounded-xl max-w-md w-full mx-4 shadow-2xl border border-gray-700"
-            x-data="{ reservaId: '', reservaInfo: '', telefono: '', tipo_telefono: '', nombreapellido: '' }"
-            @populate-cancel.window="reservaId = $event.detail.id; reservaInfo = $event.detail.info; telefono = $event.detail.telefono || ''; tipo_telefono = $event.detail.tipo_telefono || ''; nombreapellido = $event.detail.nombreapellido || '';">
+            x-data="{ 
+                reservaId: '', 
+                reservaInfo: '', 
+                telefono: '', 
+                tipo_telefono: '', 
+                nombreapellido: '',
+                motivo: '',
+                avisado: false,
+                abrirWsp() {
+                    if (!this.motivo.trim()) {
+                        alert('Por favor, ingresa el motivo antes de enviar la notificación por WhatsApp.');
+                        return;
+                    }
+                    let cleanPhone = this.telefono.replace(/[^0-9]/g, '');
+                    if (cleanPhone.startsWith('0')) cleanPhone = cleanPhone.substring(1);
+                    
+                    let msg = `¡Hola ${this.nombreapellido}! 🏫 Te escribimos desde el *Sistema de Reservas de la E.E.S.T. N° 1 \"Mariano Moreno\"* de Chivilcoy.\n\nTe queríamos avisar que tuvimos que cancelar tu reserva de *${this.reservaInfo}*.\n\n📌 *Motivo:* ${this.motivo}\n\nCualquier duda, podés ingresar de nuevo a la web para pedir un cambio de fecha o realizar otra reserva. ¡Disculpas por las molestias! 💻\n\n¡Que tengas un buen día! 👋`;
+                    
+                    window.open('https://wa.me/549' + cleanPhone + '?text=' + encodeURIComponent(msg), '_blank');
+                    this.avisado = true;
+                }
+            }"
+            @populate-cancel.window="
+                reservaId = $event.detail.id; 
+                reservaInfo = $event.detail.info; 
+                telefono = $event.detail.telefono || ''; 
+                tipo_telefono = $event.detail.tipo_telefono || ''; 
+                nombreapellido = $event.detail.nombreapellido || '';
+                motivo = '';
+                avisado = (telefono === '');
+            ">
             <div class="px-6 py-4 border-b border-gray-700 flex justify-between items-center">
                 <h3 class="text-lg font-bold text-white">Cancelar Reserva (Admin)</h3>
-                <button @click="showCancelModal = false" class="text-gray-400 hover:text-white">
+                <button @click="showCancelModal = false" type="button" class="text-gray-400 hover:text-white">
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" /></svg>
                 </button>
             </div>
@@ -1089,13 +1118,24 @@ if ($esAdmin) {
                         <p class="text-gray-400">Usuario: <span class="text-white" x-text="nombreapellido"></span></p>
                         <p class="text-gray-400">Teléfono: <span class="text-white" x-text="telefono"></span> (<span class="text-white" x-text="tipo_telefono === 'whatsapp' ? 'WhatsApp' : (tipo_telefono === 'celular_sin_wsp' ? 'Celular sin WhatsApp' : 'Línea Fija')"></span>)</p>
                         
-                        <div x-show="tipo_telefono === 'whatsapp'" class="mt-2 text-green-400 flex items-center">
-                            <svg class="h-4 w-4 mr-1 text-green-500" fill="currentColor" viewBox="0 0 24 24"><path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946C.06 5.348 5.397.01 12.008.01c3.202.001 6.212 1.246 8.477 3.514 2.266 2.268 3.507 5.28 3.505 8.484-.004 6.657-5.34 11.997-11.953 11.997-2.005-.001-3.973-.502-5.724-1.458L0 24zm6.59-4.846c1.6.95 3.188 1.449 4.825 1.451 5.436 0 9.86-4.37 9.864-9.799.002-2.63-1.023-5.101-2.885-6.965C16.488 2.01 14.07 1.01 11.478 1.01 6.046 1.01 1.62 5.378 1.617 10.806c-.001 1.69.443 3.336 1.286 4.795l-.997 3.64 3.74-.979zm11.233-5.662c-.271-.136-1.602-.79-1.85-.88-.248-.09-.429-.136-.61.136-.18.271-.698.88-.857 1.06-.158.18-.317.203-.588.068-1.52-.75-2.614-1.3-3.666-3.11-.278-.477.278-.443.796-1.472.083-.169.041-.317-.021-.452-.061-.136-.61-1.472-.836-2.014-.22-.53-.443-.457-.61-.466-.157-.008-.339-.009-.52-.009-.18 0-.475.068-.723.339-.248.271-.95.928-.95 2.262 0 1.333.972 2.621 1.107 2.802.136.18 1.913 2.922 4.633 4.097.647.28 1.153.447 1.547.572.65.207 1.243.177 1.711.107.521-.078 1.602-.656 1.829-1.289.227-.633.227-1.176.158-1.289-.068-.113-.248-.18-.52-.317z"/></svg>
-                            <span>Al confirmar, se abrirá WhatsApp para notificar.</span>
+                        <div x-show="tipo_telefono === 'whatsapp'" class="mt-2 text-green-400 flex flex-col space-y-2">
+                            <div class="flex items-center text-xs">
+                                <svg class="h-4 w-4 mr-1 text-green-500" fill="currentColor" viewBox="0 0 24 24"><path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946C.06 5.348 5.397.01 12.008.01c3.202.001 6.212 1.246 8.477 3.514 2.266 2.268 3.507 5.28 3.505 8.484-.004 6.657-5.34 11.997-11.953 11.997-2.005-.001-3.973-.502-5.724-1.458L0 24zm6.59-4.846c1.6.95 3.188 1.449 4.825 1.451 5.436 0 9.86-4.37 9.864-9.799.002-2.63-1.023-5.101-2.885-6.965C16.488 2.01 14.07 1.01 11.478 1.01 6.046 1.01 1.62 5.378 1.617 10.806c-.001 1.69.443 3.336 1.286 4.795l-.997 3.64 3.74-.979zm11.233-5.662c-.271-.136-1.602-.79-1.85-.88-.248-.09-.429-.136-.61.136-.18.271-.698.88-.857 1.06-.158.18-.317.203-.588.068-1.52-.75-2.614-1.3-3.666-3.11-.278-.477.278-.443.796-1.472.083-.169.041-.317-.021-.452-.061-.136-.61-1.472-.836-2.014-.22-.53-.443-.457-.61-.466-.157-.008-.339-.009-.52-.009-.18 0-.475.068-.723.339-.248.271-.95.928-.95 2.262 0 1.333.972 2.621 1.107 2.802.136.18 1.913 2.922 4.633 4.097.647.28 1.153.447 1.547.572.65.207 1.243.177 1.711.107.521-.078 1.602-.656 1.829-1.289.227-.633.227-1.176.158-1.289-.068-.113-.248-.18-.52-.317z"/></svg>
+                                <span>Debes abrir WhatsApp para enviar la notificación.</span>
+                            </div>
+                            <button type="button" @click="abrirWsp()" class="w-full inline-flex justify-center items-center bg-green-600 hover:bg-green-700 text-white font-medium px-3 py-1.5 rounded-lg text-xs mt-1 transition-colors">
+                                💬 Abrir WhatsApp y Habilitar Cancelación
+                            </button>
                         </div>
-                        <div x-show="tipo_telefono !== 'whatsapp'" class="mt-2 text-amber-400 flex items-center">
-                            <svg class="h-4 w-4 mr-1 text-amber-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.94.725l.548 2.2a1 1 0 01-.321.988l-1.305.98a10.582 10.582 0 004.872 4.872l.98-1.305a1 1 0 01.988-.321l2.2.548a1 1 0 01.725.94V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"/></svg>
-                            <span>No tiene WhatsApp. Deberás llamarlo para avisar.</span>
+                        <div x-show="tipo_telefono !== 'whatsapp'" class="mt-2 text-amber-400 flex flex-col space-y-1">
+                            <div class="flex items-center text-xs">
+                                <svg class="h-4 w-4 mr-1 text-amber-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.94.725l.548 2.2a1 1 0 01-.321.988l-1.305.98a10.582 10.582 0 004.872 4.872l.98-1.305a1 1 0 01.988-.321l2.2.548a1 1 0 01.725.94V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"/></svg>
+                                <span>Llamar al usuario al número de arriba para avisar.</span>
+                            </div>
+                            <label class="flex items-center space-x-2 text-xs text-gray-300 mt-1 cursor-pointer bg-gray-700/30 p-2 rounded border border-gray-600/30">
+                                <input type="checkbox" x-model="avisado" class="rounded text-amber-500 focus:ring-amber-500 bg-gray-700 border-gray-600 h-4 w-4">
+                                <span>Confirmar que ya llamé por teléfono</span>
+                            </label>
                         </div>
                     </div>
                     <div x-show="!telefono">
@@ -1104,11 +1144,11 @@ if ($esAdmin) {
                 </div>
                 
                 <label class="block text-sm font-medium text-gray-400 mb-2">Motivo de cancelación</label>
-                <textarea name="motivo" required rows="3" class="w-full bg-gray-700 border border-gray-600 text-white rounded-lg px-3 py-2 mb-4 focus:ring-red-500 focus:border-red-500" placeholder="Ej: Superposición de horarios, mantenimiento..."></textarea>
+                <textarea name="motivo" x-model="motivo" required rows="3" class="w-full bg-gray-700 border border-gray-600 text-white rounded-lg px-3 py-2 mb-4 focus:ring-red-500 focus:border-red-500" placeholder="Ej: Superposición de horarios, mantenimiento..."></textarea>
                 
                 <div class="flex justify-end space-x-3">
                     <button type="button" @click="showCancelModal = false" class="px-4 py-2 bg-gray-600 hover:bg-gray-700 text-white rounded-lg">Atrás</button>
-                    <button type="submit" class="px-4 py-2 bg-red-600 hover:bg-red-700 text-white rounded-lg">Confirmar Cancelación</button>
+                    <button type="submit" :disabled="!avisado" :class="avisado ? 'bg-red-600 hover:bg-red-700 text-white cursor-pointer' : 'bg-red-800 text-red-400 cursor-not-allowed opacity-50'" class="px-4 py-2 rounded-lg transition-all">Confirmar Cancelación</button>
                 </div>
             </form>
         </div>

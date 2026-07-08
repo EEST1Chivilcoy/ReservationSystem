@@ -19,6 +19,16 @@ $stmt->execute();
 $resultado = $stmt->get_result();
 $reservas = $resultado->fetch_all(MYSQLI_ASSOC);
 $stmt->close();
+
+// Consultar reservas canceladas del usuario
+$consulta_canceladas = "SELECT * FROM reservas_canceladas WHERE id_usuario_origen = ? ORDER BY fecha_cancelacion DESC";
+$stmt_cancel = $conexion->prepare($consulta_canceladas);
+$stmt_cancel->bind_param("i", $usuario_id);
+$stmt_cancel->execute();
+$resultado_canceladas = $stmt_cancel->get_result();
+$reservas_canceladas = $resultado_canceladas->fetch_all(MYSQLI_ASSOC);
+$stmt_cancel->close();
+
 mysqli_close($conexion);
 
 $reservas_proximas = [];
@@ -364,6 +374,53 @@ foreach ($reservas as $reserva) {
                                             </span>
                                         </div>
                                         <?php endif; ?>
+                                    </div>
+                                </div>
+                            </div>
+                        <?php endforeach; ?>
+                    </div>
+                <?php endif; ?>
+            </section>
+
+            <!-- Sección: Reservas Canceladas -->
+            <section class="mt-12">
+                <h3 class="text-xl font-bold text-red-400 mb-6 flex items-center border-b border-gray-800 pb-2">
+                    <span class="inline-block w-3 h-3 bg-red-500 rounded-full mr-2 animate-pulse"></span>
+                    Historial de Reservas Canceladas
+                </h3>
+                <?php if (empty($reservas_canceladas)): ?>
+                    <div class="bg-gray-800/20 rounded-xl p-6 text-center border border-gray-700/30">
+                        <p class="text-gray-500 text-sm">No tienes reservas canceladas.</p>
+                    </div>
+                <?php else: ?>
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                        <?php foreach ($reservas_canceladas as $cancelada): 
+                            $fecha_c = new DateTime($cancelada['fecha_cancelacion']);
+                            $fecha_cancelacion_formateada = $fecha_c->format('d/m/Y H:i');
+                        ?>
+                            <div class="bg-red-950/20 rounded-xl border border-red-500/20 overflow-hidden flex flex-col h-full relative opacity-75">
+                                <div class="absolute top-4 right-4 bg-red-600/20 text-red-400 border border-red-500/30 text-xs font-semibold px-2 py-1 rounded">
+                                    Cancelada
+                                </div>
+                                
+                                <div class="p-6 flex-grow">
+                                    <div class="flex items-center mb-4 border-b border-red-500/20 pb-4">
+                                        <div class="bg-red-900/40 p-3 rounded-lg mr-4 text-red-400 border border-red-500/20">
+                                            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                            </svg>
+                                        </div>
+                                        <div>
+                                            <h3 class="text-lg font-bold text-red-300"><?php echo htmlspecialchars($cancelada['info_reserva']); ?></h3>
+                                            <p class="text-sm text-gray-500">Cancelada el <?php echo $fecha_cancelacion_formateada; ?></p>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="space-y-3 text-sm text-gray-400">
+                                        <div class="bg-red-950/30 p-3 rounded-lg border border-red-900/20">
+                                            <span class="text-red-400 font-semibold block mb-1">Motivo de la cancelación:</span>
+                                            <span class="text-gray-300 leading-relaxed"><?php echo htmlspecialchars($cancelada['motivo']); ?></span>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
