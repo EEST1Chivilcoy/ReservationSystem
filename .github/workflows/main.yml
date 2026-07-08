@@ -14,7 +14,7 @@ jobs:
       
     steps:
       - name: 📥 Checkout del código
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7
 
       - name: 🛠️ Instalar PHP y Composer
         uses: shivammathur/setup-php@v2
@@ -23,7 +23,7 @@ jobs:
           tools: composer
 
       - name: 💾 Cache de Composer
-        uses: actions/cache@v4
+        uses: actions/cache@v6
         with:
           path: ~/.cache/composer
           key: ${{ runner.os }}-composer-${{ hashFiles('ReservationSystem/composer.lock') }}
@@ -35,7 +35,7 @@ jobs:
         run: composer install --no-dev --optimize-autoloader
 
       - name: 📤 Subir carpeta ReservationSystem por FTP
-        uses: SamKirkland/FTP-Deploy-Action@v4.3.5
+        uses: SamKirkland/FTP-Deploy-Action@v4.4.0
         with:
           server: ${{ secrets.FTP_HOST }}
           username: ${{ secrets.FTP_USER }}
