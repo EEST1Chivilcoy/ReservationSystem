@@ -43,8 +43,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $id_usuario_reserva = $reserva['id_usuario'] ? $reserva['id_usuario'] : 0;
     
     // Guardar en reservas_canceladas
-    $stmt = $conexion->prepare("INSERT INTO reservas_canceladas (id_reserva_original, id_usuario, info, fecha, horario, horario1, motivo, fecha_cancelacion) VALUES (?, ?, ?, ?, ?, ?, ?, NOW())");
-    $stmt->bind_param("iisssss", $id_reserva_original, $id_usuario_reserva, $reserva['info'], $reserva['fecha'], $reserva['horario'], $reserva['horario1'], $motivo);
+    $stmt = $conexion->prepare("INSERT INTO reservas_canceladas (id_usuario_origen, id_cancelador, info_reserva, motivo, fecha_cancelacion) VALUES (?, ?, ?, ?, NOW())");
+    $stmt->bind_param("iiss", $id_usuario_reserva, $usuario_id, $reserva['info'], $motivo);
     $stmt->execute();
     $stmt->close();
 

@@ -554,7 +554,7 @@ if ($esAdmin) {
     showPrintQrModal: false,
     showErrorModal: <?php echo isset($_GET['error']) ? 'true' : 'false'; ?>,
     errorMessage: '<?php echo isset($_GET['error']) ? htmlspecialchars($_GET['error'], ENT_QUOTES, 'UTF-8') : ''; ?>',
-    showV2Modal: <?php echo ($loggedIn && isset($_SESSION['modal_v2_visto']) && $_SESSION['modal_v2_visto'] == 0) ? 'true' : 'false'; ?>,
+    showV2Modal: <?php echo ($loggedIn && (!isset($_SESSION['modal_v2_visto']) || $_SESSION['modal_v2_visto'] == 0)) ? 'true' : 'false'; ?>,
     showCancelModal: false,
     reservaId: null,
     reservaInfo: ''
@@ -854,7 +854,7 @@ if ($esAdmin) {
                 <div class="mt-5 sm:mt-6 flex justify-end space-x-2">
                     <?php if ($esAdmin): ?>
                         <button type="button" id="editEvent" class="inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-yellow-600 text-base font-medium text-white hover:bg-yellow-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-yellow-500 sm:text-sm">Editar</button>
-                        <button type="button" id="deleteEvent" class="inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-red-600 text-base font-medium text-white hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 sm:text-sm">Eliminar</button>
+                        <button type="button" id="deleteEvent" class="inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-red-600 text-base font-medium text-white hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 sm:text-sm">Cancelar</button>
                     <?php endif; ?>
                     <button type="button" class="inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-gray-600 text-base font-medium text-white hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500 sm:text-sm" @click="showEventModal = false">Cerrar</button>
                 </div>
