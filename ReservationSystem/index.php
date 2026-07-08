@@ -393,10 +393,18 @@ if ($esAdmin) {
                     };
                 }
 
-                if (document.getElementById('deleteEvent')) {
-                    document.getElementById('deleteEvent').onclick = () => {
+                if (document.getElementById('cancelEvent')) {
+                    document.getElementById('cancelEvent').onclick = () => {
                         window.dispatchEvent(new CustomEvent('close-modal', { detail: 'eventModal' }));
                         window.dispatchEvent(new CustomEvent('open-cancel-modal', { detail: { id: event.extendedProps.id, info: event.extendedProps.info } }));
+                    };
+                }
+
+                if (document.getElementById('deleteEvent')) {
+                    document.getElementById('deleteEvent').onclick = () => {
+                        if (confirm('¿Estás seguro de que deseas eliminar permanentemente esta reserva sin notificar?')) {
+                            window.location.href = `reserva/baja_sql.php?id=${event.extendedProps.id}`;
+                        }
                     };
                 }
                 window.dispatchEvent(new CustomEvent('open-modal', { detail: 'eventModal' }));
@@ -854,7 +862,8 @@ if ($esAdmin) {
                 <div class="mt-5 sm:mt-6 flex justify-end space-x-2">
                     <?php if ($esAdmin): ?>
                         <button type="button" id="editEvent" class="inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-yellow-600 text-base font-medium text-white hover:bg-yellow-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-yellow-500 sm:text-sm">Editar</button>
-                        <button type="button" id="deleteEvent" class="inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-red-600 text-base font-medium text-white hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 sm:text-sm">Cancelar</button>
+                        <button type="button" id="cancelEvent" class="inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-orange-600 text-base font-medium text-white hover:bg-orange-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-orange-500 sm:text-sm">Cancelar</button>
+                        <button type="button" id="deleteEvent" class="inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-red-600 text-base font-medium text-white hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 sm:text-sm">Eliminar</button>
                     <?php endif; ?>
                     <button type="button" class="inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-gray-600 text-base font-medium text-white hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500 sm:text-sm" @click="showEventModal = false">Cerrar</button>
                 </div>
