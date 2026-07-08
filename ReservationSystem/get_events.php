@@ -9,11 +9,12 @@ $end = isset($_GET['end']) ? $_GET['end'] : date('Y-m-t', strtotime('+1 month'))
 $start_date = date('Y-m-d', strtotime($start));
 $end_date = date('Y-m-d', strtotime($end));
 
-// Consulta optimizada: solo eventos en el rango visible
-$query = "SELECT ID, nombreapellido, curso, materia, horario, horario1, fecha, info, materiales 
-          FROM tabla 
-          WHERE fecha BETWEEN ? AND ?
-          ORDER BY fecha, horario";
+// Consulta optimizada: solo eventos en el rango visible con datos de usuario
+$query = "SELECT t.ID, t.nombreapellido, t.curso, t.materia, t.horario, t.horario1, t.fecha, t.info, t.materiales, t.id_usuario, u.telefono, u.tipo_telefono 
+          FROM tabla t 
+          LEFT JOIN usuarios u ON t.id_usuario = u.ID
+          WHERE t.fecha BETWEEN ? AND ?
+          ORDER BY t.fecha, t.horario";
 
 $stmt = mysqli_prepare($conexion, $query);
 mysqli_stmt_bind_param($stmt, "ss", $start_date, $end_date);
@@ -33,7 +34,9 @@ while ($row = mysqli_fetch_assoc($result)) {
             'curso' => $row['curso'],
             'materia' => $row['materia'],
             'info' => $row['info'],
-            'materiales' => $row['materiales']
+            'materiales' => $row['materiales'],
+            'telefono' => $row['telefono'],
+            'tipo_telefono' => $row['tipo_telefono']
         )
     );
 }

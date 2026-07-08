@@ -57,20 +57,19 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     // Notificaciones
     if ($esAdmin && $reserva['id_usuario'] != $usuario_id) {
         // Admin canceló la reserva de un usuario.
-        // Aquí podríamos generar el enlace de WhatsApp y pasar a otra pantalla, o dejarlo así por ahora.
         $tel = $reserva['telefono'];
         $tipo = $reserva['tipo_telefono'];
         if ($tel) {
-            $mensaje = "Hola " . $reserva['NombreYApellido'] . ", tu reserva de " . $reserva['info'] . " para el " . $reserva['fecha'] . " ha sido cancelada por el siguiente motivo: " . $motivo;
-            if ($tipo == 'whatsapp') {
-                $tel_wsp = preg_replace('/[^0-9]/', '', $tel);
-                // Redirigir a una página que lance el WhatsApp
-                header("Location: cancelar_whatsapp.php?telefono=$tel_wsp&mensaje=" . urlencode($mensaje));
-                exit();
-            } else {
-                header("Location: ../index.php?success=" . urlencode("Reserva cancelada. Recuerde contactar al usuario al teléfono: $tel ($tipo). Motivo: $motivo"));
-                exit();
-            }
+            // Mensaje formal con emojis
+            $mensaje = "Estimado/a *" . $reserva['NombreYApellido'] . "*, esperamos que se encuentre muy bien. 🌟\n\n"
+                     . "Le escribimos desde el *Sistema de Reservas* para informarle que su reserva de *" . $reserva['info'] . "* programada para el día *" . date('d/m/Y', strtotime($reserva['fecha'])) . "* ha tenido que ser cancelada.\n\n"
+                     . "📝 *Motivo de la cancelación:* " . $motivo . "\n\n"
+                     . "Disculpe las molestias ocasionadas. Si lo desea, puede ingresar nuevamente al sistema para solicitar un cambio de fecha o realizar una nueva reserva. 💻\n\n"
+                     . "¡Que tenga un excelente día! Saludos cordiales. 👋";
+
+            $tel_limpio = preg_replace('/[^0-9]/', '', $tel);
+            header("Location: cancelar_whatsapp.php?telefono=" . urlencode($tel_limpio) . "&mensaje=" . urlencode($mensaje) . "&tipo=" . urlencode($tipo) . "&nombre=" . urlencode($reserva['NombreYApellido']));
+            exit();
         }
         header("Location: ../index.php?success=" . urlencode("Reserva cancelada correctamente."));
         exit();
