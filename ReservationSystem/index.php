@@ -395,8 +395,9 @@ if ($esAdmin) {
 
                 if (document.getElementById('cancelEvent')) {
                     document.getElementById('cancelEvent').onclick = () => {
+                        window.dispatchEvent(new CustomEvent('populate-cancel', { detail: { id: event.extendedProps.id, info: event.extendedProps.info } }));
                         window.dispatchEvent(new CustomEvent('close-modal', { detail: 'eventModal' }));
-                        window.dispatchEvent(new CustomEvent('open-cancel-modal', { detail: { id: event.extendedProps.id, info: event.extendedProps.info } }));
+                        window.dispatchEvent(new CustomEvent('open-modal', { detail: 'cancelModal' }));
                     };
                 }
 
@@ -567,9 +568,9 @@ if ($esAdmin) {
     reservaId: null,
     reservaInfo: ''
 }"
-    @open-modal.window="$event.detail === 'eventModal' ? showEventModal = true : ($event.detail === 'editModal' ? showEditModal = true : ($event.detail === 'printModal' ? showPrintModal = true : ($event.detail === 'printQrModal' ? showPrintQrModal = true : null)))"
-    @close-modal.window="$event.detail === 'eventModal' ? showEventModal = false : ($event.detail === 'editModal' ? showEditModal = false : ($event.detail === 'printModal' ? showPrintModal = false : ($event.detail === 'printQrModal' ? showPrintQrModal = false : null)))"
-    @open-cancel-modal.window="reservaId = $event.detail.id; reservaInfo = $event.detail.info; showCancelModal = true">
+    @open-modal.window="$event.detail === 'eventModal' ? showEventModal = true : ($event.detail === 'editModal' ? showEditModal = true : ($event.detail === 'printModal' ? showPrintModal = true : ($event.detail === 'printQrModal' ? showPrintQrModal = true : ($event.detail === 'cancelModal' ? showCancelModal = true : ($event.detail === 'v2Modal' ? showV2Modal = true : null)))))"
+    @close-modal.window="$event.detail === 'eventModal' ? showEventModal = false : ($event.detail === 'editModal' ? showEditModal = false : ($event.detail === 'printModal' ? showPrintModal = false : ($event.detail === 'printQrModal' ? showPrintQrModal = false : ($event.detail === 'cancelModal' ? showCancelModal = false : ($event.detail === 'v2Modal' ? showV2Modal = false : null)))))"
+>
 
     <div x-show="showErrorModal" class="fixed inset-0 overflow-y-auto z-50 flex items-center justify-center"
         x-transition:enter="transition ease-out duration-300" x-transition:enter-start="opacity-0"
@@ -1055,7 +1056,9 @@ if ($esAdmin) {
     <!-- Modal Cancelar -->
     <div x-show="showCancelModal" class="fixed inset-0 overflow-y-auto z-50 flex items-center justify-center" style="display: none;">
         <div class="fixed inset-0 bg-black bg-opacity-80 transition-opacity" @click="showCancelModal = false"></div>
-        <div class="relative bg-gray-800 rounded-xl max-w-md w-full mx-4 shadow-2xl border border-gray-700">
+        <div class="relative bg-gray-800 rounded-xl max-w-md w-full mx-4 shadow-2xl border border-gray-700"
+            x-data="{ reservaId: '', reservaInfo: '' }"
+            @populate-cancel.window="reservaId = $event.detail.id; reservaInfo = $event.detail.info">
             <div class="px-6 py-4 border-b border-gray-700 flex justify-between items-center">
                 <h3 class="text-lg font-bold text-white">Cancelar Reserva (Admin)</h3>
                 <button @click="showCancelModal = false" class="text-gray-400 hover:text-white">
