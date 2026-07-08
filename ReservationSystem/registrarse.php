@@ -151,6 +151,21 @@
                         </div>
                     </div>
 
+                    <div class="space-y-1">
+                        <label for="telefono" class="block text-sm font-medium text-gray-300">Número de Teléfono</label>
+                        <div class="relative rounded-md shadow-sm flex">
+                            <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-gray-400" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M2.25 6.75c0 8.284 6.716 15 15 15h2.25a2.25 2.25 0 0 0 2.25-2.25v-1.372c0-.516-.351-.966-.852-1.091l-4.423-1.106c-.44-.11-.902.055-1.173.417l-.97 1.293c-2.896-1.596-5.069-3.769-6.665-6.666l1.292-.97c.363-.271.527-.734.417-1.173L6.963 3.102a1.125 1.125 0 0 0-1.091-.852H4.5A2.25 2.25 0 0 0 2.25 4.5v2.25Z" /></svg>
+                            </div>
+                            <input type="text" id="telefono" name="telefono" required class="bg-gray-700 border border-gray-600 text-white block w-full pl-10 pr-3 py-2 rounded-l-lg focus:ring-primary-500 focus:border-primary-500 sm:text-sm" placeholder="Ej: 2346 123456">
+                            <select name="tipo_telefono" required class="bg-gray-700 border-t border-b border-r border-gray-600 text-white rounded-r-lg px-3 py-2 sm:text-sm focus:ring-primary-500 focus:border-primary-500 border-l-0 border-l-gray-600 outline-none">
+                                <option value="whatsapp">Con WhatsApp</option>
+                                <option value="celular_sin_wsp">Celular (Sin WSP)</option>
+                                <option value="fijo">Línea Fija</option>
+                            </select>
+                        </div>
+                    </div>
+
                     <div>
                         <button type="submit" class="w-full flex justify-center items-center space-x-2 py-2 px-4 border border-transparent rounded-lg shadow-sm text-sm font-medium text-white bg-primary-600 hover:bg-primary-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500 focus:ring-offset-gray-800 transition duration-200">
                             <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -197,7 +212,7 @@
                 </div>
 
                 <div class="text-center md:text-right">
-                    <p class="text-gray-400 text-sm">&copy; <?php echo date('Y'); ?> - Sistema de Reserva de Salones V2</p>
+                    <p class="text-gray-400 text-sm">&copy; <?php echo date('Y'); ?> - Sistema de Reserva de Salones V2.1</p>
                     <p class="text-gray-500 text-xs mt-1">Desarrollado por Bernardo G. Erramuspe, estudiante de 7mo año en 2024</p>
                 </div>
             </div>

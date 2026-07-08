@@ -1,6 +1,15 @@
 <?php
 require '../include/VerificacionSesion.php';
 $esAdmin = isset($_SESSION['EsAdmin']) && $_SESSION['EsAdmin'] == true;
+
+$usuariosLista = [];
+if ($esAdmin) {
+    include('../include/conexion.php');
+    $resUsuarios = mysqli_query($conexion, "SELECT ID, NombreYApellido, usuario FROM usuarios ORDER BY NombreYApellido ASC");
+    if ($resUsuarios) {
+        $usuariosLista = mysqli_fetch_all($resUsuarios, MYSQLI_ASSOC);
+    }
+}
 ?>
 
 <!DOCTYPE html>
@@ -182,7 +191,7 @@ $esAdmin = isset($_SESSION['EsAdmin']) && $_SESSION['EsAdmin'] == true;
                     </div>
 
                     <!-- Admin Switch (Solo para administradores) -->
-                    <?php if (isset($_SESSION['EsAdmin']) && $_SESSION['EsAdmin'] == true): ?>
+                    <?php if ($esAdmin): ?>
                         <div class="mb-6 bg-dark-800 p-4 rounded-lg">
                             <label class="inline-flex items-center cursor-pointer">
                                 <input type="checkbox" class="sr-only peer" x-model="showAdminForm">
@@ -190,10 +199,23 @@ $esAdmin = isset($_SESSION['EsAdmin']) && $_SESSION['EsAdmin'] == true;
                                 <span class="ml-3 text-gray-300 font-medium">¿Es para otra persona?</span>
                             </label>
 
-                            <div x-show="showAdminForm" x-transition class="mt-4 bg-dark-900 rounded-md p-4">
-                                <label for="NombreYApellido" class="block text-sm font-medium text-gray-300 mb-1">Nombre y Apellido</label>
-                                <input type="text" id="NombreYApellido" name="NombreYApellido" placeholder="Ingrese nombre completo"
-                                    class="w-full bg-dark-800 border border-gray-700 text-white rounded-md px-4 py-2 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-all">
+                            <div x-show="showAdminForm" x-transition class="mt-4 bg-dark-900 rounded-md p-4 space-y-4">
+                                <div>
+                                    <label for="id_usuario_asignado" class="block text-sm font-medium text-gray-300 mb-1">Vincular a Usuario del Sistema (Opcional)</label>
+                                    <select id="id_usuario_asignado" name="id_usuario_asignado" 
+                                        class="w-full bg-dark-800 border border-gray-700 text-white rounded-md px-4 py-2 focus:outline-none focus:ring-2 focus:ring-primary-500 transition-all">
+                                        <option value="">-- No vincular (escribir nombre abajo) --</option>
+                                        <?php foreach($usuariosLista as $u): ?>
+                                            <option value="<?= $u['ID'] ?>"><?= htmlspecialchars($u['NombreYApellido'] . ' (' . $u['usuario'] . ')') ?></option>
+                                        <?php endforeach; ?>
+                                    </select>
+                                </div>
+                                
+                                <div>
+                                    <label for="NombreYApellido" class="block text-sm font-medium text-gray-300 mb-1">O ingrese nombre manualmente</label>
+                                    <input type="text" id="NombreYApellido" name="NombreYApellido" placeholder="Ingrese nombre completo"
+                                        class="w-full bg-dark-800 border border-gray-700 text-white rounded-md px-4 py-2 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-all">
+                                </div>
                             </div>
                         </div>
                     <?php endif; ?>

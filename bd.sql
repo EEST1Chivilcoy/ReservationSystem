@@ -1,5 +1,4 @@
 -- Script para crear base de datos y tablas (MyISAM)
--- Incluye dos usuarios por defecto con contraseñas hasheadas
 -- Zona horaria: Argentina (UTC-3)
 
 -- Configuración inicial
@@ -45,16 +44,41 @@ CREATE TABLE `usuarios` (
   PRIMARY KEY (`ID`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4;
 
--- --------------------------------------------------------
--- Inserción de usuarios predeterminados con claves BCRYPT
--- --------------------------------------------------------
-
-INSERT INTO `usuarios` (`usuario`, `clave`, `NombreYApellido`, `esAdmin`) VALUES
-('admin', '$2y$10$asqZ1UiHQ.qLsA28QaZ7uONwZQv2rqTEJo/8yMP67UPHFl3yA7PxW', 'Administrador del Sistema', 1),
-('prueba', '$2y$10$sm1phFtuoyZ4R9PN3E3YxeZd96rznq6Aax56BGRZ1kEX3GR8DdZga', 'Usuario de Prueba', 0);
-
 ALTER TABLE tabla ADD INDEX idx_fecha (fecha);
 ALTER TABLE tabla ADD INDEX idx_fecha_horario (fecha, horario);
 
 -- Confirmar cambios
 COMMIT;
+
+-- --------------------------------------------------------
+-- Actualizaciones y migraciones de estructura (Nuevas funcionalidades)
+-- --------------------------------------------------------
+-- Añadir id_usuario a la tabla para vincular reservas con usuarios del sistema
+ALTER TABLE tabla ADD COLUMN id_usuario INT(11) DEFAULT NULL COMMENT 'Añadido para relacionar la reserva con el usuario';
+
+-- Migraciones V2.1: Teléfonos, Notificaciones y Cancelaciones
+ALTER TABLE `usuarios` 
+ADD COLUMN `telefono` VARCHAR(20) DEFAULT NULL,
+ADD COLUMN `tipo_telefono` ENUM('whatsapp', 'celular_sin_wsp', 'fijo') DEFAULT NULL,
+ADD COLUMN `modal_v2_visto` TINYINT(1) NOT NULL DEFAULT 0,
+ADD COLUMN `foto_perfil` VARCHAR(255) DEFAULT NULL;
+
+CREATE TABLE IF NOT EXISTS `reservas_canceladas` (
+  `ID` INT(11) NOT NULL AUTO_INCREMENT,
+  `id_usuario_origen` INT(11) DEFAULT NULL,
+  `id_cancelador` INT(11) DEFAULT NULL,
+  `info_reserva` VARCHAR(255) NOT NULL,
+  `motivo` TEXT NOT NULL,
+  `fecha_cancelacion` DATETIME NOT NULL,
+  PRIMARY KEY (`ID`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4;
+
+CREATE TABLE IF NOT EXISTS `notificaciones` (
+  `ID` INT(11) NOT NULL AUTO_INCREMENT,
+  `id_usuario_origen` INT(11) DEFAULT NULL,
+  `tipo` ENUM('cancelacion', 'cambio_fecha') NOT NULL,
+  `mensaje` TEXT NOT NULL,
+  `fecha` DATETIME NOT NULL,
+  `leido` TINYINT(1) NOT NULL DEFAULT 0,
+  PRIMARY KEY (`ID`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4;

@@ -21,6 +21,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $nomyapp = htmlspecialchars($_POST["nomyapp"], ENT_QUOTES, 'UTF-8');
     }
 
+    $telefono = isset($_POST["telefono"]) ? htmlspecialchars($_POST["telefono"], ENT_QUOTES, 'UTF-8') : NULL;
+    $tipo_telefono = isset($_POST["tipo_telefono"]) ? htmlspecialchars($_POST["tipo_telefono"], ENT_QUOTES, 'UTF-8') : NULL;
+
     if ($_POST["accion"] == "alta") {
         if (!empty($usuario_error) || !empty($clave_error)) {
             $Message = "Debe completar los campos obligatorios";
@@ -41,8 +44,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
             // Encriptar la contraseña
             $clavehash = password_hash($clave, PASSWORD_BCRYPT);
-            $stmt = $conexion->prepare("INSERT INTO usuarios (usuario, clave, NombreYApellido) VALUES (?, ?, ?)");
-            $stmt->bind_param("sss", $usuario, $clavehash, $nomyapp);
+            $modal_visto = 1; // Ya proporcionó los datos en V2.1
+            $stmt = $conexion->prepare("INSERT INTO usuarios (usuario, clave, NombreYApellido, telefono, tipo_telefono, modal_v2_visto) VALUES (?, ?, ?, ?, ?, ?)");
+            $stmt->bind_param("sssssi", $usuario, $clavehash, $nomyapp, $telefono, $tipo_telefono, $modal_visto);
 
             if ($stmt->execute()) {
                 $Message = "Se ha creado el usuario " . $usuario;

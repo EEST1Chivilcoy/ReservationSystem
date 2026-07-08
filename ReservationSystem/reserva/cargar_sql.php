@@ -9,10 +9,27 @@ if (!isset($_SESSION["nombreyapellido"])) {
 }
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    if (!empty($_POST["NombreYApellido"])) {
-        $nombreapellido = htmlspecialchars($_POST["NombreYApellido"], ENT_QUOTES, 'UTF-8');
-    } else {
-        $nombreapellido = $_SESSION["nombreyapellido"];
+    $esAdmin = isset($_SESSION['EsAdmin']) && $_SESSION['EsAdmin'] == true;
+    $id_usuario = isset($_SESSION["usuario_id"]) ? $_SESSION["usuario_id"] : null;
+    $nombreapellido = $_SESSION["nombreyapellido"];
+    
+    if ($esAdmin) {
+        if (!empty($_POST["id_usuario_asignado"])) {
+            $id_usuario = (int)$_POST["id_usuario_asignado"];
+            
+            // Buscar el nombre de ese usuario
+            $stmt = $conexion->prepare("SELECT NombreYApellido FROM usuarios WHERE ID = ?");
+            $stmt->bind_param("i", $id_usuario);
+            $stmt->execute();
+            $stmt->bind_result($nombreapellido_asignado);
+            if ($stmt->fetch()) {
+                $nombreapellido = $nombreapellido_asignado;
+            }
+            $stmt->close();
+        } elseif (!empty($_POST["NombreYApellido"])) {
+            $nombreapellido = htmlspecialchars($_POST["NombreYApellido"], ENT_QUOTES, 'UTF-8');
+            $id_usuario = null; // No está vinculado a una cuenta del sistema
+        }
     }
 }
 
@@ -56,11 +73,11 @@ if ($stmt) {
 }
 
 // Si no hay reservas conflictivas, proceder a insertar la nueva reserva
-$alta = "INSERT INTO tabla (nombreapellido, curso, materia, horario, horario1, fecha, info, materiales) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+$alta = "INSERT INTO tabla (id_usuario, nombreapellido, curso, materia, horario, horario1, fecha, info, materiales) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
 $stmt = mysqli_prepare($conexion, $alta);
 
 if ($stmt) {
-    mysqli_stmt_bind_param($stmt, "ssssssss", $nombreapellido, $p_curso, $p_materia, $p_horario, $p_horario1, $p_fecha, $p_info, $p_materiales);
+    mysqli_stmt_bind_param($stmt, "issssssss", $id_usuario, $nombreapellido, $p_curso, $p_materia, $p_horario, $p_horario1, $p_fecha, $p_info, $p_materiales);
     $resultado_alta = mysqli_stmt_execute($stmt);
 
     if ($resultado_alta) {

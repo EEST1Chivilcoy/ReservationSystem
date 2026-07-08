@@ -62,6 +62,24 @@ $today = new DateTime();
 $month = (int) $today->format('m');
 $day = (int) $today->format('d');
 $isChristmasWeek = $month === 12 && $day >= 20 && $day <= 26;
+
+// Consultar notificaciones si es admin
+$notificaciones_no_leidas = 0;
+$notificaciones = [];
+if ($esAdmin) {
+    include('include/conexion.php');
+    $query = "SELECT n.*, u.NombreYApellido FROM notificaciones n LEFT JOIN usuarios u ON n.id_usuario_origen = u.ID ORDER BY n.fecha DESC LIMIT 10";
+    $result_notif = mysqli_query($conexion, $query);
+    if ($result_notif) {
+        while ($row = mysqli_fetch_assoc($result_notif)) {
+            $notificaciones[] = $row;
+            if ($row['leido'] == 0) {
+                $notificaciones_no_leidas++;
+            }
+        }
+    }
+    mysqli_close($conexion);
+}
 ?>
 <!DOCTYPE html>
 <html lang="es">
@@ -377,9 +395,8 @@ $isChristmasWeek = $month === 12 && $day >= 20 && $day <= 26;
 
                 if (document.getElementById('deleteEvent')) {
                     document.getElementById('deleteEvent').onclick = () => {
-                        if (confirm('¿Estás seguro de que deseas eliminar esta reserva?')) {
-                            window.location.href = `reserva/baja_sql.php?id=${event.extendedProps.id}`;
-                        }
+                        window.dispatchEvent(new CustomEvent('close-modal', { detail: 'eventModal' }));
+                        window.dispatchEvent(new CustomEvent('open-cancel-modal', { detail: { id: event.extendedProps.id, info: event.extendedProps.info } }));
                     };
                 }
                 window.dispatchEvent(new CustomEvent('open-modal', { detail: 'eventModal' }));
@@ -536,10 +553,15 @@ $isChristmasWeek = $month === 12 && $day >= 20 && $day <= 26;
     showPrintModal: false,
     showPrintQrModal: false,
     showErrorModal: <?php echo isset($_GET['error']) ? 'true' : 'false'; ?>,
-    errorMessage: '<?php echo isset($_GET['error']) ? htmlspecialchars($_GET['error'], ENT_QUOTES, 'UTF-8') : ''; ?>'
+    errorMessage: '<?php echo isset($_GET['error']) ? htmlspecialchars($_GET['error'], ENT_QUOTES, 'UTF-8') : ''; ?>',
+    showV2Modal: <?php echo ($loggedIn && isset($_SESSION['modal_v2_visto']) && $_SESSION['modal_v2_visto'] == 0) ? 'true' : 'false'; ?>,
+    showCancelModal: false,
+    reservaId: null,
+    reservaInfo: ''
 }"
     @open-modal.window="$event.detail === 'eventModal' ? showEventModal = true : ($event.detail === 'editModal' ? showEditModal = true : ($event.detail === 'printModal' ? showPrintModal = true : ($event.detail === 'printQrModal' ? showPrintQrModal = true : null)))"
-    @close-modal.window="$event.detail === 'eventModal' ? showEventModal = false : ($event.detail === 'editModal' ? showEditModal = false : ($event.detail === 'printModal' ? showPrintModal = false : ($event.detail === 'printQrModal' ? showPrintQrModal = false : null)))">
+    @close-modal.window="$event.detail === 'eventModal' ? showEventModal = false : ($event.detail === 'editModal' ? showEditModal = false : ($event.detail === 'printModal' ? showPrintModal = false : ($event.detail === 'printQrModal' ? showPrintQrModal = false : null)))"
+    @open-cancel-modal.window="reservaId = $event.detail.id; reservaInfo = $event.detail.info; showCancelModal = true">
 
     <div x-show="showErrorModal" class="fixed inset-0 overflow-y-auto z-50 flex items-center justify-center"
         x-transition:enter="transition ease-out duration-300" x-transition:enter-start="opacity-0"
@@ -583,6 +605,59 @@ $isChristmasWeek = $month === 12 && $day >= 20 && $day <= 26;
 
                 <div class="hidden md:flex items-center space-x-4">
                     <?php if ($loggedIn): ?>
+                        <?php if ($esAdmin): ?>
+                            <!-- Campanita de notificaciones -->
+                            <div class="relative" x-data="{ notifOpen: false }">
+                                <button @click="notifOpen = !notifOpen" class="text-gray-300 hover:text-white transition-colors relative focus:outline-none mt-2">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" />
+                                    </svg>
+                                    <?php if ($notificaciones_no_leidas > 0): ?>
+                                        <span class="absolute top-0 right-0 -mt-1 -mr-1 flex h-4 w-4">
+                                            <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-400 opacity-75"></span>
+                                            <span class="relative inline-flex rounded-full h-4 w-4 bg-red-500 text-xs text-white justify-center items-center"><?php echo $notificaciones_no_leidas; ?></span>
+                                        </span>
+                                    <?php endif; ?>
+                                </button>
+                                
+                                <div x-show="notifOpen" @click.away="notifOpen = false" class="absolute right-0 mt-2 w-80 bg-gray-800 rounded-md shadow-xl py-1 z-50 border border-gray-700" style="display: none;">
+                                    <div class="px-4 py-2 border-b border-gray-700 font-bold text-white flex justify-between items-center">
+                                        Notificaciones
+                                        <button onclick="marcarTodasLeidas()" class="text-xs text-blue-400 hover:text-blue-300">Marcar leídas</button>
+                                    </div>
+                                    <div class="max-h-64 overflow-y-auto">
+                                        <?php if (count($notificaciones) > 0): ?>
+                                            <?php foreach ($notificaciones as $notif): ?>
+                                                <div class="px-4 py-3 border-b border-gray-700 <?php echo $notif['leido'] == 0 ? 'bg-gray-700/50' : ''; ?>">
+                                                    <p class="text-sm text-gray-200">
+                                                        <strong class="text-primary-400"><?php echo htmlspecialchars($notif['NombreYApellido'] ?? 'Sistema'); ?></strong> 
+                                                        <?php echo htmlspecialchars($notif['mensaje']); ?>
+                                                    </p>
+                                                    <p class="text-xs text-gray-400 mt-1"><?php echo date('d/m/Y H:i', strtotime($notif['fecha'])); ?></p>
+                                                </div>
+                                            <?php endforeach; ?>
+                                        <?php else: ?>
+                                            <div class="px-4 py-3 text-sm text-gray-400 text-center">No hay notificaciones</div>
+                                        <?php endif; ?>
+                                    </div>
+                                </div>
+                            </div>
+                        <?php endif; ?>
+                        
+                        <a href="perfil.php" class="text-gray-300 hover:text-white font-medium px-2 py-2 rounded-lg transition-all flex items-center" title="Mi Perfil">
+                            <?php if (isset($_SESSION['foto_perfil']) && !empty($_SESSION['foto_perfil'])): ?>
+                                <img src="<?php echo htmlspecialchars($_SESSION['foto_perfil']); ?>" alt="Perfil" class="h-8 w-8 rounded-full object-cover border border-gray-600">
+                            <?php else: ?>
+                                <div class="h-8 w-8 rounded-full bg-primary-600 flex items-center justify-center text-white text-sm font-bold">
+                                    <?php echo substr(strtoupper($_SESSION['nombreyapellido']), 0, 1); ?>
+                                </div>
+                            <?php endif; ?>
+                        </a>
+
+                        <a href="mis_reservas.php" class="text-white bg-indigo-600 hover:bg-indigo-700 font-medium px-4 py-2 rounded-lg transition-all flex items-center">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-5 mr-2"><path stroke-linecap="round" stroke-linejoin="round" d="M8.25 6.75h12M8.25 12h12m-12 5.25h12M3.75 6.75h.007v.008H3.75V6.75Zm.375 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0ZM3.75 12h.007v.008H3.75V12Zm.375 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Zm-.375 5.25h.007v.008H3.75v-.008Zm.375 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Z" /></svg>
+                            Mis Reservas
+                        </a>
                         <a href="reserva/cargar_reserva.php?tabla=" class="text-white bg-blue-600 hover:bg-blue-700 font-medium px-4 py-2 rounded-lg transition-all flex items-center">
                             <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M6 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1zm0 5a1 1 0 000 2h8a1 1 0 100-2H6z" clip-rule="evenodd" /></svg>
                             Reservar
@@ -612,7 +687,8 @@ $isChristmasWeek = $month === 12 && $day >= 20 && $day <= 26;
         <div id="mobile-menu" x-show="isOpen" @click.away="isOpen = false" class="md:hidden" style="display: none;">
             <div class="px-2 pt-2 pb-3 space-y-1 border-t border-gray-700">
                 <?php if ($loggedIn): ?>
-                    <a href="reserva/cargar_reserva.php?tabla=" class="block text-white bg-blue-600 hover:bg-blue-700 font-medium px-3 py-2 rounded-md text-center">Reservar</a>
+                    <a href="mis_reservas.php" class="block text-white bg-indigo-600 hover:bg-indigo-700 font-medium px-3 py-2 rounded-md text-center">Mis Reservas</a>
+                    <a href="reserva/cargar_reserva.php?tabla=" class="block text-white bg-blue-600 hover:bg-blue-700 font-medium px-3 py-2 rounded-md text-center mt-2">Reservar</a>
                     <a href="logout.php" class="block text-white bg-red-600 hover:bg-red-700 font-medium px-3 py-2 rounded-md text-center mt-2">Cerrar sesión</a>
                 <?php else: ?>
                     <a href="iniciar_sesion.php" class="block text-white bg-gray-700 hover:bg-gray-600 font-medium px-3 py-2 rounded-md text-center">Iniciar sesión</a>
@@ -909,12 +985,7 @@ $isChristmasWeek = $month === 12 && $day >= 20 && $day <= 26;
                         <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M5 4v3H4a2 2 0 00-2 2v3a2 2 0 002 2h1v2a2 2 0 002 2h6a2 2 0 002-2v-2h1a2 2 0 002-2V9a2 2 0 00-2-2h-1V4a2 2 0 00-2-2H7a2 2 0 00-2 2zm8 0H7v3h6V4zm0 8H7v4h6v-4z" clip-rule="evenodd" /></svg>
                         Imprimir Código QR
                     </button>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <div x-show="showPrintModal" class="fixed inset-0 overflow-y-auto z-50 flex items-center justify-center" x-transition:enter="transition ease-out duration-300" x-transition:enter-start="opacity-0" x-transition:enter-end="opacity-100" x-transition:leave="transition ease-in duration-200" x-transition:leave-start="opacity-100" x-transition:leave-end="opacity-0" style="display: none;">
+          <div x-show="showPrintModal" class="fixed inset-0 overflow-y-auto z-50 flex items-center justify-center" x-transition:enter="transition ease-out duration-300" x-transition:enter-start="opacity-0" x-transition:enter-end="opacity-100" x-transition:leave="transition ease-in duration-200" x-transition:leave-start="opacity-100" x-transition:leave-end="opacity-0" style="display: none;">
         <div class="fixed inset-0 bg-black bg-opacity-75 transition-opacity" @click="showPrintModal = false"></div>
         <div class="relative bg-gray-800 rounded-lg max-w-md w-full mx-4 overflow-hidden shadow-xl transform transition-all" x-transition:enter="transition ease-out duration-300" x-transition:enter-start="opacity-0 translate-y-4" x-transition:enter-end="opacity-100 translate-y-0" x-transition:leave="transition ease-in duration-200" x-transition:leave-start="opacity-100 translate-y-0" x-transition:leave-end="opacity-0 translate-y-4">
             <div class="px-4 pt-5 pb-4 sm:p-6">
@@ -943,5 +1014,72 @@ $isChristmasWeek = $month === 12 && $day >= 20 && $day <= 26;
             </div>
         </div>
     </div>
+
+    <!-- Modal V2.1 -->
+    <div x-show="showV2Modal" class="fixed inset-0 overflow-y-auto z-50 flex items-center justify-center" style="display: none;">
+        <div class="fixed inset-0 bg-black bg-opacity-80 transition-opacity"></div>
+        <div class="relative bg-gray-800 rounded-xl max-w-md w-full mx-4 shadow-2xl overflow-hidden border border-gray-700">
+            <div class="bg-gradient-to-r from-blue-600 to-indigo-600 px-6 py-4 text-center">
+                <h3 class="text-xl font-bold text-white">¡Novedades V2.1! 🎉</h3>
+            </div>
+            <div class="px-6 py-6 text-gray-300">
+                <p class="mb-4">Ahora tus reservas están vinculadas a tu cuenta. Para mantenerte informado sobre posibles cancelaciones o cambios, necesitamos tu número de teléfono.</p>
+                
+                <form action="perfil_actualizar_modal.php" method="POST" class="space-y-4">
+                    <div>
+                        <label class="block text-sm font-medium mb-1 text-gray-400">Número de Teléfono</label>
+                        <div class="flex">
+                            <input type="text" name="telefono" required class="w-full bg-gray-700 border border-gray-600 text-white rounded-l-lg px-3 py-2 focus:ring-blue-500 focus:border-blue-500" placeholder="Ej: 2346 123456">
+                            <select name="tipo_telefono" required class="bg-gray-700 border border-l-0 border-gray-600 text-white rounded-r-lg px-2 py-2 focus:ring-blue-500 focus:border-blue-500">
+                                <option value="whatsapp">WhatsApp</option>
+                                <option value="celular_sin_wsp">Sin WSP</option>
+                                <option value="fijo">Línea Fija</option>
+                            </select>
+                        </div>
+                    </div>
+                    <button type="submit" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 rounded-lg shadow-md transition-colors">Guardar y continuar</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Cancelar -->
+    <div x-show="showCancelModal" class="fixed inset-0 overflow-y-auto z-50 flex items-center justify-center" style="display: none;">
+        <div class="fixed inset-0 bg-black bg-opacity-80 transition-opacity" @click="showCancelModal = false"></div>
+        <div class="relative bg-gray-800 rounded-xl max-w-md w-full mx-4 shadow-2xl border border-gray-700">
+            <div class="px-6 py-4 border-b border-gray-700 flex justify-between items-center">
+                <h3 class="text-lg font-bold text-white">Cancelar Reserva (Admin)</h3>
+                <button @click="showCancelModal = false" class="text-gray-400 hover:text-white">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" /></svg>
+                </button>
+            </div>
+            <form action="reserva/cancelar_reserva_sql.php" method="POST" class="p-6">
+                <input type="hidden" name="id" x-model="reservaId">
+                <input type="hidden" name="info" x-model="reservaInfo">
+                
+                <p class="text-gray-300 text-sm mb-4">Vas a cancelar la reserva <strong x-text="reservaInfo" class="text-white"></strong>. Por favor, indica el motivo para notificar al usuario (si corresponde).</p>
+                
+                <label class="block text-sm font-medium text-gray-400 mb-2">Motivo de cancelación</label>
+                <textarea name="motivo" required rows="3" class="w-full bg-gray-700 border border-gray-600 text-white rounded-lg px-3 py-2 mb-4 focus:ring-red-500 focus:border-red-500" placeholder="Ej: Superposición de horarios, mantenimiento..."></textarea>
+                
+                <div class="flex justify-end space-x-3">
+                    <button type="button" @click="showCancelModal = false" class="px-4 py-2 bg-gray-600 hover:bg-gray-700 text-white rounded-lg">Atrás</button>
+                    <button type="submit" class="px-4 py-2 bg-red-600 hover:bg-red-700 text-white rounded-lg">Confirmar Cancelación</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        function marcarTodasLeidas() {
+            fetch('admin/marcar_notificaciones.php', { method: 'POST' })
+            .then(res => res.json())
+            .then(data => {
+                if(data.success) {
+                    location.reload();
+                }
+            });
+        }
+    </script>
 </body>
 </html>

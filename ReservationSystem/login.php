@@ -25,18 +25,24 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         exit(); // Asegura que el script se detenga después de redirigir
     } else {
         // Utiliza una consulta preparada para evitar inyección SQL
-        $stmt = $conexion->prepare("SELECT clave, NombreYApellido, esAdmin FROM usuarios WHERE usuario = ?");
+        $stmt = $conexion->prepare("SELECT ID, clave, NombreYApellido, esAdmin, telefono, tipo_telefono, modal_v2_visto, foto_perfil FROM usuarios WHERE usuario = ?");
         $stmt->bind_param("s", $username);
         $stmt->execute();
         $stmt->store_result();
 
         if ($stmt->num_rows > 0) {
-            $stmt->bind_result($clavebdd, $nombreyapellido, $esAdmin);
+            $stmt->bind_result($id_usuario, $clavebdd, $nombreyapellido, $esAdmin, $telefono, $tipo_telefono, $modal_v2_visto, $foto_perfil);
             $stmt->fetch();
 
             if (password_verify($password, $clavebdd)) {
+                $_SESSION["usuario_id"] = $id_usuario; // Guarda el ID para relacionarlo con reservas
                 $_SESSION["usuario"] = $username;
                 $_SESSION["nombreyapellido"] = $nombreyapellido; // Guarda el nombre y apellido en la sesión
+                $_SESSION["telefono"] = $telefono;
+                $_SESSION["tipo_telefono"] = $tipo_telefono;
+                $_SESSION["modal_v2_visto"] = $modal_v2_visto;
+                $_SESSION["foto_perfil"] = $foto_perfil;
+                
                 if ($esAdmin == 1) {
                     $_SESSION["EsAdmin"] = true;
                 } else {
