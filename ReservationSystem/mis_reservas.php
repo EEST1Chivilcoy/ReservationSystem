@@ -20,6 +20,17 @@ $resultado = $stmt->get_result();
 $reservas = $resultado->fetch_all(MYSQLI_ASSOC);
 $stmt->close();
 mysqli_close($conexion);
+
+$reservas_proximas = [];
+$reservas_pasadas = [];
+$hoy = date('Y-m-d');
+foreach ($reservas as $reserva) {
+    if ($reserva['fecha'] < $hoy) {
+        $reservas_pasadas[] = $reserva;
+    } else {
+        $reservas_proximas[] = $reserva;
+    }
+}
 ?>
 <!DOCTYPE html>
 <html lang="es">
@@ -202,7 +213,7 @@ mysqli_close($conexion);
             </a>
         </section>
 
-        <?php if (empty($reservas)): ?>
+        <?php if (empty($reservas_proximas) && empty($reservas_pasadas)): ?>
             <div class="bg-gray-800 rounded-xl p-8 text-center border border-gray-700 shadow-lg">
                 <svg xmlns="http://www.w3.org/2000/svg" class="h-16 w-16 mx-auto text-gray-500 mb-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4" />
@@ -214,86 +225,152 @@ mysqli_close($conexion);
                 </a>
             </div>
         <?php else: ?>
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                <?php foreach ($reservas as $reserva): 
-                    // Verificar si la reserva ya pasó
-                    $fecha_reserva = $reserva['fecha'];
-                    $hoy = date('Y-m-d');
-                    $es_pasada = ($fecha_reserva < $hoy);
-                    
-                    // Dar formato a la fecha
-                    $fecha_obj = new DateTime($fecha_reserva);
-                    $fecha_formateada = $fecha_obj->format('d/m/Y');
-                    
-                    // Dar formato a horas
-                    $hora_inicio = substr($reserva['horario'], 0, 5);
-                    $hora_fin = substr($reserva['horario1'], 0, 5);
-                ?>
-                    <div class="bg-gray-800 rounded-xl shadow-lg border border-gray-700 overflow-hidden card-hover flex flex-col h-full relative">
-                        <?php if ($es_pasada): ?>
-                            <div class="absolute top-4 right-4 bg-gray-600 text-white text-xs font-bold px-2 py-1 rounded shadow">
-                                Finalizada
-                            </div>
-                        <?php else: ?>
-                            <div class="absolute top-4 right-4 bg-green-500 text-white text-xs font-bold px-2 py-1 rounded shadow">
-                                Próxima
-                            </div>
-                        <?php endif; ?>
-                        
-                        <div class="p-6 flex-grow">
-                            <div class="flex items-center mb-4 border-b border-gray-700 pb-4">
-                                <div class="bg-primary-900/50 p-3 rounded-lg mr-4">
-                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-primary-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
-                                    </svg>
-                                </div>
-                                <div>
-                                    <h3 class="text-lg font-bold text-white"><?php echo htmlspecialchars($reserva['info']); ?></h3>
-                                    <p class="text-sm text-gray-400"><?php echo $fecha_formateada; ?></p>
-                                </div>
-                            </div>
-                            
-                            <div class="space-y-3 mb-4">
-                                <div class="flex justify-between">
-                                    <span class="text-gray-400 text-sm">Horario:</span>
-                                    <span class="text-gray-200 font-medium"><?php echo $hora_inicio . ' - ' . $hora_fin; ?></span>
-                                </div>
-                                <div class="flex justify-between">
-                                    <span class="text-gray-400 text-sm">Curso/Evento:</span>
-                                    <span class="text-gray-200 font-medium text-right"><?php echo htmlspecialchars($reserva['curso']); ?></span>
-                                </div>
-                                <div class="flex justify-between">
-                                    <span class="text-gray-400 text-sm">Materia/Motivo:</span>
-                                    <span class="text-gray-200 font-medium text-right"><?php echo htmlspecialchars($reserva['materia']); ?></span>
-                                </div>
-                                <?php if (!empty($reserva['materiales'])): ?>
-                                <div class="flex justify-between">
-                                    <span class="text-gray-400 text-sm">Materiales:</span>
-                                    <span class="text-gray-200 font-medium text-right truncate w-1/2" title="<?php echo htmlspecialchars($reserva['materiales']); ?>">
-                                        <?php echo htmlspecialchars($reserva['materiales']); ?>
-                                    </span>
-                                </div>
-                                <?php endif; ?>
-                            </div>
-                        </div>
-                        
-                        <div class="bg-gray-750 px-6 py-4 border-t border-gray-700 mt-auto grid grid-cols-1 gap-2">
-                            <button @click="reservaId = <?php echo $reserva['ID']; ?>; reservaInfo = '<?php echo htmlspecialchars(addslashes($reserva['info'])); ?>'; showCancelModal = true" 
-                                class="w-full inline-flex justify-center items-center px-4 py-2 bg-transparent border border-red-500 text-red-500 hover:bg-red-500 hover:text-white rounded-lg transition-colors font-medium text-sm">
-                                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
-                                </svg>
-                                Cancelar Reserva
-                            </button>
-                            <button @click="reservaId = <?php echo $reserva['ID']; ?>; reservaInfo = '<?php echo htmlspecialchars(addslashes($reserva['info'])); ?>'; showChangeDateModal = true" 
-                                class="w-full inline-flex justify-center items-center px-4 py-2 bg-transparent border border-blue-500 text-blue-500 hover:bg-blue-500 hover:text-white rounded-lg transition-colors font-medium text-sm">
-                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="h-4 w-4 mr-2"><path stroke-linecap="round" stroke-linejoin="round" d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 0 1 2.25-2.25h13.5A2.25 2.25 0 0 1 21 7.5v11.25m-18 0A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75m-18 0v-7.5A2.25 2.25 0 0 1 5.25 9h13.5A2.25 2.25 0 0 1 21 11.25v7.5m-9-6h.008v.008H12v-.008ZM12 15h.008v.008H12V15Zm0 2.25h.008v.008H12v-.008ZM9.75 15h.008v.008H9.75V15Zm0 2.25h.008v.008H9.75v-.008ZM7.5 15h.008v.008H7.5V15Zm0 2.25h.008v.008H7.5v-.008Zm6.75-4.5h.008v.008h-.008v-.008Zm0 2.25h.008v.008h-.008V15Zm0 2.25h.008v.008h-.008v-.008Zm2.25-4.5h.008v.008H16.5v-.008Zm0 2.25h.008v.008H16.5V15Z" /></svg>
-                                Solicitar Cambio
-                            </button>
-                        </div>
+            <!-- Sección: Reservas Próximas -->
+            <section class="mb-12">
+                <h3 class="text-xl font-bold text-white mb-6 flex items-center border-b border-gray-700 pb-2">
+                    <span class="inline-block w-3 h-3 bg-green-500 rounded-full mr-2"></span>
+                    Próximas Reservas (Vigentes)
+                </h3>
+                <?php if (empty($reservas_proximas)): ?>
+                    <div class="bg-gray-800/40 rounded-xl p-6 text-center border border-gray-700/50">
+                        <p class="text-gray-400 text-sm">No tienes reservas próximas agendadas.</p>
                     </div>
-                <?php endforeach; ?>
-            </div>
+                <?php else: ?>
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                        <?php foreach ($reservas_proximas as $reserva): 
+                            $fecha_reserva = $reserva['fecha'];
+                            $fecha_obj = new DateTime($fecha_reserva);
+                            $fecha_formateada = $fecha_obj->format('d/m/Y');
+                            $hora_inicio = substr($reserva['horario'], 0, 5);
+                            $hora_fin = substr($reserva['horario1'], 0, 5);
+                        ?>
+                            <div class="bg-gray-800 rounded-xl shadow-lg border border-gray-700 overflow-hidden card-hover flex flex-col h-full relative">
+                                <div class="absolute top-4 right-4 bg-green-500/20 text-green-400 border border-green-500/30 text-xs font-bold px-2 py-1 rounded shadow">
+                                    Próxima
+                                </div>
+                                
+                                <div class="p-6 flex-grow">
+                                    <div class="flex items-center mb-4 border-b border-gray-700 pb-4">
+                                        <div class="bg-blue-900/40 p-3 rounded-lg mr-4 text-blue-400 border border-blue-500/20">
+                                            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                                            </svg>
+                                        </div>
+                                        <div>
+                                            <h3 class="text-lg font-bold text-white"><?php echo htmlspecialchars($reserva['info']); ?></h3>
+                                            <p class="text-sm text-gray-400"><?php echo $fecha_formateada; ?></p>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="space-y-3 mb-4">
+                                        <div class="flex justify-between">
+                                            <span class="text-gray-400 text-sm">Horario:</span>
+                                            <span class="text-gray-200 font-medium"><?php echo $hora_inicio . ' - ' . $hora_fin; ?></span>
+                                        </div>
+                                        <div class="flex justify-between">
+                                            <span class="text-gray-400 text-sm">Curso/Evento:</span>
+                                            <span class="text-gray-200 font-medium text-right"><?php echo htmlspecialchars($reserva['curso']); ?></span>
+                                        </div>
+                                        <div class="flex justify-between">
+                                            <span class="text-gray-400 text-sm">Materia/Motivo:</span>
+                                            <span class="text-gray-200 font-medium text-right"><?php echo htmlspecialchars($reserva['materia']); ?></span>
+                                        </div>
+                                        <?php if (!empty($reserva['materiales'])): ?>
+                                        <div class="flex justify-between">
+                                            <span class="text-gray-400 text-sm">Materiales:</span>
+                                            <span class="text-gray-200 font-medium text-right truncate w-1/2" title="<?php echo htmlspecialchars($reserva['materiales']); ?>">
+                                                <?php echo htmlspecialchars($reserva['materiales']); ?>
+                                            </span>
+                                        </div>
+                                        <?php endif; ?>
+                                    </div>
+                                </div>
+                                
+                                <div class="bg-gray-750 px-6 py-4 border-t border-gray-700 mt-auto grid grid-cols-1 gap-2">
+                                    <button @click="reservaId = <?php echo $reserva['ID']; ?>; reservaInfo = '<?php echo htmlspecialchars(addslashes($reserva['info'])); ?>'; showCancelModal = true" 
+                                        class="w-full inline-flex justify-center items-center px-4 py-2 bg-transparent border border-red-500 text-red-500 hover:bg-red-500 hover:text-white rounded-lg transition-colors font-medium text-sm">
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                                        </svg>
+                                        Cancelar Reserva
+                                    </button>
+                                    <button @click="reservaId = <?php echo $reserva['ID']; ?>; reservaInfo = '<?php echo htmlspecialchars(addslashes($reserva['info'])); ?>'; showChangeDateModal = true" 
+                                        class="w-full inline-flex justify-center items-center px-4 py-2 bg-transparent border border-blue-500 text-blue-500 hover:bg-blue-500 hover:text-white rounded-lg transition-colors font-medium text-sm">
+                                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="h-4 w-4 mr-2"><path stroke-linecap="round" stroke-linejoin="round" d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 0 1 2.25-2.25h13.5A2.25 2.25 0 0 1 21 7.5v11.25m-18 0A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75m-18 0v-7.5A2.25 2.25 0 0 1 5.25 9h13.5A2.25 2.25 0 0 1 21 11.25v7.5m-9-6h.008v.008H12v-.008ZM12 15h.008v.008H12V15Zm0 2.25h.008v.008H12v-.008ZM9.75 15h.008v.008H9.75V15Zm0 2.25h.008v.008H9.75v-.008ZM7.5 15h.008v.008H7.5V15Zm0 2.25h.008v.008H7.5v-.008Zm6.75-4.5h.008v.008h-.008v-.008Zm0 2.25h.008v.008h-.008V15Zm0 2.25h.008v.008h-.008v-.008Zm2.25-4.5h.008v.008H16.5v-.008Zm0 2.25h.008v.008H16.5V15Z" /></svg>
+                                        Solicitar Cambio de Fecha
+                                    </button>
+                                </div>
+                            </div>
+                        <?php endforeach; ?>
+                    </div>
+                <?php endif; ?>
+            </section>
+
+            <!-- Sección: Historial de Reservas Pasadas -->
+            <section class="mt-12">
+                <h3 class="text-xl font-bold text-gray-400 mb-6 flex items-center border-b border-gray-800 pb-2">
+                    <span class="inline-block w-3 h-3 bg-gray-600 rounded-full mr-2"></span>
+                    Historial de Reservas Pasadas (Finalizadas)
+                </h3>
+                <?php if (empty($reservas_pasadas)): ?>
+                    <div class="bg-gray-800/20 rounded-xl p-6 text-center border border-gray-700/30">
+                        <p class="text-gray-500 text-sm">No tienes reservas pasadas finalizadas.</p>
+                    </div>
+                <?php else: ?>
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                        <?php foreach ($reservas_pasadas as $reserva): 
+                            $fecha_reserva = $reserva['fecha'];
+                            $fecha_obj = new DateTime($fecha_reserva);
+                            $fecha_formateada = $fecha_obj->format('d/m/Y');
+                            $hora_inicio = substr($reserva['horario'], 0, 5);
+                            $hora_fin = substr($reserva['horario1'], 0, 5);
+                        ?>
+                            <div class="bg-gray-800/40 rounded-xl border border-gray-700/40 overflow-hidden flex flex-col h-full relative opacity-60">
+                                <div class="absolute top-4 right-4 bg-gray-700/50 text-gray-400 border border-gray-700/30 text-xs font-semibold px-2 py-1 rounded">
+                                    Finalizada
+                                </div>
+                                
+                                <div class="p-6 flex-grow">
+                                    <div class="flex items-center mb-4 border-b border-gray-700/30 pb-4">
+                                        <div class="bg-gray-700/30 p-3 rounded-lg mr-4 text-gray-500 border border-gray-700/20">
+                                            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                                            </svg>
+                                        </div>
+                                        <div>
+                                            <h3 class="text-lg font-bold text-gray-300"><?php echo htmlspecialchars($reserva['info']); ?></h3>
+                                            <p class="text-sm text-gray-500"><?php echo $fecha_formateada; ?></p>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="space-y-3 text-sm text-gray-400">
+                                        <div class="flex justify-between">
+                                            <span>Horario:</span>
+                                            <span class="text-gray-300 font-medium"><?php echo $hora_inicio . ' - ' . $hora_fin; ?></span>
+                                        </div>
+                                        <div class="flex justify-between">
+                                            <span>Curso/Evento:</span>
+                                            <span class="text-gray-300 font-medium text-right"><?php echo htmlspecialchars($reserva['curso']); ?></span>
+                                        </div>
+                                        <div class="flex justify-between">
+                                            <span>Materia/Motivo:</span>
+                                            <span class="text-gray-300 font-medium text-right"><?php echo htmlspecialchars($reserva['materia']); ?></span>
+                                        </div>
+                                        <?php if (!empty($reserva['materiales'])): ?>
+                                        <div class="flex justify-between">
+                                            <span>Materiales:</span>
+                                            <span class="text-gray-300 font-medium text-right truncate w-1/2" title="<?php echo htmlspecialchars($reserva['materiales']); ?>">
+                                                <?php echo htmlspecialchars($reserva['materiales']); ?>
+                                            </span>
+                                        </div>
+                                        <?php endif; ?>
+                                    </div>
+                                </div>
+                            </div>
+                        <?php endforeach; ?>
+                    </div>
+                <?php endif; ?>
+            </section>
         <?php endif; ?>
     </main>
 
