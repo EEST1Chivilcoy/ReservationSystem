@@ -68,7 +68,7 @@ $notificaciones_no_leidas = 0;
 $notificaciones = [];
 if ($esAdmin) {
     include('include/conexion.php');
-    $query = "SELECT n.*, u.NombreYApellido FROM notificaciones n LEFT JOIN usuarios u ON n.id_usuario_origen = u.ID ORDER BY n.fecha DESC LIMIT 10";
+    $query = "SELECT n.*, u.NombreYApellido FROM notificaciones n LEFT JOIN usuarios u ON n.id_usuario_origen = u.ID WHERE n.para_admins = 1 ORDER BY n.fecha DESC LIMIT 10";
     $result_notif = mysqli_query($conexion, $query);
     if ($result_notif) {
         while ($row = mysqli_fetch_assoc($result_notif)) {
@@ -1156,7 +1156,13 @@ if ($esAdmin) {
 
     <script>
         function marcarTodasLeidas() {
-            fetch('admin/marcar_notificaciones.php', { method: 'POST' })
+            fetch('admin/marcar_notificaciones.php', { 
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                },
+                body: 'action=marcar_todas'
+            })
             .then(res => res.json())
             .then(data => {
                 if(data.success) {
