@@ -1179,7 +1179,9 @@ if ($esAdmin) {
                     
                     let msg = `¡Hola ${this.nombreapellido}! 🏫 Te escribimos desde el *Sistema de Reservas de la E.E.S.T. N° 1 "Mariano Moreno"* de Chivilcoy.\n\nTe queríamos avisar que tuvimos que cancelar tu reserva de *${this.reservaInfo}*.\n\n📌 *Motivo:* ${this.motivo}\n\nCualquier duda, podés ingresar de nuevo a la web para pedir un cambio de fecha o realizar otra reserva. ¡Disculpas por las molestias! 💻\n\n¡Que tengas un buen día! 👋`;
                     
-                    window.open('https://wa.me/549' + cleanPhone + '?text=' + encodeURIComponent(msg), '_blank');
+                    // Usar encodeURI para preservar emojis UTF-8
+                    let encodedMsg = encodeURI(msg);
+                    window.open('https://wa.me/549' + cleanPhone + '?text=' + encodedMsg, '_blank');
                     this.avisado = true;
                 },
                 cargarContacto(id) {
