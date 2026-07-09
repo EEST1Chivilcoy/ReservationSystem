@@ -1077,6 +1077,7 @@ if ($esAdmin) {
                 nombreapellido: '',
                 motivo: '',
                 avisado: false,
+                cargando: false,
                 abrirWsp() {
                     if (!this.motivo.trim()) {
                         alert('Por favor, ingresa el motivo antes de enviar la notificación por WhatsApp.');
@@ -1089,16 +1090,33 @@ if ($esAdmin) {
                     
                     window.open('https://wa.me/549' + cleanPhone + '?text=' + encodeURIComponent(msg), '_blank');
                     this.avisado = true;
+                },
+                cargarContacto(id) {
+                    this.cargando = true;
+                    fetch('get_reserva_contacto.php?id=' + id)
+                        .then(r => r.json())
+                        .then(data => {
+                            this.telefono = data.telefono || '';
+                            this.tipo_telefono = data.tipo_telefono || '';
+                            this.nombreapellido = data.nombreapellido || this.nombreapellido;
+                            this.avisado = (this.telefono === '');
+                            this.cargando = false;
+                        })
+                        .catch(() => {
+                            this.cargando = false;
+                        });
                 }
             }"
             @populate-cancel.window="
                 reservaId = $event.detail.id; 
                 reservaInfo = $event.detail.info; 
-                telefono = $event.detail.telefono || ''; 
-                tipo_telefono = $event.detail.tipo_telefono || ''; 
+                telefono = ''; 
+                tipo_telefono = ''; 
                 nombreapellido = $event.detail.nombreapellido || '';
                 motivo = '';
-                avisado = (telefono === '');
+                avisado = false;
+                cargando = true;
+                cargarContacto($event.detail.id);
             ">
             <div class="px-6 py-4 border-b border-gray-700 flex justify-between items-center">
                 <h3 class="text-lg font-bold text-white">Cancelar Reserva (Admin)</h3>
@@ -1114,7 +1132,11 @@ if ($esAdmin) {
                 
                 <div class="mb-4 p-3 bg-gray-700/50 rounded-lg border border-gray-600 text-sm">
                     <p class="text-gray-300 font-semibold mb-1">📢 Información de contacto:</p>
-                    <div x-show="telefono">
+                    <div x-show="cargando" class="flex items-center justify-center py-3">
+                        <svg class="animate-spin h-5 w-5 text-primary-400 mr-2" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg>
+                        <span class="text-gray-400 text-sm">Cargando datos de contacto...</span>
+                    </div>
+                    <div x-show="!cargando && telefono">
                         <p class="text-gray-400">Usuario: <span class="text-white" x-text="nombreapellido"></span></p>
                         <p class="text-gray-400">Teléfono: <span class="text-white" x-text="telefono"></span> (<span class="text-white" x-text="tipo_telefono === 'whatsapp' ? 'WhatsApp' : (tipo_telefono === 'celular_sin_wsp' ? 'Celular sin WhatsApp' : 'Línea Fija')"></span>)</p>
                         
@@ -1138,7 +1160,7 @@ if ($esAdmin) {
                             </label>
                         </div>
                     </div>
-                    <div x-show="!telefono">
+                    <div x-show="!cargando && !telefono">
                         <p class="text-red-400">⚠️ Este usuario no tiene teléfono registrado. Deberás avisarle por otro medio.</p>
                     </div>
                 </div>
