@@ -91,7 +91,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         header("Location: ../mis_reservas.php?success=" . urlencode("Reserva cancelada correctamente. Se notificó a los administradores."));
         exit();
     } else {
-        // Admin canceló su propia reserva
+        // Admin canceló su propia reserva → notificar a otros admins
+        $mensaje_notif = $_SESSION['nombreyapellido'] . " (admin) ha cancelado su propia reserva de " . $reserva['info'] . " (" . date('d/m/Y', strtotime($reserva['fecha'])) . "). Motivo: " . $motivo;
+        $stmt = $conexion->prepare("INSERT INTO notificaciones (id_usuario_origen, tipo, mensaje, para_admins, leido, fecha) VALUES (?, 'cancelacion', ?, 1, 0, NOW())");
+        $stmt->bind_param("is", $usuario_id, $mensaje_notif);
+        $stmt->execute();
+        $stmt->close();
+
         header("Location: ../index.php?success=" . urlencode("Reserva cancelada correctamente."));
         exit();
     }

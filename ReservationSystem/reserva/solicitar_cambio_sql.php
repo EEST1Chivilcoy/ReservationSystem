@@ -41,7 +41,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     
     $mensaje = "solicita cambiar su reserva de " . $reserva['info'] . " del " . $fecha_formateada_vieja . " (" . $reserva['horario'] . ") al " . $fecha_formateada_nueva . " (" . $nuevo_horario . " - " . $nuevo_horario1 . "). Motivo: " . $motivo;
     
-    $stmt = $conexion->prepare("INSERT INTO notificaciones (id_usuario_origen, tipo, mensaje, leido, fecha) VALUES (?, 'cambio_fecha', ?, 0, NOW())");
+    $stmt = $conexion->prepare("INSERT INTO notificaciones (id_usuario_origen, tipo, mensaje, para_admins, leido, fecha) VALUES (?, 'cambio_fecha', ?, 1, 0, NOW())");
     $stmt->bind_param("is", $usuario_id, $mensaje);
     $stmt->execute();
     $stmt->close();
