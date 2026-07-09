@@ -1108,15 +1108,15 @@ if ($esAdmin) {
                 }
             }"
             @populate-cancel.window="
-                reservaId = $event.detail.id; 
-                reservaInfo = $event.detail.info; 
-                telefono = ''; 
-                tipo_telefono = ''; 
-                nombreapellido = $event.detail.nombreapellido || '';
-                motivo = '';
-                avisado = false;
-                cargando = true;
-                cargarContacto($event.detail.id);
+                this.reservaId = $event.detail.id; 
+                this.reservaInfo = $event.detail.info; 
+                this.telefono = ''; 
+                this.tipo_telefono = ''; 
+                this.nombreapellido = $event.detail.nombreapellido || '';
+                this.motivo = '';
+                this.avisado = false;
+                this.cargando = true;
+                this.cargarContacto($event.detail.id);
             ">
             <div class="px-6 py-4 border-b border-gray-700 flex justify-between items-center">
                 <h3 class="text-lg font-bold text-white">Cancelar Reserva (Admin)</h3>
