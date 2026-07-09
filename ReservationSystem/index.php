@@ -1069,44 +1069,44 @@ if ($esAdmin) {
     <div x-show="showCancelModal" class="fixed inset-0 overflow-y-auto z-50 flex items-center justify-center" style="display: none;">
         <div class="fixed inset-0 bg-black bg-opacity-80 transition-opacity" @click="showCancelModal = false"></div>
         <div class="relative bg-gray-800 rounded-xl max-w-md w-full mx-4 shadow-2xl border border-gray-700"
-            x-data="{ 
-                reservaId: '', 
-                reservaInfo: '', 
-                telefono: '', 
-                tipo_telefono: '', 
-                nombreapellido: '',
-                motivo: '',
+            x-data='{ 
+                reservaId: "", 
+                reservaInfo: "", 
+                telefono: "", 
+                tipo_telefono: "", 
+                nombreapellido: "",
+                motivo: "",
                 avisado: false,
                 cargando: false,
                 abrirWsp() {
                     if (!this.motivo.trim()) {
-                        alert('Por favor, ingresa el motivo antes de enviar la notificación por WhatsApp.');
+                        alert("Por favor, ingresa el motivo antes de enviar la notificación por WhatsApp.");
                         return;
                     }
-                    let cleanPhone = this.telefono.replace(/[^0-9]/g, '');
-                    if (cleanPhone.startsWith('0')) cleanPhone = cleanPhone.substring(1);
+                    let cleanPhone = this.telefono.replace(/[^0-9]/g, "");
+                    if (cleanPhone.startsWith("0")) cleanPhone = cleanPhone.substring(1);
                     
-                    let msg = `¡Hola ${this.nombreapellido}! 🏫 Te escribimos desde el *Sistema de Reservas de la E.E.S.T. N° 1 \"Mariano Moreno\"* de Chivilcoy.\n\nTe queríamos avisar que tuvimos que cancelar tu reserva de *${this.reservaInfo}*.\n\n📌 *Motivo:* ${this.motivo}\n\nCualquier duda, podés ingresar de nuevo a la web para pedir un cambio de fecha o realizar otra reserva. ¡Disculpas por las molestias! 💻\n\n¡Que tengas un buen día! 👋`;
+                    let msg = `¡Hola ${this.nombreapellido}! 🏫 Te escribimos desde el *Sistema de Reservas de la E.E.S.T. N° 1 "Mariano Moreno"* de Chivilcoy.\n\nTe queríamos avisar que tuvimos que cancelar tu reserva de *${this.reservaInfo}*.\n\n📌 *Motivo:* ${this.motivo}\n\nCualquier duda, podés ingresar de nuevo a la web para pedir un cambio de fecha o realizar otra reserva. ¡Disculpas por las molestias! 💻\n\n¡Que tengas un buen día! 👋`;
                     
-                    window.open('https://wa.me/549' + cleanPhone + '?text=' + encodeURIComponent(msg), '_blank');
+                    window.open("https://wa.me/549" + cleanPhone + "?text=" + encodeURIComponent(msg), "_blank");
                     this.avisado = true;
                 },
                 cargarContacto(id) {
                     this.cargando = true;
-                    fetch('get_reserva_contacto.php?id=' + id)
+                    fetch("get_reserva_contacto.php?id=" + id)
                         .then(r => r.json())
                         .then(data => {
-                            this.telefono = data.telefono || '';
-                            this.tipo_telefono = data.tipo_telefono || '';
+                            this.telefono = data.telefono || "";
+                            this.tipo_telefono = data.tipo_telefono || "";
                             this.nombreapellido = data.nombreapellido || this.nombreapellido;
-                            this.avisado = (this.telefono === '');
+                            this.avisado = (this.telefono === "");
                             this.cargando = false;
                         })
                         .catch(() => {
                             this.cargando = false;
                         });
                 }
-            }"
+            }'
             @populate-cancel.window="
                 this.reservaId = $event.detail.id; 
                 this.reservaInfo = $event.detail.info; 
