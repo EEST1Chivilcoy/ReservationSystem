@@ -17,32 +17,47 @@ if (!isset($_GET['id']) || !is_numeric($_GET['id'])) {
 
 $id = intval($_GET['id']);
 
-// Misma lógica de JOIN que cancelar_reserva_sql.php para máxima consistencia
-$stmt = $conexion->prepare("SELECT r.nombreapellido, 
-                                   COALESCE(u.telefono, u2.telefono) AS telefono, 
-                                   COALESCE(u.tipo_telefono, u2.tipo_telefono) AS tipo_telefono,
-                                   COALESCE(u.NombreYApellido, u2.NombreYApellido, r.nombreapellido) AS NombreYApellido
-                            FROM tabla r 
-                            LEFT JOIN usuarios u ON r.id_usuario = u.ID
-                            LEFT JOIN usuarios u2 ON r.nombreapellido = u2.NombreYApellido
-                            WHERE r.ID = ?");
+// Primero obtener los datos de la reserva
+$stmt = $conexion->prepare("SELECT id_usuario, nombreapellido FROM tabla WHERE ID = ?");
 $stmt->bind_param("i", $id);
 $stmt->execute();
 $result = $stmt->get_result();
-$reserva = $result->fetch_assoc();
+$reserva_base = $result->fetch_assoc();
 $stmt->close();
-mysqli_close($conexion);
 
-if (!$reserva) {
+if (!$reserva_base) {
     http_response_code(404);
     echo json_encode(['error' => 'Reserva no encontrada']);
+    mysqli_close($conexion);
     exit();
 }
 
+// Ahora buscar los datos del usuario por id_usuario
+$telefono = '';
+$tipo_telefono = '';
+$nombreapellido = $reserva_base['nombreapellido'];
+
+if (!empty($reserva_base['id_usuario'])) {
+    $stmt = $conexion->prepare("SELECT telefono, tipo_telefono, NombreYApellido FROM usuarios WHERE ID = ?");
+    $stmt->bind_param("i", $reserva_base['id_usuario']);
+    $stmt->execute();
+    $result = $stmt->get_result();
+    $usuario = $result->fetch_assoc();
+    $stmt->close();
+    
+    if ($usuario) {
+        $telefono = $usuario['telefono'] ?? '';
+        $tipo_telefono = $usuario['tipo_telefono'] ?? '';
+        $nombreapellido = $usuario['NombreYApellido'] ?? $nombreapellido;
+    }
+}
+
+mysqli_close($conexion);
+
 header('Content-Type: application/json');
 echo json_encode([
-    'telefono' => $reserva['telefono'] ?? '',
-    'tipo_telefono' => $reserva['tipo_telefono'] ?? '',
-    'nombreapellido' => $reserva['NombreYApellido'] ?? $reserva['nombreapellido'] ?? ''
+    'telefono' => $telefono,
+    'tipo_telefono' => $tipo_telefono,
+    'nombreapellido' => $nombreapellido
 ]);
 ?>
