@@ -9,10 +9,13 @@ $end = isset($_GET['end']) ? $_GET['end'] : date('Y-m-t', strtotime('+1 month'))
 $start_date = date('Y-m-d', strtotime($start));
 $end_date = date('Y-m-d', strtotime($end));
 
-// Consulta optimizada: solo eventos en el rango visible con datos de usuario
-$query = "SELECT t.ID, t.nombreapellido, t.curso, t.materia, t.horario, t.horario1, t.fecha, t.info, t.materiales, t.id_usuario, u.telefono, u.tipo_telefono 
+// Consulta optimizada: solo eventos en el rango visible con datos de usuario (y fallback por nombre de usuario)
+$query = "SELECT t.ID, t.nombreapellido, t.curso, t.materia, t.horario, t.horario1, t.fecha, t.info, t.materiales, t.id_usuario, 
+                 COALESCE(u.telefono, u2.telefono) AS telefono, 
+                 COALESCE(u.tipo_telefono, u2.tipo_telefono) AS tipo_telefono
           FROM tabla t 
           LEFT JOIN usuarios u ON t.id_usuario = u.ID
+          LEFT JOIN usuarios u2 ON t.nombreapellido = u2.NombreYApellido
           WHERE t.fecha BETWEEN ? AND ?
           ORDER BY t.fecha, t.horario";
 

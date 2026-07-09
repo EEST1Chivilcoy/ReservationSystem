@@ -13,8 +13,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $usuario_id = $_SESSION['usuario_id'];
     $esAdmin = isset($_SESSION['EsAdmin']) && $_SESSION['EsAdmin'] == true;
 
-    // Obtener info de la reserva
-    $stmt = $conexion->prepare("SELECT r.*, u.telefono, u.tipo_telefono, u.NombreYApellido FROM tabla r LEFT JOIN usuarios u ON r.id_usuario = u.ID WHERE r.ID = ?");
+    // Obtener info de la reserva (con fallback por coincidencia de nombre y apellido)
+    $stmt = $conexion->prepare("SELECT r.*, COALESCE(u.telefono, u2.telefono) AS telefono, COALESCE(u.tipo_telefono, u2.tipo_telefono) AS tipo_telefono, COALESCE(u.NombreYApellido, u2.NombreYApellido, r.nombreapellido) AS NombreYApellido FROM tabla r LEFT JOIN usuarios u ON r.id_usuario = u.ID LEFT JOIN usuarios u2 ON r.nombreapellido = u2.NombreYApellido WHERE r.ID = ?");
     $stmt->bind_param("i", $id);
     $stmt->execute();
     $result = $stmt->get_result();
