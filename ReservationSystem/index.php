@@ -1069,60 +1069,8 @@ if ($esAdmin) {
     <div x-show="showCancelModal" class="fixed inset-0 overflow-y-auto z-50 flex items-center justify-center" style="display: none;">
         <div class="fixed inset-0 bg-black bg-opacity-80 transition-opacity" @click="showCancelModal = false"></div>
         <div class="relative bg-gray-800 rounded-xl max-w-md w-full mx-4 shadow-2xl border border-gray-700"
-            x-data='{ 
-                reservaId: "", 
-                reservaInfo: "", 
-                telefono: "", 
-                tipo_telefono: "", 
-                nombreapellido: "",
-                motivo: "",
-                avisado: false,
-                cargando: false,
-                init() {
-                    // Registrar listener para el evento populate-cancel
-                    window.addEventListener('populate-cancel', (event) => {
-                        console.log('Evento populate-cancel recibido:', event.detail);
-                        this.reservaId = event.detail.id;
-                        this.reservaInfo = event.detail.info;
-                        this.telefono = '';
-                        this.tipo_telefono = '';
-                        this.nombreapellido = event.detail.nombreapellido || '';
-                        this.motivo = '';
-                        this.avisado = false;
-                        this.cargando = true;
-                        this.cargarContacto(event.detail.id);
-                    });
-                },
-                abrirWsp() {
-                    if (!this.motivo.trim()) {
-                        alert("Por favor, ingresa el motivo antes de enviar la notificación por WhatsApp.");
-                        return;
-                    }
-                    let cleanPhone = this.telefono.replace(/[^0-9]/g, "");
-                    if (cleanPhone.startsWith("0")) cleanPhone = cleanPhone.substring(1);
-                    
-                    let msg = `¡Hola ${this.nombreapellido}! 🏫 Te escribimos desde el *Sistema de Reservas de la E.E.S.T. N° 1 "Mariano Moreno"* de Chivilcoy.\n\nTe queríamos avisar que tuvimos que cancelar tu reserva de *${this.reservaInfo}*.\n\n📌 *Motivo:* ${this.motivo}\n\nCualquier duda, podés ingresar de nuevo a la web para pedir un cambio de fecha o realizar otra reserva. ¡Disculpas por las molestias! 💻\n\n¡Que tengas un buen día! 👋`;
-                    
-                    window.open("https://wa.me/549" + cleanPhone + "?text=" + encodeURIComponent(msg), "_blank");
-                    this.avisado = true;
-                },
-                cargarContacto(id) {
-                    this.cargando = true;
-                    fetch("get_reserva_contacto.php?id=" + id)
-                        .then(r => r.json())
-                        .then(data => {
-                            this.telefono = data.telefono || "";
-                            this.tipo_telefono = data.tipo_telefono || "";
-                            this.nombreapellido = data.nombreapellido || this.nombreapellido;
-                            this.avisado = (this.telefono === "");
-                            this.cargando = false;
-                        })
-                        .catch((error) => {
-                            console.error("Error cargando contacto:", error);
-                            this.cargando = false;
-                        });
-                }
-            }'>
+            x-data="cancelModalData()"
+            @populate-cancel.window="handlePopulateCancel($event)">
             <div class="px-6 py-4 border-b border-gray-700 flex justify-between items-center">
                 <h3 class="text-lg font-bold text-white">Cancelar Reserva (Admin)</h3>
                 <button @click="showCancelModal = false" type="button" class="text-gray-400 hover:text-white">
@@ -1196,6 +1144,62 @@ if ($esAdmin) {
                     location.reload();
                 }
             });
+        }
+
+        // Componente del modal de cancelación
+        function cancelModalData() {
+            return {
+                reservaId: '',
+                reservaInfo: '',
+                telefono: '',
+                tipo_telefono: '',
+                nombreapellido: '',
+                motivo: '',
+                avisado: false,
+                cargando: false,
+                handlePopulateCancel(event) {
+                    console.log('Evento recibido:', event.detail);
+                    this.reservaId = event.detail.id;
+                    this.reservaInfo = event.detail.info;
+                    this.telefono = '';
+                    this.tipo_telefono = '';
+                    this.nombreapellido = event.detail.nombreapellido || '';
+                    this.motivo = '';
+                    this.avisado = false;
+                    this.cargando = true;
+                    this.cargarContacto(event.detail.id);
+                },
+                abrirWsp() {
+                    if (!this.motivo.trim()) {
+                        alert('Por favor, ingresa el motivo antes de enviar la notificación por WhatsApp.');
+                        return;
+                    }
+                    let cleanPhone = this.telefono.replace(/[^0-9]/g, '');
+                    if (cleanPhone.startsWith('0')) cleanPhone = cleanPhone.substring(1);
+                    
+                    let msg = `¡Hola ${this.nombreapellido}! 🏫 Te escribimos desde el *Sistema de Reservas de la E.E.S.T. N° 1 "Mariano Moreno"* de Chivilcoy.\n\nTe queríamos avisar que tuvimos que cancelar tu reserva de *${this.reservaInfo}*.\n\n📌 *Motivo:* ${this.motivo}\n\nCualquier duda, podés ingresar de nuevo a la web para pedir un cambio de fecha o realizar otra reserva. ¡Disculpas por las molestias! 💻\n\n¡Que tengas un buen día! 👋`;
+                    
+                    window.open('https://wa.me/549' + cleanPhone + '?text=' + encodeURIComponent(msg), '_blank');
+                    this.avisado = true;
+                },
+                cargarContacto(id) {
+                    this.cargando = true;
+                    fetch('get_reserva_contacto.php?id=' + id)
+                        .then(r => r.json())
+                        .then(data => {
+                            console.log('Datos recibidos:', data);
+                            this.telefono = data.telefono || '';
+                            this.tipo_telefono = data.tipo_telefono || '';
+                            this.nombreapellido = data.nombreapellido || this.nombreapellido;
+                            this.avisado = (this.telefono === '');
+                            this.cargando = false;
+                        })
+                        .catch((error) => {
+                            console.error('Error cargando contacto:', error);
+                            this.cargando = false;
+                        });
+                }
+            };
         }
     </script>
 </body>
