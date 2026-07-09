@@ -105,7 +105,6 @@ foreach ($reservas as $reserva) {
     errorMessage: '<?php echo isset($_GET['error']) ? htmlspecialchars($_GET['error'], ENT_QUOTES, 'UTF-8') : ''; ?>',
     successMessage: '<?php echo isset($_GET['success']) ? htmlspecialchars($_GET['success'], ENT_QUOTES, 'UTF-8') : ''; ?>',
     showCancelModal: false,
-    showChangeDateModal: false,
     reservaId: null,
     reservaInfo: ''
 }">
@@ -304,11 +303,7 @@ foreach ($reservas as $reserva) {
                                         </svg>
                                         Cancelar Reserva
                                     </button>
-                                    <button @click="reservaId = <?php echo $reserva['ID']; ?>; reservaInfo = '<?php echo htmlspecialchars(addslashes($reserva['info'])); ?>'; showChangeDateModal = true" 
-                                        class="w-full inline-flex justify-center items-center px-4 py-2 bg-transparent border border-blue-500 text-blue-500 hover:bg-blue-500 hover:text-white rounded-lg transition-colors font-medium text-sm">
-                                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="h-4 w-4 mr-2"><path stroke-linecap="round" stroke-linejoin="round" d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 0 1 2.25-2.25h13.5A2.25 2.25 0 0 1 21 7.5v11.25m-18 0A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75m-18 0v-7.5A2.25 2.25 0 0 1 5.25 9h13.5A2.25 2.25 0 0 1 21 11.25v7.5m-9-6h.008v.008H12v-.008ZM12 15h.008v.008H12V15Zm0 2.25h.008v.008H12v-.008ZM9.75 15h.008v.008H9.75V15Zm0 2.25h.008v.008H9.75v-.008ZM7.5 15h.008v.008H7.5V15Zm0 2.25h.008v.008H7.5v-.008Zm6.75-4.5h.008v.008h-.008v-.008Zm0 2.25h.008v.008h-.008V15Zm0 2.25h.008v.008h-.008v-.008Zm2.25-4.5h.008v.008H16.5v-.008Zm0 2.25h.008v.008H16.5V15Z" /></svg>
-                                        Solicitar Cambio de Fecha
-                                    </button>
+                                
                                 </div>
                             </div>
                         <?php endforeach; ?>
@@ -477,47 +472,6 @@ foreach ($reservas as $reserva) {
         </div>
     </div>
 
-    <!-- Modal Cambio Fecha -->
-    <div x-show="showChangeDateModal" class="fixed inset-0 overflow-y-auto z-50 flex items-center justify-center" style="display: none;">
-        <div class="fixed inset-0 bg-black bg-opacity-80 transition-opacity" @click="showChangeDateModal = false"></div>
-        <div class="relative bg-gray-800 rounded-xl max-w-md w-full mx-4 shadow-2xl border border-gray-700">
-            <div class="px-6 py-4 border-b border-gray-700 flex justify-between items-center">
-                <h3 class="text-lg font-bold text-white">Solicitar Cambio</h3>
-                <button @click="showChangeDateModal = false" class="text-gray-400 hover:text-white">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" /></svg>
-                </button>
-            </div>
-            <form action="reserva/solicitar_cambio_sql.php" method="POST" class="p-6">
-                <input type="hidden" name="id" x-model="reservaId">
-                <input type="hidden" name="info" x-model="reservaInfo">
-                
-                <p class="text-gray-300 text-sm mb-4">Solicita a los administradores un cambio en tu reserva <strong x-text="reservaInfo" class="text-white"></strong>.</p>
-                
-                <div class="mb-4">
-                    <label class="block text-sm font-medium text-gray-400 mb-1">Nueva Fecha Deseada</label>
-                    <input type="date" name="nueva_fecha" required class="w-full bg-gray-700 border border-gray-600 text-white rounded-lg px-3 py-2 focus:ring-blue-500 focus:border-blue-500">
-                </div>
-                
-                <div class="grid grid-cols-2 gap-4 mb-4">
-                    <div>
-                        <label class="block text-sm font-medium text-gray-400 mb-1">Nuevo Inicio</label>
-                        <input type="time" name="nuevo_horario" required class="w-full bg-gray-700 border border-gray-600 text-white rounded-lg px-3 py-2 focus:ring-blue-500 focus:border-blue-500">
-                    </div>
-                    <div>
-                        <label class="block text-sm font-medium text-gray-400 mb-1">Nuevo Fin</label>
-                        <input type="time" name="nuevo_horario1" required class="w-full bg-gray-700 border border-gray-600 text-white rounded-lg px-3 py-2 focus:ring-blue-500 focus:border-blue-500">
-                    </div>
-                </div>
 
-                <label class="block text-sm font-medium text-gray-400 mb-2">Motivo del cambio</label>
-                <textarea name="motivo" required rows="2" class="w-full bg-gray-700 border border-gray-600 text-white rounded-lg px-3 py-2 mb-4 focus:ring-blue-500 focus:border-blue-500" placeholder="Breve motivo del cambio..."></textarea>
-                
-                <div class="flex justify-end space-x-3">
-                    <button type="button" @click="showChangeDateModal = false" class="px-4 py-2 bg-gray-600 hover:bg-gray-700 text-white rounded-lg">Atrás</button>
-                    <button type="submit" class="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg">Enviar Solicitud</button>
-                </div>
-            </form>
-        </div>
-    </div>
 </body>
 </html>
