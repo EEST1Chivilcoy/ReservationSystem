@@ -560,24 +560,6 @@ if ($esAdmin) {
                     contentType: 'application/json'
                 });
             }
-
-            // Variable global para guardar referencia del componente del modal
-            window.cancelModalComponent = null;
-
-            // Manejador global para el evento populate-cancel
-            window.addEventListener('populate-cancel', function(event) {
-                if (window.cancelModalComponent) {
-                    window.cancelModalComponent.reservaId = event.detail.id;
-                    window.cancelModalComponent.reservaInfo = event.detail.info;
-                    window.cancelModalComponent.telefono = '';
-                    window.cancelModalComponent.tipo_telefono = '';
-                    window.cancelModalComponent.nombreapellido = event.detail.nombreapellido || '';
-                    window.cancelModalComponent.motivo = '';
-                    window.cancelModalComponent.avisado = false;
-                    window.cancelModalComponent.cargando = true;
-                    window.cancelModalComponent.cargarContacto(event.detail.id);
-                }
-            });
         });
     </script>
 </head>
@@ -1097,7 +1079,19 @@ if ($esAdmin) {
                 avisado: false,
                 cargando: false,
                 init() {
-                    window.cancelModalComponent = this;
+                    // Registrar listener para el evento populate-cancel
+                    window.addEventListener('populate-cancel', (event) => {
+                        console.log('Evento populate-cancel recibido:', event.detail);
+                        this.reservaId = event.detail.id;
+                        this.reservaInfo = event.detail.info;
+                        this.telefono = '';
+                        this.tipo_telefono = '';
+                        this.nombreapellido = event.detail.nombreapellido || '';
+                        this.motivo = '';
+                        this.avisado = false;
+                        this.cargando = true;
+                        this.cargarContacto(event.detail.id);
+                    });
                 },
                 abrirWsp() {
                     if (!this.motivo.trim()) {
