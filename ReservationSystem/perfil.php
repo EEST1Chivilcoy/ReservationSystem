@@ -200,7 +200,7 @@ $stmt->close();
 
     <footer class="bg-gray-800 border-t border-gray-700 py-6 mt-auto">
         <div class="container mx-auto px-4 text-center">
-            <p class="text-gray-400 text-sm">&copy; <?php echo date('Y'); ?> - Sistema de Reserva de Salones V2.1</p>
+            <p class="text-gray-400 text-sm">&copy; <?php echo date('Y'); ?> - Sistema de Reserva de Salones V2.3</p>
         </div>
     </footer>
 </body>

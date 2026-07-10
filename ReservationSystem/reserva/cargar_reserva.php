@@ -399,8 +399,8 @@ if ($esAdmin) {
                 </div>
 
                 <div class="text-center md:text-right">
-                    <p class="text-gray-400 text-sm">&copy; <?php echo date('Y'); ?> - Sistema de Reserva de Salones V2</p>
-                    <p class="text-gray-500 text-xs mt-1">Desarrollado por Bernardo G. Erramuspe, estudiante de 7mo año en 2024</p>
+                    <p class="text-gray-400 text-sm">&copy; <?php echo date('Y'); ?> - Sistema de Reserva de Salones V2.3</p>
+                    <p class="text-gray-500 text-xs mt-1">Desarrollado por <a href="https://bernard2806.is-a.dev/" target="_blank" class="cursor-default">Bernardo G. Erramuspe</a>, estudiante de 7mo año en 2024</p>
                 </div>
             </div>
         </div>
