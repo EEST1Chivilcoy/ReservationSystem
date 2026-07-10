@@ -9,25 +9,31 @@ if (!isset($_SESSION['loggedIn']) || $_SESSION['loggedIn'] !== true || $_SESSION
     exit();
 }
 
+$usuario_id = $_SESSION['usuario_id'];
+
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $action = isset($_POST['action']) ? $_POST['action'] : 'marcar_todas';
     
     if ($action === 'marcar_todas') {
-        // Marcar solo las notificaciones dirigidas a administradores como leído
-        $query = "UPDATE notificaciones SET leido = 1 WHERE leido = 0 AND para_admins = 1";
-        if (mysqli_query($conexion, $query)) {
+        // Marcar todas las notificaciones para admins como leídas por el usuario actual
+        $query = "INSERT IGNORE INTO notificaciones_leidas (id_notificacion, id_usuario, fecha_lectura) SELECT n.ID, ?, NOW() FROM notificaciones n LEFT JOIN notificaciones_leidas nl ON nl.id_notificacion = n.ID AND nl.id_usuario = ? WHERE n.para_admins = 1 AND nl.id_usuario IS NULL";
+        $stmt = $conexion->prepare($query);
+        $stmt->bind_param("ii", $usuario_id, $usuario_id);
+        
+        if ($stmt->execute()) {
             echo json_encode(['success' => true, 'message' => 'Notificaciones marcadas como leídas']);
         } else {
             echo json_encode(['success' => false, 'error' => mysqli_error($conexion)]);
         }
+        $stmt->close();
     } elseif ($action === 'marcar_individual') {
-        // Marcar una notificación individual como leída
+        // Marcar una notificación individual como leída por el usuario actual
         $notificacion_id = intval($_POST['notificacion_id'] ?? 0);
         
         if ($notificacion_id > 0) {
-            $query = "UPDATE notificaciones SET leido = 1 WHERE ID = ? AND para_admins = 1";
+            $query = "INSERT IGNORE INTO notificaciones_leidas (id_notificacion, id_usuario, fecha_lectura) VALUES (?, ?, NOW())";
             $stmt = $conexion->prepare($query);
-            $stmt->bind_param("i", $notificacion_id);
+            $stmt->bind_param("ii", $notificacion_id, $usuario_id);
             
             if ($stmt->execute()) {
                 echo json_encode(['success' => true, 'message' => 'Notificación marcada como leída']);

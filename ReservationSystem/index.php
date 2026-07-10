@@ -63,21 +63,26 @@ $month = (int) $today->format('m');
 $day = (int) $today->format('d');
 $isChristmasWeek = $month === 12 && $day >= 20 && $day <= 26;
 
-// Consultar notificaciones si es admin
+// Consultar notificaciones si es admin (estado de lectura por usuario)
 $notificaciones_no_leidas = 0;
 $notificaciones = [];
 if ($esAdmin) {
     include('include/conexion.php');
-    $query = "SELECT n.*, u.NombreYApellido FROM notificaciones n LEFT JOIN usuarios u ON n.id_usuario_origen = u.ID WHERE n.para_admins = 1 ORDER BY n.fecha DESC LIMIT 10";
-    $result_notif = mysqli_query($conexion, $query);
+    $usuario_id_notif = $_SESSION['usuario_id'];
+    $query = "SELECT n.*, u.NombreYApellido, IF(nl.id_usuario IS NOT NULL, 1, 0) AS leido_por_mi FROM notificaciones n LEFT JOIN usuarios u ON n.id_usuario_origen = u.ID LEFT JOIN notificaciones_leidas nl ON nl.id_notificacion = n.ID AND nl.id_usuario = ? WHERE n.para_admins = 1 ORDER BY n.fecha DESC LIMIT 10";
+    $stmt_notif = $conexion->prepare($query);
+    $stmt_notif->bind_param("i", $usuario_id_notif);
+    $stmt_notif->execute();
+    $result_notif = $stmt_notif->get_result();
     if ($result_notif) {
         while ($row = mysqli_fetch_assoc($result_notif)) {
             $notificaciones[] = $row;
-            if ($row['leido'] == 0) {
+            if ($row['leido_por_mi'] == 0) {
                 $notificaciones_no_leidas++;
             }
         }
     }
+    $stmt_notif->close();
     mysqli_close($conexion);
 }
 ?>
@@ -645,7 +650,7 @@ if ($esAdmin) {
                                     <div class="max-h-64 overflow-y-auto">
                                         <?php if (count($notificaciones) > 0): ?>
                                             <?php foreach ($notificaciones as $notif): ?>
-                                                <div class="px-4 py-3 border-b border-gray-700 <?php echo $notif['leido'] == 0 ? 'bg-gray-700/50' : ''; ?>">
+                                                <div class="px-4 py-3 border-b border-gray-700 <?php echo $notif['leido_por_mi'] == 0 ? 'bg-gray-700/50' : ''; ?>">
                                                     <p class="text-sm text-gray-200">
                                                         <strong class="text-primary-400"><?php echo htmlspecialchars($notif['NombreYApellido'] ?? 'Sistema'); ?></strong> 
                                                         <?php echo htmlspecialchars($notif['mensaje']); ?>
