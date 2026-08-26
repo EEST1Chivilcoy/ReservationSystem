@@ -1,50 +1,29 @@
-# Instrucciones para agentes de IA (AGENTS.md)
+# Instrucciones para agentes (AGENTS.md)
 
-Propósito: ayudar a un agente de codificación a entender rápidamente cómo montar, probar y modificar este repositorio sin romper dependencias ni datos.
+Ayuda a un agente a montar, verificar y modificar el repo sin romper dependencias ni datos.
 
-Resumen rápido
-- Levantar con Docker: `docker-compose up -d --build` ([docker-compose.yml](docker-compose.yml#L1)).
-- Build manual: `docker build -t reservation-web .` y `docker run -p 80:80 reservation-web` ([Dockerfile](Dockerfile#L1)).
-- Desarrollo local: `cd ReservationSystem && composer install` y `php -S localhost:8000 -t .` ([ReservationSystem/composer.json](ReservationSystem/composer.json#L1)).
-- Importar esquema: `mysql -u <user> -p ReservationSystem < bd.sql` ([bd.sql](bd.sql#L1)).
+## Estructura y arquitectura (no obvio)
+- Todo el código de la app vive en `ReservationSystem/`. Docker (`Dockerfile`) y CI copian/despliegan el **contenido** de esa carpeta como raíz web (`/var/www/html`, `htdocs/`). No confundir la raíz del repo con la raíz web.
+- PHP plano sin framework: scripts que se enlazan con `include`/`require`. No hay router ni namespaces de app en uso.
+- `composer.json` declara autoload PSR-4 a `src/`, pero esa carpeta **no existe**. Solo se autocargan las librerías de vendor (`vlucas/phpdotenv`, `tecnickcom/tcpdf`). No esperes que código bajo el namespace `Eest1chivilcoy\ReservationSystem\` se autocarga; crea `src/` si lo necesitas.
+- La tabla principal de reservas se llama literalmente `tabla` (BD `ReservationSystem`).
 
-Archivos clave (referencias)
-- [README.md](README.md#L1) — visión general y comandos.
-- [docker-compose.yml](docker-compose.yml#L1) — orquestación local y variables de entorno de ejemplo.
-- [Dockerfile](Dockerfile#L1) — pasos de build y `composer install` en contenedor.
-- [bd.sql](bd.sql#L1), [upgrade_v2.2.sql](upgrade_v2.2.sql#L1) — scripts de base de datos.
-- [ReservationSystem/composer.json](ReservationSystem/composer.json#L1) — dependencias Composer.
-- [ReservationSystem/include/conexion.php](ReservationSystem/include/conexion.php#L1) — conexión DB y uso de `.env`.
-- [ReservationSystem/include/VerificacionSesion.php](ReservationSystem/include/VerificacionSesion.php#L1) — control de sesión y autenticación.
-- [ReservationSystem/reserva/](ReservationSystem/reserva/), [ReservationSystem/admin/](ReservationSystem/admin/) — áreas de lógica de negocio.
+## Comandos
+- Entorno completo: `docker-compose up -d --build` (web + MySQL 8.0). Web en http://localhost.
+- Local sin Docker: en `ReservationSystem/` ejecutar `composer install` y luego `php -S localhost:8000 -t .` (desde `ReservationSystem/`, no la raíz del repo).
+- **No hay tests automatizados.** Verificación = `php -l <archivo>` (lint por archivo), `composer validate` (en `ReservationSystem/`) y `docker-compose config`.
+- CI (push a `main`) despliega por FTP a InfinityFree con `composer install --no-dev`; no corre migraciones.
 
-Convenciones importantes
-- El proyecto no usa framework moderno; son scripts PHP con `require`/`require_once`. Respeta rutas relativas al moverse entre carpetas.
-- Autoload y dependencias gestionadas por Composer; no editar `ReservationSystem/vendor/` manualmente.
-- Variables sensibles en `.env` y `docker-compose.yml` (no comitear secretos reales). `conexion.php` usa `vlucas/phpdotenv`.
-- Cuidado con los scripts SQL: importarlos solo en entornos controlados.
+## Base de datos
+- `bd.sql` se monta como init automático en Docker (`/docker-entrypoint-initdb.d/init.sql`) y crea la BD. Importar en local: `mysql -u <user> -p ReservationSystem < bd.sql` desde la raíz del repo.
+- `upgrade_v2.2.sql`, `upgrade_v2.3.sql`, `downgrade_v2.sql` **no** se ejecutan solos; aplicarlos manualmente y en orden. Pedir confirmación y backup antes de correrlos.
+- `conexion.php` lee `.env` desde `ReservationSystem/.env` (**no** la raíz del repo, pese a lo que dice el README). En Docker usa variables de entorno (`DB_HOST=db`, `DB_USER`, `DB_PASS`, `DB_NAME`).
 
-Recomendaciones para agentes
-- Priorizar enlaces sobre copia: enlaza a documentación existente en el repositorio en lugar de duplicarla.
-- Antes de aplicar cambios que afectan dependencias, ejecutar `composer install` y comprobar `vendor/`.
-- No modificar archivos en `vendor/`; proponer cambios a `composer.json` y dejar que el human los apruebe.
-- Antes de ejecutar migraciones o `bd.sql`, pedir confirmación del usuario y hacer backup.
-- Revisar uso de includes relativos; cuando muevas ficheros, actualizar rutas con pruebas locales.
-
-Checks rápidos que un agente puede ejecutar
-- `docker-compose config` para validar el compose.
-- `composer validate` dentro de `ReservationSystem/`.
-- `php -l <file>` para comprobar sintaxis PHP de archivos modificados.
-
-Próximos pasos sugeridos
-- Crear instrucciones específicas por área (`AGENTS-admin.md`, `AGENTS-reserva.md`) si el repo crece.
-- Añadir pruebas automatizadas y un comando `make test` para facilitar verificaciones automáticas.
-
-Si necesitas ampliar alguna sección o prefieres `.github/copilot-instructions.md` en lugar de este archivo, indícalo.
-
-## Historial de cambios
-
-- docs(agents): agregar AGENTS.md con instrucciones de montaje, comandos y recomendaciones para agentes
-	- Fecha: 2026-07-09
-	- Detalle: Archivo creado con resumen de comandos Docker/Composer, rutas críticas, convenciones y checks rápidos para agentes de IA.
-
+## Convenciones y gotchas
+- Includes relativos según la carpeta del script: raíz usa `include('include/conexion.php')`; subcarpetas (`reserva/`, `admin/`) usan `include('../include/conexion.php')`. Al mover archivos, ajusta estas rutas y pruébalas.
+- Sesión: `include/VerificacionSesion.php` (logueado) y `include/VerificacionAdmin.php` (admin) llaman `session_start()` y redirigen. Claves usadas: `loggedIn`, `EsAdmin`, `usuario_id`, `nombreyapellido`, `foto_perfil`.
+- `index.php` abre y cierra la conexión BD dos veces (el bloque admin re-incluye `conexion.php`). Mantener ese patrón al editar.
+- Timezone fijo `America/Argentina/Buenos_Aires` en `index.php`.
+- `.htaccess` fuerza HTTPS excepto en localhost y bloquea el acceso web a `.env`, `composer.json`, `composer.lock`, `README.md`. No planees servir esos archivos.
+- Secrets en `.env` (ignorado por git) y en GitHub Secrets para CI (`FTP_HOST`, `FTP_USER`, `ftp_password`). No commitear credenciales reales.
+- No editar `ReservationSystem/vendor/`; los cambios de dependencias van en `composer.json`.
